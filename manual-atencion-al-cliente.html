@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Área — Atención al Cliente · Tienda Mayor</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black:  #0c0c0c;
+  --white:  #ffffff;
+  --off:    #f6f6f6;
+  --mid:    #e8e8e8;
+  --gray:   #999;
+  --dark:   #444;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ NAV ═══ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--mid);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 300;
+}
+
+.logo { display: flex; flex-direction: column; line-height: 1; }
+.logo-line1 { font-size: .55rem; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: var(--black); }
+.logo-line2 { font-size: .55rem; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: var(--black); }
+
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: .58rem; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gray);
+  text-decoration: none; transition: color .2s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--black); }
+
+/* ═══ HERO ═══ */
+.hero {
+  padding-top: 60px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.hero-left {
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 56px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,.022) 47px, rgba(255,255,255,.022) 48px),
+    repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,.022) 47px, rgba(255,255,255,.022) 48px);
+  pointer-events: none;
+}
+
+.hero-logo-white { position: relative; z-index: 1; }
+.hero-logo-white .logo-line1 { color: rgba(255,255,255,.55); }
+.hero-logo-white .logo-line2 { color: rgba(255,255,255,.55); }
+
+.hero-bottom { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  font-size: .55rem; font-weight: 500; letter-spacing: .24em;
+  text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 24px;
+}
+
+.hero-h1 {
+  font-size: 2.8rem; font-weight: 400; line-height: 1.1;
+  color: var(--white); margin-bottom: 28px; letter-spacing: -.01em;
+}
+.hero-h1 em { font-style: italic; font-weight: 300; }
+
+.hero-sub {
+  font-size: .72rem; font-weight: 400; line-height: 1.9;
+  color: rgba(255,255,255,.65); max-width: 320px; letter-spacing: .02em;
+}
+
+.hero-right {
+  background: var(--off);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 56px 56px 64px;
+  position: relative;
+}
+
+.hero-right-label {
+  font-size: .55rem; font-weight: 500; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--gray); margin-bottom: 20px;
+}
+
+.hero-manifiesto {
+  font-size: .88rem; font-weight: 400; line-height: 1.85;
+  color: var(--black);
+  border-left: 1px solid var(--black);
+  padding-left: 24px;
+  letter-spacing: .01em;
+}
+
+.hero-scroll {
+  position: absolute; bottom: 36px; right: 52px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-line {
+  width: 1px; height: 36px; background: var(--mid);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity:1; transform:scaleY(1); }
+  50%       { opacity:.3; transform:scaleY(.6); }
+}
+.scroll-label { font-size: .5rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--gray); }
+
+/* ═══ SECTIONS ═══ */
+section { padding: 96px 0; }
+.container { max-width: 1140px; margin: 0 auto; padding: 0 48px; }
+
+.sec-label { font-size: .55rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--gray); margin-bottom: 14px; }
+.sec-title { font-size: 2.4rem; font-weight: 200; line-height: 1.15; color: var(--black); margin-bottom: 36px; letter-spacing: -.02em; }
+.sec-rule { width: 28px; height: 1px; background: var(--black); margin-bottom: 40px; }
+
+/* ═══ HORARIOS ═══ */
+#horarios { border-bottom: 1px solid var(--mid); }
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--mid);
+  border: 1px solid var(--mid);
+}
+
+.horario-card {
+  background: var(--white);
+  padding: 40px 40px 36px;
+  transition: background .2s;
+}
+.horario-card:hover { background: var(--off); }
+.horario-card--full { grid-column: 1 / -1; background: var(--off); }
+
+.hc-icon-wrap {
+  width: 36px; height: 36px;
+  background: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+}
+.hc-icon-wrap svg { width:16px; height:16px; stroke:var(--white); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+
+.hc-area {
+  font-size: .55rem; font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--gray);
+  margin-bottom: 6px;
+}
+.hc-nombre {
+  font-size: 1.2rem; font-weight: 300; color: var(--black);
+  margin-bottom: 18px; padding-bottom: 18px;
+  border-bottom: 1px solid var(--mid);
+  letter-spacing: -.01em;
+}
+
+.hc-row {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 10px;
+}
+.hc-row:last-child { margin-bottom: 0; }
+.hc-tag {
+  font-size: .5rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gray);
+  background: var(--off); border: 1px solid var(--mid);
+  padding: 3px 8px; white-space: nowrap; flex-shrink: 0;
+}
+.hc-hora {
+  font-size: .82rem; font-weight: 400; color: var(--black);
+  letter-spacing: .01em;
+}
+.hc-nota {
+  font-size: .7rem; font-weight: 300; color: var(--gray);
+  line-height: 1.6; margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--mid);
+  font-style: italic;
+}
+
+/* ═══ DEPOSITO ═══ */
+#deposito {
+  background: var(--black);
+  color: var(--white);
+  border-bottom: none;
+}
+#deposito .sec-title { color: var(--white); }
+#deposito .sec-label { color: rgba(255,255,255,.28); }
+#deposito .sec-rule  { background: rgba(255,255,255,.18); }
+
+.deposito-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.timeline { display: flex; flex-direction: column; }
+
+.tl-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  align-items: start;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .4s, transform .4s;
+}
+.tl-item.visible { opacity: 1; transform: none; }
+
+.tl-hora {
+  font-size: 1rem; font-weight: 200;
+  color: rgba(255,255,255,.22);
+  line-height: 1; padding-top: 2px;
+  letter-spacing: -.02em;
+}
+
+.tl-titulo {
+  font-size: .65rem; font-weight: 600;
+  color: var(--white); letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.tl-desc {
+  font-size: .72rem; font-weight: 300;
+  line-height: 1.8; color: rgba(255,255,255,.6);
+}
+
+/* Panel derecho depósito */
+.deposito-aside { display: flex; flex-direction: column; gap: 28px; }
+
+.dep-block {
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 28px 30px;
+  background: rgba(255,255,255,.02);
+}
+.dep-block-label {
+  font-size: .5rem; font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+  margin-bottom: 14px;
+}
+.dep-block-title {
+  font-size: 1rem; font-weight: 300; color: var(--white);
+  margin-bottom: 14px; letter-spacing: -.01em;
+}
+.dep-block-text {
+  font-size: .74rem; font-weight: 300;
+  line-height: 1.85; color: rgba(255,255,255,.6);
+}
+.dep-block-text strong { font-weight: 600; color: rgba(255,255,255,.9); }
+
+.dep-list {
+  list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
+}
+.dep-list li {
+  font-size: .72rem; font-weight: 300;
+  color: rgba(255,255,255,.6);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.6;
+}
+.dep-list li::before {
+  content: ''; display: block;
+  width: 14px; height: 1px;
+  background: rgba(255,255,255,.15);
+  margin-top: 8px; flex-shrink: 0;
+}
+
+/* Produccion badge */
+.prod-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .5rem; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--black);
+  background: var(--white); padding: 4px 10px;
+  margin-bottom: 12px;
+}
+
+/* ═══ WHATSAPP / COMUNICACION ═══ */
+#comunicacion {
+  background: var(--off);
+  border-bottom: 1px solid var(--mid);
+}
+
+.wsp-intro {
+  font-size: .82rem; font-weight: 300;
+  line-height: 1.85; color: var(--dark);
+  max-width: 580px; margin-bottom: 48px;
+}
+
+.grupos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--mid);
+  border: 1px solid var(--mid);
+}
+
+.grupo-card {
+  background: var(--white);
+  padding: 32px 32px 28px;
+  transition: background .2s;
+}
+.grupo-card:hover { background: var(--off); }
+.grupo-card--full { grid-column: 1 / -1; background: var(--off); }
+
+.grupo-n {
+  font-size: 1.1rem; font-weight: 200;
+  color: var(--mid); margin-bottom: 14px;
+  letter-spacing: -.02em;
+}
+.grupo-nombre {
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--black); margin-bottom: 6px;
+}
+.grupo-integrantes {
+  font-size: .6rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 16px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--mid);
+}
+.grupo-desc {
+  font-size: .73rem; font-weight: 300;
+  line-height: 1.85; color: var(--dark);
+}
+
+/* ═══ COMO FUNCIONA ATC ═══ */
+#atc {
+  background: var(--white);
+  border-bottom: 1px solid var(--mid);
+}
+
+.atc-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.atc-sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+.atc-intro {
+  font-size: .76rem; font-weight: 300;
+  line-height: 1.9; color: var(--dark);
+  margin-bottom: 32px;
+}
+
+.atc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--mid);
+}
+
+.atc-item {
+  padding: 36px 32px;
+  border-right: 1px solid var(--mid);
+  border-bottom: 1px solid var(--mid);
+  transition: background .2s;
+}
+.atc-item:nth-child(even)      { border-right: none; }
+.atc-item:nth-last-child(-n+2) { border-bottom: none; }
+.atc-item:hover { background: var(--off); }
+.atc-item--full {
+  grid-column: 1 / -1;
+  border-right: none !important;
+  border-bottom: none !important;
+  background: var(--off);
+}
+.atc-item--full .atc-text { max-width: 640px; }
+
+.atc-num {
+  font-size: 1rem; font-weight: 200;
+  color: var(--mid); margin-bottom: 14px; letter-spacing: -.01em;
+}
+.atc-title {
+  font-size: .65rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--black); margin-bottom: 10px;
+}
+.atc-text {
+  font-size: .74rem; font-weight: 300;
+  line-height: 1.85; color: var(--dark);
+}
+
+/* tipos clientes */
+.clientes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--mid);
+  border: 1px solid var(--mid);
+  margin-top: 48px;
+}
+
+.cliente-card {
+  background: var(--white);
+  padding: 32px 28px;
+  transition: background .2s;
+}
+.cliente-card:hover { background: var(--off); }
+.cliente-n {
+  font-size: 2.2rem; font-weight: 200;
+  color: rgba(0,0,0,.06); line-height: 1;
+  margin-bottom: 4px; letter-spacing: -.04em;
+}
+.cliente-tipo {
+  font-size: .65rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--black); margin-bottom: 8px;
+}
+.cliente-desc {
+  font-size: .72rem; font-weight: 300;
+  line-height: 1.8; color: var(--dark);
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  background: var(--black);
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-logo .logo-line1 { color: rgba(255,255,255,.55); }
+.footer-logo .logo-line2 { color: rgba(255,255,255,.55); }
+.footer-info {
+  font-size: .62rem; font-weight: 300;
+  letter-spacing: .06em; line-height: 1.9;
+  color: rgba(255,255,255,.35); text-align: center;
+}
+.footer-copy {
+  font-size: .62rem; font-weight: 300;
+  letter-spacing: .06em; line-height: 1.9;
+  color: rgba(255,255,255,.25); text-align: right;
+}
+
+/* ═══ EDIT TOOLBAR ═══ */
+#edit-toolbar {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  background: #0a0a0a; color: #fff;
+  display: flex; align-items: center; gap: 0;
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,.22);
+  font-family: 'Montserrat', sans-serif;
+}
+.tb-btn {
+  padding: 13px 20px; font-size: .58rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); background: none; border: none;
+  cursor: pointer; transition: color .15s, background .15s;
+  font-family: 'Montserrat', sans-serif; white-space: nowrap;
+}
+.tb-btn:hover { color: #fff; background: rgba(255,255,255,.06); }
+.tb-sep { width: 1px; height: 32px; background: rgba(255,255,255,.1); }
+.tb-status { padding: 13px 20px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(255,255,255,.3); white-space: nowrap; }
+#toggle-edit {
+  padding: 13px 24px; background: #fff; color: #0a0a0a;
+  font-size: .58rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; transition: background .15s;
+}
+#toggle-edit:hover { background: #e8e8e8; }
+#toggle-edit.on { background: #e8e8e8; }
+
+.edit-mode [data-editable]:hover { outline: 1.5px dashed #aaa; outline-offset: 3px; cursor: text; }
+.edit-mode [data-editable]:focus { outline: 2px solid #0a0a0a; outline-offset: 3px; }
+[data-editable] { transition: outline .15s; }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="logo">
+    <span class="logo-line1">Tienda</span>
+    <span class="logo-line2">Mayor</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#horarios">Horarios</a></li>
+    <li><a href="#deposito">Depósito</a></li>
+    <li><a href="#comunicacion">Comunicación</a></li>
+    <li><a href="#atc">Atención al Cliente</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-logo-white logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-eyebrow">Manual de área · Uso interno</p>
+      <h1 class="hero-h1">Bienvenida a<br><em>Atención<br>al Cliente</em></h1>
+      <p class="hero-sub">Todo lo que necesitás saber para arrancar: cómo funciona el área, los horarios, cómo nos comunicamos internamente y cómo atendemos a nuestros clientes.</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <p class="hero-right-label">El área en una frase</p>
+    <p class="hero-manifiesto">Somos el primer contacto del cliente con Tienda Mayor. Nuestra forma de responder, de resolver y de acompañar cada pedido es parte de la experiencia que hace a la marca. El servicio no es un complemento — es parte de lo que ofrecemos.</p>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span class="scroll-label">Scroll</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HORARIOS ══ -->
+<section id="horarios">
+  <div class="container">
+    <p class="sec-label">Organización del equipo</p>
+    <h2 class="sec-title">Horarios de<br>trabajo</h2>
+    <div class="sec-rule"></div>
+
+    <div class="horarios-grid">
+
+      <!-- ATC, Cobranzas, Administración -->
+      <div class="horario-card">
+        <div class="hc-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <p class="hc-area">Presencial · Ambas sedes</p>
+        <p class="hc-nombre">Atención al cliente, Cobranzas & Administración</p>
+        <div class="hc-row">
+          <span class="hc-tag">Ingreso / Salida</span>
+          <span class="hc-hora">9:30 — 18:30 hs</span>
+        </div>
+        <div class="hc-row">
+          <span class="hc-tag">Atención al público</span>
+          <span class="hc-hora">10:00 — 18:00 hs</span>
+        </div>
+      </div>
+
+      <!-- Comunicación y Comercial -->
+      <div class="horario-card">
+        <div class="hc-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <p class="hc-area">Modalidad híbrida · Rotación entre sedes</p>
+        <p class="hc-nombre">Comunicación & Comercial</p>
+        <div class="hc-row">
+          <span class="hc-tag">Ingreso / Salida</span>
+          <span class="hc-hora">9:30 — 16:00 hs</span>
+        </div>
+        <p class="hc-nota">Trabajan en modalidad híbrida con rotación entre ambas sedes según agenda semanal.</p>
+      </div>
+
+      <!-- Producción -->
+      <div class="horario-card">
+        <div class="hc-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        </div>
+        <p class="hc-area">Producción · Con modalidad híbrida</p>
+        <p class="hc-nombre">Depósito & Producción</p>
+        <div class="hc-row">
+          <span class="hc-tag">Ingreso / Salida</span>
+          <span class="hc-hora">9:30 — 17:30 hs</span>
+        </div>
+        <div class="hc-row">
+          <span class="hc-tag">Actividad</span>
+          <span class="hc-hora">10:00 — 17:00 hs</span>
+        </div>
+        <p class="hc-nota">La encargada de producción trabaja de forma híbrida: <strong>lunes y jueves online.</strong></p>
+      </div>
+
+      <!-- Nota general -->
+      <div class="horario-card" style="background:var(--off);">
+        <div class="hc-icon-wrap" style="background:var(--off); border:1px solid var(--mid);">
+          <svg viewBox="0 0 24 24" style="stroke:var(--black)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <p class="hc-area">A tener en cuenta</p>
+        <p class="hc-nombre" style="font-size:1rem;">Sobre los horarios</p>
+        <p class="hc-nota" style="border:none; padding:0; margin:0; font-style:normal; font-size:.74rem; color:var(--dark); line-height:1.85;">
+          El horario de ingreso/salida corresponde al personal. El horario de atención al público puede variar y está acotado para garantizar que el equipo esté disponible y en condiciones de responder con calidad. Cualquier consulta sobre excepciones o cambios de turno, hablar con la encargada del área.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEPOSITO ══ -->
+<section id="deposito">
+  <div class="container">
+    <p class="sec-label">Cómo opera el depósito</p>
+    <h2 class="sec-title">Dinámica del<br><em style="font-style:italic;font-weight:200">depósito</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="deposito-layout">
+
+      <!-- Timeline jornada -->
+      <div>
+        <p style="font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:24px;">Jornada diaria — Operarios</p>
+        <div class="timeline">
+          <div class="tl-item">
+            <span class="tl-hora">9:30</span>
+            <div>
+              <p class="tl-titulo">Llegada al depósito</p>
+              <p class="tl-desc">Hora de ingreso del equipo de depósito a la sede de producción.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-hora">10:00</span>
+            <div>
+              <p class="tl-titulo">Inicio del armado</p>
+              <p class="tl-desc">Comienza el armado de pedidos con las listas ya impresas desde producción.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-hora">14:00</span>
+            <div>
+              <p class="tl-titulo">Almuerzo</p>
+              <p class="tl-desc">Pausa de una hora. El espacio de trabajo queda en orden.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-hora">15:00</span>
+            <div>
+              <p class="tl-titulo">Retoman armado o tareas de depósito</p>
+              <p class="tl-desc">Continúan con las listas pendientes. Si finalizaron, realizan tareas como contabilizar stock, control de paños, control de calidad de mercadería recibida, entre otras.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-hora">17:00</span>
+            <div>
+              <p class="tl-titulo">Cierre de jornada</p>
+              <p class="tl-desc">Finalizan la jornada y realizan orden y limpieza del espacio de trabajo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aside -->
+      <div class="deposito-aside">
+
+        <!-- Producción -->
+        <div class="dep-block">
+          <div class="prod-badge">Desde producción</div>
+          <p class="dep-block-title" style="color:var(--white);">Tareas de producción que se articulan con depósito</p>
+          <ul class="dep-list">
+            <li>Entre las <strong>14 y 15 hs</strong> se cambian los estados de los pedidos que ya están armados.</li>
+            <li>Entre las <strong>16:30 y 17 hs</strong> se generan las listas de armado para el día siguiente.</li>
+          </ul>
+        </div>
+
+        <!-- Almacenamiento -->
+        <div class="dep-block">
+          <p class="dep-block-label">Almacenamiento de mercadería</p>
+          <p class="dep-block-title" style="color:var(--white);">¿Cómo se guarda la mercadería?</p>
+          <p class="dep-block-text">
+            Los textiles se guardan de <strong>dos formas según el tipo</strong>:
+          </p>
+          <ul class="dep-list" style="margin-top:14px;">
+            <li>La mayoría de los textiles se almacena <strong>enrollada</strong> en estanterías.</li>
+            <li>Otra parte se guarda en <strong>paños plegados</strong>, también en estanterías.</li>
+            <li>Los <strong>terciopelos y panas</strong> se almacenan en cajas de cartón apoyadas de forma horizontal, para preservar la estructura del tejido.</li>
+          </ul>
+        </div>
+
+        <!-- Nota -->
+        <div class="dep-block" style="background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.04);">
+          <p class="dep-block-label">Para tener en cuenta</p>
+          <p class="dep-block-text">
+            El depósito no es accesible directamente desde las áreas de atención. Toda consulta de stock o logística se canaliza por el grupo de WhatsApp correspondiente. Las consultas directas fuera de canal pueden retrasar la operación.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMUNICACION ══ -->
+<section id="comunicacion">
+  <div class="container">
+    <p class="sec-label">Canales internos</p>
+    <h2 class="sec-title">Grupos de<br>WhatsApp</h2>
+    <div class="sec-rule"></div>
+    <p class="wsp-intro">Tenemos grupos de WhatsApp específicos para cada tipo de comunicación. Es importante usar el canal correcto para que la información llegue a quien corresponde y no se pierda en conversaciones generales.</p>
+
+    <div class="grupos-grid">
+
+      <div class="grupo-card">
+        <p class="grupo-n">01</p>
+        <p class="grupo-nombre">TM General</p>
+        <p class="grupo-integrantes">Todos los integrantes de la empresa</p>
+        <p class="grupo-desc">Avisos generales, comunicados institucionales y saludos de cumpleaños. No se usa para consultas operativas.</p>
+      </div>
+
+      <div class="grupo-card">
+        <p class="grupo-n">02</p>
+        <p class="grupo-nombre">AT al Cliente</p>
+        <p class="grupo-integrantes">Atención al cliente + Comercial</p>
+        <p class="grupo-desc">Para consultar dudas del área y recibir avisos sobre estrategias comerciales. El canal cotidiano del equipo de atención.</p>
+      </div>
+
+      <div class="grupo-card">
+        <p class="grupo-n">03</p>
+        <p class="grupo-nombre">AT + Producción</p>
+        <p class="grupo-integrantes">Atención al cliente + Producción</p>
+        <p class="grupo-desc">Avisos desde la encargada de producción hacia atención al cliente: ingresos de textiles nuevos, novedades de stock, tiempos de demora de algún textil, entre otros.</p>
+      </div>
+
+      <div class="grupo-card">
+        <p class="grupo-n">04</p>
+        <p class="grupo-nombre">Depósito + ATC · Consultas Stock & Logística</p>
+        <p class="grupo-integrantes">Depósito + Atención al cliente + Cobranzas</p>
+        <p class="grupo-desc">La única comunicación directa entre depósito y las áreas de atención. Se usa para avisar traslados internos entre sucursales, consultas de mercadería disponible o temas puntuales que requieren ver la mercadería física. <strong>No se usa para consultas que pueden resolverse sin depósito.</strong></p>
+      </div>
+
+      <div class="grupo-card grupo-card--full">
+        <p class="grupo-n">05</p>
+        <p class="grupo-nombre">Reclamos TM</p>
+        <p class="grupo-integrantes">Atención al cliente + Producción</p>
+        <p class="grupo-desc">En este grupo se envían los reclamos recibidos de clientes para evaluar cada caso en conjunto y dar una respuesta adecuada. La resolución siempre involucra a las dos áreas.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ ATC ══ -->
+<section id="atc">
+  <div class="container">
+    <div class="atc-layout">
+
+      <div class="atc-sidebar">
+        <p class="sec-label">El área</p>
+        <h2 class="sec-title" style="font-size:1.9rem;">Cómo funciona<br>Atención<br>al Cliente</h2>
+        <div class="sec-rule"></div>
+        <p class="atc-intro">Los pedidos, las consultas y las relaciones con los clientes son el centro de lo que hacemos. Entender cómo entra cada solicitud y quién es nuestro cliente es el punto de partida.</p>
+      </div>
+
+      <div>
+        <div class="atc-grid">
+
+          <div class="atc-item">
+            <p class="atc-num">01</p>
+            <p class="atc-title">Pedidos por mail</p>
+            <p class="atc-text">Los clientes realizan sus pedidos por mail, diferenciado según la sede. También pueden hacer pedidos y consultas en nuestros locales directamente.</p>
+          </div>
+
+          <div class="atc-item">
+            <p class="atc-num">02</p>
+            <p class="atc-title">Consultas por WhatsApp & Instagram</p>
+            <p class="atc-text">Recibimos consultas a través de WhatsApp e Instagram. Son canales más informales, pero requieren la misma atención y calidad de respuesta.</p>
+          </div>
+
+          <div class="atc-item">
+            <p class="atc-num">03</p>
+            <p class="atc-title">Venta por metro</p>
+            <p class="atc-text">Los textiles se venden por metro. El cliente puede comprar la cantidad que quiera, sin mínimo, salvo en terciopelos y panas donde el mínimo es <strong>1 metro.</strong></p>
+          </div>
+
+          <div class="atc-item">
+            <p class="atc-num">04</p>
+            <p class="atc-title">Conocimiento del catálogo</p>
+            <p class="atc-text">Parte del rol es conocer los textiles: fibra, peso, usos posibles, tiempos de disponibilidad. Ese conocimiento hace la diferencia al asesorar a cada cliente.</p>
+          </div>
+
+        </div>
+
+        <!-- Tipos de clientes -->
+        <p class="sec-label" style="margin-top:48px; margin-bottom:16px;">Tipos de clientes</p>
+        <div class="clientes-grid">
+
+          <div class="cliente-card">
+            <p class="cliente-n">01</p>
+            <p class="cliente-tipo">Decorador / Arquitecto / Estudio / Local</p>
+            <p class="cliente-desc">Nuestro cliente principal. Tiene acceso a nuestros catálogos y compra textiles de forma regular para sus proyectos o punto de venta.</p>
+          </div>
+
+          <div class="cliente-card">
+            <p class="cliente-n">02</p>
+            <p class="cliente-tipo">Consumidor Final</p>
+            <p class="cliente-desc">Compra para uso personal o del hogar. Suele tener menos conocimiento técnico sobre los textiles, por lo que el asesoramiento es más importante.</p>
+          </div>
+
+          <div class="cliente-card">
+            <p class="cliente-n">03</p>
+            <p class="cliente-tipo">Mayorista</p>
+            <p class="cliente-desc">Compra en volúmenes mayores para reventa. Tiene condiciones y dinámicas de compra diferentes que se coordinan junto al área comercial.</p>
+          </div>
+
+        </div>
+
+        <div style="background:var(--black); padding:28px 28px; margin-top:1px;">
+          <p style="font-size:.78rem;font-weight:400;font-style:italic;line-height:1.85;color:rgba(255,255,255,.75);letter-spacing:.01em;">
+            "Somos el vínculo entre el producto y quien lo elige. Cada consulta bien respondida, cada pedido resuelto con atención, es una forma de decir quiénes somos."
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo logo">
+    <span class="logo-line1">Tienda</span>
+    <span class="logo-line2">Mayor</span>
+  </div>
+  <div class="footer-info">
+    Laboratorio Textil · Industria Argentina<br>
+    info@tiendamayor.com.ar<br>
+    tiendamayor.com.ar · @tiendamayor
+  </div>
+  <div class="footer-copy">
+    Manual de Área · Atención al Cliente<br>
+    Uso interno · 2025
+  </div>
+</footer>
+
+<!-- ══ TOOLBAR ══ -->
+<div id="edit-toolbar">
+  <span class="tb-status" id="tb-hint">Modo lectura</span>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="btn-undo">↩ Deshacer</button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="btn-copy-html">Copiar HTML</button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="btn-download">↓ Descargar</button>
+  <div class="tb-sep"></div>
+  <button id="toggle-edit">Editar</button>
+</div>
+
+<script>
+// Nav scroll highlight
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const a = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+    if (a) a.classList.add('active');
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('section[id]').forEach(s => navObs.observe(s));
+
+// Timeline animation
+const tlObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      setTimeout(() => e.target.classList.add('visible'), +e.target.dataset.d || 0);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.tl-item').forEach((el, i) => {
+  el.dataset.d = i * 80;
+  tlObs.observe(el);
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Edit toolbar
+(function () {
+  const SELECTORS = [
+    '.hero-h1', '.hero-sub', '.hero-eyebrow', '.hero-manifiesto', '.hero-right-label',
+    '.hc-nombre', '.hc-hora', '.hc-nota', '.hc-area',
+    '.tl-titulo', '.tl-desc', '.tl-hora',
+    '.dep-block-title', '.dep-block-text',
+    '.grupo-nombre', '.grupo-integrantes', '.grupo-desc',
+    '.atc-title', '.atc-text',
+    '.cliente-tipo', '.cliente-desc',
+    '.footer-info', '.footer-copy',
+  ];
+
+  let editMode = false;
+  const body = document.body;
+  const toggleBtn = document.getElementById('toggle-edit');
+  const hint = document.getElementById('tb-hint');
+  const btnCopy = document.getElementById('btn-copy-html');
+  const btnDl = document.getElementById('btn-download');
+
+  function getEditables() {
+    return document.querySelectorAll(SELECTORS.join(','));
+  }
+
+  function enableEdit() {
+    editMode = true;
+    body.classList.add('edit-mode');
+    toggleBtn.textContent = 'Listo';
+    toggleBtn.classList.add('on');
+    hint.textContent = 'Clic para editar';
+    getEditables().forEach(el => {
+      el.setAttribute('data-editable', '');
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('spellcheck', 'false');
+    });
+  }
+
+  function disableEdit() {
+    editMode = false;
+    body.classList.remove('edit-mode');
+    toggleBtn.textContent = 'Editar';
+    toggleBtn.classList.remove('on');
+    hint.textContent = 'Modo lectura';
+    getEditables().forEach(el => {
+      el.removeAttribute('data-editable');
+      el.removeAttribute('contenteditable');
+    });
+  }
+
+  toggleBtn.addEventListener('click', () => { editMode ? disableEdit() : enableEdit(); });
+
+  document.getElementById('btn-undo').addEventListener('click', () => {
+    document.execCommand('undo');
+  });
+
+  btnCopy.addEventListener('click', () => {
+    navigator.clipboard.writeText('<!DOCTYPE html>\n' + document.documentElement.outerHTML).then(() => {
+      btnCopy.textContent = '✓ Copiado';
+      setTimeout(() => btnCopy.textContent = 'Copiar HTML', 2000);
+    });
+  });
+
+  btnDl.addEventListener('click', () => {
+    const wasEditing = editMode;
+    if (wasEditing) disableEdit();
+    const blob = new Blob(['<!DOCTYPE html>\n' + document.documentElement.outerHTML], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'manual-atencion-al-cliente-tienda-mayor.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    if (wasEditing) enableEdit();
+  });
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'e') { e.preventDefault(); editMode ? disableEdit() : enableEdit(); }
+    if (e.key === 'Escape' && editMode) disableEdit();
+  });
+})();
+</script>
+</body>
+</html>
