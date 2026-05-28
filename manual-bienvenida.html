@@ -1136,6 +1136,61 @@ footer {
 @media (max-width: 880px) {
   .beneficios-grid { grid-template-columns: 1fr; }
   .benefit-card--full { grid-column: auto; }
+  /* Vestimenta */
+  .vestimenta-grid { grid-template-columns: 1fr; }
+  .vest-card--full { grid-column: auto; }
+  /* Horarios */
+  .horarios-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .container { padding: 0 16px; }
+  section { padding: 48px 0; }
+
+  .hero-left { padding: 72px 20px 48px; }
+  .hero-h1 { font-size: 1.7rem; }
+  .hero-sub { font-size: 0.72rem; }
+
+  .manifiesto-grid,
+  .cultura-layout    { grid-template-columns: 1fr; gap: 24px; }
+  .manifiesto-sidebar { position: static; }
+  .datos-fila { flex-wrap: wrap; gap: 16px; }
+
+  .dirs-grid,
+  .areas-pair,
+  .sedes-grid,
+  .pasos-layout,
+  .horarios-grid,
+  .vestimenta-grid,
+  .beneficios-grid   { grid-template-columns: 1fr; }
+
+  .vest-card--full,
+  .benefit-card--full { grid-column: auto; }
+
+  .cultura-grid      { grid-template-columns: 1fr; }
+  .c-item            { border-right: none; }
+  .c-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--mid); }
+  .c-item:last-child { border-bottom: none; }
+
+  .dir-card { padding: 28px 20px; }
+  .area-card { padding: 24px 20px; }
+  .sede { padding: 32px 20px; }
+  .horario-card { padding: 28px 20px; }
+  .vest-card { padding: 28px 20px; }
+
+  .sec-title { font-size: 1.5rem; }
+  .dir-nombre { font-size: 1.3rem; }
+  .sede-nombre { font-size: 1.6rem; }
+
+  footer { grid-template-columns: 1fr; gap: 20px; padding: 40px 16px; }
+  .footer-copy { text-align: left; }
+
+  .horarios-nota-bloque { flex-direction: column; gap: 12px; padding: 20px; }
+  .horarios-nota-header { white-space: normal; }
+
+  .pasos-layout { grid-template-columns: 1fr; gap: 40px; }
 }
 
 /* ── Legibility: raise minimum text sizes ── */
@@ -1861,259 +1916,9 @@ footer {
   });
 </script>
 
-<style>
-/* ── EDIT MODE ── */
-.edit-mode [data-editable]:hover {
-  outline: 1.5px dashed #aaa;
-  outline-offset: 3px;
-  cursor: text;
-}
-.edit-mode [data-editable]:focus {
-  outline: 2px solid #0a0a0a;
-  outline-offset: 3px;
-  cursor: text;
-}
-[data-editable] { transition: outline 0.15s; }
 
-/* Toolbar */
-#edit-toolbar {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #0a0a0a;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  font-family: 'Montserrat', sans-serif;
-}
 
-.tb-btn {
-  padding: 13px 20px;
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.15s, background 0.15s;
-  font-family: 'Montserrat', sans-serif;
-  white-space: nowrap;
-}
 
-.tb-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
-
-.tb-btn.active { color: #fff; }
-
-.tb-sep {
-  width: 1px;
-  height: 32px;
-  background: rgba(255,255,255,0.1);
-}
-
-.tb-status {
-  padding: 13px 20px;
-  font-size: 0.55rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.3);
-  white-space: nowrap;
-}
-
-#toggle-edit {
-  padding: 13px 24px;
-  background: #fff;
-  color: #0a0a0a;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
-  transition: background 0.15s;
-}
-
-#toggle-edit:hover { background: #e8e8e8; }
-#toggle-edit.on { background: #e8e8e8; color: #0a0a0a; }
-</style>
-
-<!-- TOOLBAR -->
-<div id="edit-toolbar">
-  <span class="tb-status" id="tb-hint">Modo lectura</span>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-undo" title="Deshacer">↩ Deshacer</button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-copy-html">Copiar HTML</button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-download">↓ Descargar</button>
-  <div class="tb-sep"></div>
-  <button id="toggle-edit" class="">Editar</button>
-</div>
-
-<script>
-(function () {
-  // All editable selectors
-  const SELECTORS = [
-    '.hero-h1', '.hero-sub', '.hero-eyebrow',
-    '.hero-manifiesto', '.hero-right-label',
-    '.manif-texto', '.sidebar-logo',
-    '.sec-title', '.sec-label',
-    '.dir-nombre', '.dir-rol', '.dir-desc', '.dir-tag', '.dir-enfoque-label', '.dir-inicial',
-    '.area-nombre', '.area-encargado', '.area-desc',
-    '.team-ul li',
-    '.sede-nombre', '.sede-dir', '.sede-ft', '.sede-fl', '.sede-tag',
-    '.c-title', '.c-text', '.c-num',
-    '.cultura-intro',
-    '.paso-titulo', '.paso-desc', '.paso-n',
-    '.c-nombre', '.c-rol', '.c-area-tag',
-    '.nota-final p',
-    '.footer-info', '.footer-copy',
-    '.nivel-tag',
-    '.contactos-lbl',
-    '.contacto-grupo-label',
-    '.hc-area', '.hc-nombre', '.hc-hora', '.hc-nota',
-    '.vest-area', '.vest-title', '.vest-text',
-    '.benefit-title', '.benefit-desc',
-    '.dato-n', '.dato-l',
-    '.servicio-label', '.servicio-texto',
-    '.manif-texto strong',
-    '.logo-line1', '.logo-line2',
-    '.hero-manifiesto',
-    '.dir-desc',
-    '.area-card .area-desc',
-    '[data-original]',
-    '.c-avatar',
-    '.vest-note',
-    '.acc-label',
-    '.bml-label',
-    '.bml-desc',
-  ];
-
-  let editMode = false;
-  const history = [];
-
-  const body      = document.body;
-  const toolbar   = document.getElementById('edit-toolbar');
-  const toggleBtn = document.getElementById('toggle-edit');
-  const hint      = document.getElementById('tb-hint');
-  const btnUndo   = document.getElementById('btn-undo');
-  const btnCopy   = document.getElementById('btn-copy-html');
-  const btnDl     = document.getElementById('btn-download');
-
-  function getEditables() {
-    return document.querySelectorAll(SELECTORS.join(','));
-  }
-
-  function enableEdit() {
-    editMode = true;
-    body.classList.add('edit-mode');
-    toggleBtn.textContent = 'Listo';
-    toggleBtn.classList.add('on');
-    hint.textContent = 'Doble clic para editar';
-
-    getEditables().forEach(el => {
-      el.setAttribute('data-editable', '');
-      el.setAttribute('contenteditable', 'true');
-      el.setAttribute('spellcheck', 'false');
-      el.addEventListener('focus', onFocus);
-      el.addEventListener('input', onInput);
-    });
-  }
-
-  function disableEdit() {
-    editMode = false;
-    body.classList.remove('edit-mode');
-    toggleBtn.textContent = 'Editar';
-    toggleBtn.classList.remove('on');
-    hint.textContent = 'Modo lectura';
-
-    getEditables().forEach(el => {
-      el.removeAttribute('data-editable');
-      el.removeAttribute('contenteditable');
-      el.removeEventListener('focus', onFocus);
-      el.removeEventListener('input', onInput);
-    });
-  }
-
-  function onFocus(e) {
-    hint.textContent = 'Editando…';
-    e.target.addEventListener('blur', () => {
-      if (editMode) hint.textContent = 'Doble clic para editar';
-    }, { once: true });
-  }
-
-  function onInput(e) {
-    history.push({ el: e.target, html: e.target.innerHTML });
-  }
-
-  function undo() {
-    if (!history.length) return;
-    const last = history.pop();
-    // undo one step
-    last.el.innerHTML = history.length
-      ? history[history.length - 1].html
-      : last.el.dataset.original || last.el.innerHTML;
-  }
-
-  // Store originals on load
-  document.addEventListener('DOMContentLoaded', () => {
-    getEditables().forEach(el => {
-      el.dataset.original = el.innerHTML;
-    });
-  });
-
-  toggleBtn.addEventListener('click', () => {
-    editMode ? disableEdit() : enableEdit();
-  });
-
-  btnUndo.addEventListener('click', () => {
-    document.execCommand('undo');
-  });
-
-  btnCopy.addEventListener('click', () => {
-    // Get full page HTML without the toolbar style modifications
-    const doctype = '<!DOCTYPE html>\n';
-    const fullHtml = doctype + document.documentElement.outerHTML;
-    navigator.clipboard.writeText(fullHtml).then(() => {
-      btnCopy.textContent = '✓ Copiado';
-      setTimeout(() => btnCopy.textContent = 'Copiar HTML', 2000);
-    });
-  });
-
-  btnDl.addEventListener('click', () => {
-    // Temporarily disable edit mode for clean export
-    const wasEditing = editMode;
-    if (wasEditing) disableEdit();
-
-    const doctype = '<!DOCTYPE html>\n';
-    const fullHtml = doctype + document.documentElement.outerHTML;
-    const blob = new Blob([fullHtml], { type: 'text/html' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'manual-bienvenida-tienda-mayor.html';
-    a.click();
-    URL.revokeObjectURL(a.href);
-
-    if (wasEditing) enableEdit();
-  });
-
-  // Keyboard shortcut: Cmd/Ctrl+E to toggle
-  document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
-      e.preventDefault();
-      editMode ? disableEdit() : enableEdit();
-    }
-    // Escape to exit edit
-    if (e.key === 'Escape' && editMode) disableEdit();
-  });
-})();
-</script>
 
 
 
