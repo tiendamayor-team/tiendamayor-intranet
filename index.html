@@ -317,6 +317,62 @@ footer {
 .edit-mode [data-editable]:hover { outline: 1.5px dashed rgba(255,255,255,.4); outline-offset: 3px; cursor: text; }
 .edit-mode [data-editable]:focus { outline: 2px solid rgba(255,255,255,.7); outline-offset: 3px; }
 [data-editable] { transition: outline .15s; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  nav { padding: 0 28px; }
+
+  .hero { padding-left: 28px; padding-right: 28px; padding-bottom: 48px; min-height: 45vh; }
+  .hero-bg-text { font-size: 12rem; right: 20px; }
+  .hero-h1 { font-size: 2.8rem; }
+
+  .divider { margin: 0 28px; }
+
+  .manuales-section { padding: 48px 28px 60px; }
+
+  .manuales-grid { grid-template-columns: 1fr 1fr !important; }
+
+  footer { padding: 28px 28px; gap: 20px; }
+}
+
+@media (max-width: 600px) {
+  nav { padding: 0 20px; height: 52px; }
+  .nav-badge { display: none; }
+
+  .hero { padding-left: 20px; padding-right: 20px; padding-bottom: 36px; min-height: 38vh; }
+  .hero-bg-text { display: none; }
+  .hero-h1 { font-size: 2.1rem; }
+  .hero-sub { font-size: .72rem; }
+
+  .divider { margin: 0 20px; }
+
+  .manuales-section { padding: 36px 20px 48px; }
+
+  .manuales-grid { grid-template-columns: 1fr !important; }
+
+  .manual-card { min-height: 220px; padding: 32px 24px 28px; }
+
+  .sec-header { flex-direction: column; gap: 6px; margin-bottom: 24px; }
+
+  footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px 20px;
+  }
+  .footer-copy { text-align: left; }
+
+  #edit-toolbar {
+    bottom: 16px;
+    width: calc(100% - 32px);
+    left: 16px;
+    transform: none;
+    overflow-x: auto;
+  }
+  .tb-btn { padding: 11px 14px; font-size: .5rem; }
+  .tb-status { padding: 11px 14px; }
+  #toggle-edit { padding: 11px 16px; }
+}
 </style>
 </head>
 <body>
