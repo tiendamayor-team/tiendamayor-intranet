@@ -597,7 +597,7 @@ section { padding: 96px 0; }
 
 .paso-n {
   font-size: 2.4rem; font-weight: 200;
-  color: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.35);
   line-height: 1; margin-bottom: 14px;
   letter-spacing: -.04em;
 }
@@ -1659,6 +1659,30 @@ footer {
   .stock-layout { grid-template-columns: 1fr; gap: 40px; }
   .stock-sidebar { position: static; }
   .stock-tags-grid { grid-template-columns: 1fr; }
+  .stock-planilla-head { padding: 16px 22px; flex-wrap: wrap; gap: 10px; }
+  .stock-planilla-body { padding: 24px 22px 20px; }
+  .stock-tags-head { padding: 16px 22px; }
+  .stock-tags-intro { padding: 22px 22px 18px; }
+  .tag-card { padding: 24px 22px; }
+  .stock-deposito-head { padding: 16px 22px; }
+  .stock-deposito-body { padding: 22px 22px 18px; }
+  .stock-warning { padding: 16px 18px; }
+  .planilla-mock { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .planilla-mock-table { font-size: .5rem; min-width: 580px; }
+  .planilla-mock-table th, .planilla-mock-table td { padding: 5px 6px; }
+}
+@media (max-width: 600px) {
+  .stock-planilla-head { padding: 14px 16px; }
+  .stock-planilla-body { padding: 18px 16px 16px; }
+  .stock-tags-head { padding: 14px 16px; }
+  .stock-tags-intro { padding: 18px 16px 14px; }
+  .tag-card { padding: 20px 16px; }
+  .stock-deposito-head { padding: 14px 16px; }
+  .stock-deposito-body { padding: 18px 16px 14px; }
+  .planilla-mock-table { font-size: .46rem; min-width: 500px; }
+  .planilla-mock-caption { font-size: .46rem; margin-top: 8px; }
+  .stock-head-title { font-size: .64rem; }
+  .stock-footnote { padding: 14px 16px; }
 }
 
 /* ═══ PEDIDOS ═══ */
@@ -2389,6 +2413,10 @@ footer {
   .rec-consultas-list { grid-template-columns: 1fr; }
   .rec-step { grid-template-columns: 48px 1fr; }
 
+  /* Recursos */
+  #recursos > .container > div { grid-template-columns: 1fr !important; gap: 40px !important; }
+  #recursos > .container > div > div:first-child { position: static !important; }
+
   /* Timeline proceso */
   .proceso-timeline-wrap { padding-bottom: 24px; }
 
@@ -2441,8 +2469,8 @@ footer {
   .proceso-tl { min-width: 700px; }
 
   /* Stock planilla */
-  .stock-planilla-head { padding: 16px 20px; }
-  .stock-deposito-body { padding: 20px 20px 18px; }
+  .stock-planilla-head { padding: 14px 16px; }
+  .stock-deposito-body { padding: 18px 16px 14px; }
 
   /* Nav */
   nav { padding: 0 16px; }
@@ -2469,23 +2497,25 @@ footer {
     <span class="logo-line1">Tienda</span>
     <span class="logo-line2">Mayor</span>
   </div>
-  <a class="nav-back" href="index.html"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
+  <a class="nav-back" href="#hero-anchor" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
   <ul class="nav-links">
     <li><a href="#atc" class="">Atención al Cliente</a></li>
     <li><a href="#tareas" class="">Día a día</a></li>
     <li><a href="#muestritas" class="">Muestritas</a></li>
     <li><a href="#showroom" class="">Showroom</a></li>
     <li><a href="#stock" class="">Stock</a></li>
-    <li><a href="#comunicacion" class="">Comunicación</a></li>
+    <li><a href="#comunicacion" class="">WhatsApp</a></li>
     <li><a href="#pedidos" class="">Pedidos</a></li>
-    <li><a href="#proceso-pedido" class="">Proceso</a></li>
-    <li><a href="#entrega" class="">Entrega</a></li>
+    <li><a href="#proceso-pedido" class="">Armado Pedidos</a></li>
+    <li><a href="#entrega" class="">Entrega Inmediata</a></li>
     <li><a href="#pagos" class="">Pagos</a></li>
     <li><a href="#logistica" class="">Logística</a></li>
     <li><a href="#reclamos" class="">Reclamos</a></li>
+    <li><a href="#recursos" class="">Consultas</a></li>
   </ul>
 </nav>
 
+<div id="hero-anchor" style="position:absolute;top:0;"></div>
 <!-- ══ HERO ══ -->
 <div class="hero">
   <div class="hero-left">
@@ -2495,7 +2525,7 @@ footer {
     </div>
     <div class="hero-bottom">
       <p class="hero-eyebrow" spellcheck="true">Manual de área · Uso interno</p>
-      <h1 class="hero-h1" spellcheck="true">Bienvenida a<br><em>Atención<br>al Cliente</em></h1>
+      <h1 class="hero-h1" spellcheck="true">Bienvenida/o a<br><em>Atención<br>al Cliente</em></h1>
       <p class="hero-sub" spellcheck="true">Todo lo que necesitás saber para arrancar: cómo funciona el área, cómo nos comunicamos internamente y cómo atendemos a nuestros clientes.</p>
     </div>
   </div>
@@ -2621,7 +2651,7 @@ footer {
         <div class="tarea-card">
           <span class="tarea-num">04</span>
           <p class="tarea-titulo" spellcheck="true">Orden del perchero de exhibición</p>
-          <p class="tarea-text" spellcheck="true">El espacio de trabajo y el perchero deben estar <strong>siempre prolijos y ordenados</strong>. Los paños se pueden descolgar para que el cliente arme paletas; después hay que <strong>volver a ubicarlos en su lugar</strong> según el documento <a href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing" class="tarea-link" target="_blank" data-editable-href="https://bit.ly/ORDENPERCHERO" title="Orden de perchero" data-link-bound="1">Orden de perchero<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</p>
+          <p class="tarea-text" spellcheck="true">El espacio de trabajo y el perchero deben estar <strong>siempre prolijos y ordenados</strong>. Los paños se pueden descolgar para que el cliente arme paletas; después hay que <strong>volver a ubicarlos en su lugar</strong> según el documento <a href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing" class="tarea-link" target="_blank" data-editable-href="https://bit.ly/ORDENPERCHERO" title="Orden de perchero" data-link-bound="1" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing','_blank');return false;})(event);return false;">Orden de perchero<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</p>
         </div>
 
         <div class="tarea-card">
@@ -2909,7 +2939,7 @@ footer {
               <p class="tag-card-color" spellcheck="true">Amarillo</p>
               <p class="tag-card-title" spellcheck="true">Tag amarillo</p>
               <p class="tag-card-text" spellcheck="true">
-                El textil se encuentra <strong>fraccionado</strong> o con <strong>muchos paños</strong> en stock. <em>Podemos consultarlo en la planilla "Paños Stock TM" — ver más info en <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al documento de Preguntas Frecuentes" data-link-bound="1">Preguntas Frecuentes<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</em>
+                El textil se encuentra <strong>fraccionado</strong> o con <strong>muchos paños</strong> en stock. <em>Podemos consultarlo en la planilla "Paños Stock TM" — ver más info en <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al documento de Preguntas Frecuentes" data-link-bound="1" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;">Preguntas Frecuentes<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</em>
               </p>
             </div>
 
@@ -2994,7 +3024,7 @@ footer {
         <p class="grupo-n">05</p>
         <p class="grupo-nombre" spellcheck="true">Reclamos TM</p>
         <p class="grupo-integrantes" spellcheck="true">Atención al cliente + COBRANZAS + Producción + ISA Y BELU</p>
-        <p class="grupo-desc" spellcheck="true">En este grupo se envían los reclamos recibidos de clientes junto a toda la información necesaria para evaluar cada caso en conjunto y dar una respuesta adecuada. <br>La resolución siempre involucra a At al cliente y Producción, el ok final lo dan Isa o Belu.&nbsp;</p>
+        <p class="grupo-desc" spellcheck="true">En este grupo se envían los reclamos recibidos de clientes junto a toda la información necesaria para evaluar cada caso en conjunto y dar una respuesta adecuada. <br>La resolución siempre involucra a At al cliente y Producción, el ok final lo dan Isa o Belu.&nbsp;<br><br>Ver más info en <a href="#reclamos" class="ff-link" style="font-size:inherit;">Reclamos y Devoluciones<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</p>
       </div>
 
     </div>
@@ -3061,7 +3091,7 @@ footer {
               Completamos los datos solicitados en <strong>cada columna</strong> y aclaramos todo lo necesario sobre el pedido — para que una vez confirmado, <strong>producción</strong> pueda proceder a armarlo sin consultas previas o inquietudes.
             </p>
           </div>
-          <a href="https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing" class="ped-planilla-link" target="_blank" data-editable-href="" title="Pegá acá el link a la planilla Encargos TM" spellcheck="false">
+          <a href="https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing" class="ped-planilla-link" target="_blank" title="Planilla Encargos TM" spellcheck="false" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing','_blank');return false;})(event);return false;">
             Abrir planilla
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg>
           </a>
@@ -3275,7 +3305,7 @@ footer {
             <span class="tl-hora" spellcheck="true">14:00</span>
             <div>
               <p class="tl-titulo" spellcheck="true">Almuerzo</p>
-              <p class="tl-desc" spellcheck="true">Pausa de una hora.&nbsp;</p>
+              <p class="tl-desc" spellcheck="true">Pausa de una hora.</p>
             </div>
           </div>
           <div class="tl-item visible" data-d="240">
@@ -3289,7 +3319,7 @@ footer {
             <span class="tl-hora" spellcheck="true">17:00</span>
             <div>
               <p class="tl-titulo" spellcheck="true">Cierre de jornada</p>
-              <p class="tl-desc" spellcheck="true">Finalizan la jornada de armado,&nbsp; realizan orden y limpieza del espacio de trabajo. Dejan todo preparado para el día siguiente.&nbsp;</p>
+              <p class="tl-desc" spellcheck="true">Finalizan la jornada de armado, realizan orden y limpieza del espacio de trabajo. Dejan todo preparado para el día siguiente.</p>
             </div>
           </div>
         </div>
@@ -3301,34 +3331,32 @@ footer {
         <!-- Producción -->
         <div class="dep-block">
           <div class="prod-badge">Desde producción</div>
-          <p class="dep-block-title" style="color:var(--white);" spellcheck="true">Tareas de producción que se articulan con depósito</p>
+          <p class="dep-block-title" style="color:var(--white);margin-bottom:16px;" spellcheck="true">Tareas de producción que se articulan con depósito</p>
           <ul class="dep-list">
-            <li>Entre las <strong>14 y 15 hs</strong> se cambian los estados de los pedidos que ya están armados.</li>
-            <li>Entre las <strong>16:30 y 17 hs</strong> se generan las listas de armado para el día siguiente.</li>
+            <li><span><strong style="color:rgba(255,255,255,.85);">14 – 15 hs</strong> &nbsp;·&nbsp; Se cambian los estados de los pedidos que ya están armados.</span></li>
+            <li><span><strong style="color:rgba(255,255,255,.85);">16:30 – 17 hs</strong> &nbsp;·&nbsp; Se generan las listas de armado para el día siguiente.</span></li>
           </ul>
         </div>
 
         <!-- Almacenamiento -->
         <div class="dep-block">
           <p class="dep-block-label" spellcheck="true">Almacenamiento de mercadería</p>
-          <p class="dep-block-title" style="color:var(--white);" spellcheck="true">¿Cómo se guarda la mercadería?</p>
-          <p class="dep-block-text" spellcheck="true">
-            Los textiles se guardan en rollo/cajas o en paños plegados.&nbsp;<strong>&nbsp;</strong></p>
-          <ul class="dep-list" style="margin-top:14px;">
-            <li>La mayoría de los textiles se almacena <strong>enrollada</strong> en estanterías.</li>
-            <li>Otra parte se guarda en <strong>paños plegados</strong>, también en estanterías.</li>
-            <li>Los <strong>terciopelos y panas</strong> se almacenan en cajas de cartón apoyadas de forma horizontal, para preservar la estructura del tejido.</li>
+          <p class="dep-block-title" style="color:var(--white);margin-bottom:10px;" spellcheck="true">¿Cómo se guarda la mercadería?</p>
+          <p class="dep-block-text" style="margin-bottom:12px;" spellcheck="true">Los textiles se guardan en rollo/cajas o en paños plegados.</p>
+          <ul class="dep-list">
+            <li><span>La mayoría se almacena <strong style="color:rgba(255,255,255,.85);">enrollada</strong> en estanterías.</span></li>
+            <li><span>Otra parte se guarda en <strong style="color:rgba(255,255,255,.85);">paños plegados</strong>, también en estanterías.</span></li>
+            <li><span>Los <strong style="color:rgba(255,255,255,.85);">terciopelos y panas</strong> se almacenan en cajas de cartón apoyadas horizontalmente, para preservar la estructura del tejido.</span></li>
           </ul>
         </div>
 
-        <!-- Nota -->
-        <div class="dep-block" style="background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.04);">
-          <p class="dep-block-label" spellcheck="true">Para tener en cuenta</p>
-          <p class="dep-block-text" spellcheck="true">
-            El depósito no es accesible directamente desde las áreas de atención. Toda consulta de stock o logística se canaliza por el grupo de WhatsApp correspondiente.&nbsp;</p>
-        </div>
-
       </div>
+    </div>
+
+    <!-- Observación al pie — ancho completo -->
+    <div style="margin-top:32px;padding:20px 28px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);display:flex;align-items:flex-start;gap:16px;">
+      <span style="font-size:.47rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.35);white-space:nowrap;padding-top:2px;flex-shrink:0;">Para tener en cuenta</span>
+      <p style="font-size:.72rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.55);font-style:italic;">El depósito no es accesible directamente desde las áreas de atención. Toda consulta de stock o logística se canaliza por el <strong style="color:rgba(255,255,255,.75);font-style:normal;">grupo de WhatsApp</strong> correspondiente.</p>
     </div>
 
   </div>
@@ -3406,7 +3434,7 @@ footer {
 
         <div class="entrega-link-block">
           <p class="entrega-link-text" spellcheck="true">El paso a paso detallado lo encontrás en el documento de <strong>Preguntas Frecuentes</strong>.</p>
-          <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="entrega-link-btn" target="_blank">
+          <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="entrega-link-btn" target="_blank" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;">
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             Ver documento
           </a>
@@ -3779,6 +3807,49 @@ footer {
   </div>
 </section>
 
+<!-- ══ RECURSOS Y CONSULTAS ══ -->
+<section id="recursos" style="background:var(--off);border-top:1px solid var(--mid);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:80px;align-items:start;">
+
+      <div style="position:sticky;top:80px;">
+        <p class="sec-label">Recursos del área</p>
+        <h2 class="sec-title" style="font-size:1.9rem;">Consultas<br>&amp; <em style="font-style:italic;font-weight:200">recursos</em></h2>
+        <div class="sec-rule"></div>
+        <p style="font-size:.76rem;font-weight:300;line-height:1.9;color:var(--dark);">Para resolver dudas del día a día, estos son los principales recursos disponibles para el equipo.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1px;background:var(--mid);border:1px solid var(--mid);">
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">01</span>
+            <p style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;">Instructivo de Atención al Cliente</p>
+          </div>
+          <p style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);">Para consultar dudas o procesos explicativos, paso a paso, instrucciones detalladas sobre tus tareas, podés consultar el <a href="https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Instructivo de Atención al Cliente" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing','_blank');return false;})(event);return false;"><strong>Instructivo de Atención al Cliente</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>. Es el documento de referencia principal del área.</p>
+        </div>
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">02</span>
+            <p style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;">Documento de Preguntas Frecuentes</p>
+          </div>
+          <p style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);">También podés consultar el <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al Documento de Preguntas Frecuentes" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;"><strong>Documento de Preguntas Frecuentes</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a> para resolver dudas concretas sobre situaciones habituales del área.</p>
+        </div>
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">03</span>
+            <p style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;">Responsable de área</p>
+          </div>
+          <p style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);">Para cualquier otra consulta que no esté cubierta por los documentos mencionados, podés consultar al <strong>responsable de área</strong> lo que necesites.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ FOOTER ══ -->
 <footer>
   <div class="footer-logo logo">
@@ -3842,14 +3913,54 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
   tlObs.observe(el);
 });
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior: 'smooth' });
-  });
-});
+// Handler de navegación — registrado en WINDOW con CAPTURA
+// Corre antes que cualquier otro listener incluyendo el interceptor del iframe.
+// Maneja: (1) links internos #hash → smooth scroll, (2) links externos → nueva pestaña
+(function() {
+  function handleNav(e) {
+    var el = e.target;
+    // Subir hasta el <a> más cercano
+    while (el && el.tagName !== 'A') el = el.parentElement;
+    if (!el) return;
+
+    var rawHref = el.getAttribute('href') || '';
+
+    // — Links internos (#hash) → smooth scroll —
+    if (rawHref.startsWith('#')) {
+      var target = document.getElementById(rawHref.slice(1));
+      if (!target) target = document.querySelector(rawHref);
+      if (!target) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      target.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    // — Links externos (http/https) → nueva pestaña —
+    if (rawHref.startsWith('http://') || rawHref.startsWith('https://')) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      try {
+        // Dentro del iframe de Claude
+        if (window.parent && window !== window.parent) {
+          window.parent.postMessage({ type: 'openExternal', href: rawHref }, '*');
+        } else {
+          window.open(rawHref, '_blank', 'noopener,noreferrer');
+        }
+      } catch(err) {
+        window.open(rawHref, '_blank', 'noopener,noreferrer');
+      }
+      return;
+    }
+  }
+
+  // Registrar en window con captura = máxima prioridad posible
+  window.addEventListener('click', handleNav, true);
+  // También en document captura como respaldo
+  document.addEventListener('click', handleNav, true);
+})();
 
 // Edit toolbar with autosave
 (function () {
@@ -3921,7 +4032,64 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
   const STORAGE_KEY = 'tm-manual-edits-v1';
   const memStore = {};
-  const ls = { getItem(k){try{return localStorage.getItem(k)}catch(e){return memStore[k]||null}}, setItem(k,v){try{localStorage.setItem(k,v)}catch(e){memStore[k]=v}}, removeItem(k){try{localStorage.removeItem(k)}catch(e){delete memStore[k]}} };
+
+  // Almacenamiento robusto: IndexedDB → localStorage → memStore en memoria
+  const DB_NAME = 'tm-manual-db';
+  const DB_STORE = 'edits';
+  let idb = null;
+
+  function openIDB() {
+    return new Promise((resolve) => {
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore(DB_STORE);
+        req.onsuccess = e => { idb = e.target.result; resolve(idb); };
+        req.onerror = () => resolve(null);
+      } catch(e) { resolve(null); }
+    });
+  }
+
+  function idbGet(key) {
+    return new Promise(resolve => {
+      if (!idb) { resolve(null); return; }
+      try {
+        const tx = idb.transaction(DB_STORE, 'readonly');
+        const req = tx.objectStore(DB_STORE).get(key);
+        req.onsuccess = e => resolve(e.target.result ?? null);
+        req.onerror = () => resolve(null);
+      } catch(e) { resolve(null); }
+    });
+  }
+
+  function idbSet(key, value) {
+    return new Promise(resolve => {
+      if (!idb) { resolve(false); return; }
+      try {
+        const tx = idb.transaction(DB_STORE, 'readwrite');
+        tx.objectStore(DB_STORE).put(value, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      } catch(e) { resolve(false); }
+    });
+  }
+
+  function idbDelete(key) {
+    return new Promise(resolve => {
+      if (!idb) { resolve(); return; }
+      try {
+        const tx = idb.transaction(DB_STORE, 'readwrite');
+        tx.objectStore(DB_STORE).delete(key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      } catch(e) { resolve(); }
+    });
+  }
+
+  const ls = {
+    getItem(k) { try { return localStorage.getItem(k); } catch(e) { return memStore[k] || null; } },
+    setItem(k,v) { try { localStorage.setItem(k,v); } catch(e) { memStore[k]=v; } },
+    removeItem(k) { try { localStorage.removeItem(k); } catch(e) { delete memStore[k]; } }
+  };
 
   let editMode = false;
   let dirty = false;
@@ -3979,9 +4147,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
   }
 
-  function saveNow() {
+  async function saveNow() {
     try {
-      ls.setItem(STORAGE_KEY, JSON.stringify(collectEdits()));
+      const json = JSON.stringify(collectEdits());
+      // Intentar IndexedDB primero
+      const ok = await idbSet(STORAGE_KEY, json);
+      if (!ok) ls.setItem(STORAGE_KEY, json); // fallback localStorage/memStore
       setSaveStatus('saved', 'Guardado automáticamente');
       dirty = false;
       setTimeout(() => { if (!dirty) setSaveStatus('', ''); }, 2500);
@@ -3998,9 +4169,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     saveTimer = setTimeout(saveNow, 600);
   }
 
-  function loadSaved() {
+  async function loadSaved() {
     try {
-      const raw = ls.getItem(STORAGE_KEY);
+      // Intentar IndexedDB primero, luego localStorage
+      let raw = await idbGet(STORAGE_KEY);
+      if (!raw) raw = ls.getItem(STORAGE_KEY);
       if (!raw) return;
       applyEdits(JSON.parse(raw));
       setSaveStatus('saved', 'Cambios restaurados');
@@ -4071,15 +4244,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   if (btnItalic) btnItalic.addEventListener('mousedown', e => { e.preventDefault(); document.execCommand('italic');                    scheduleSave(); });
   if (btnColor)  btnColor.addEventListener('input',      e => { document.execCommand('foreColor', false, e.target.value); scheduleSave(); });
 
-  btnReset.addEventListener('click', () => {
+  btnReset.addEventListener('click', async () => {
     if (!confirm('¿Restaurar el manual al estado original? Se perderán todos los cambios guardados en este navegador.')) return;
     try { ls.removeItem(STORAGE_KEY); } catch (err) { console.error(err); }
+    await idbDelete(STORAGE_KEY);
     location.reload();
   });
 
-  btnDl.addEventListener('click', () => {
+  btnDl.addEventListener('click', async () => {
     const wasEditing = editMode;
     if (wasEditing) disableEdit();
+
+    setSaveStatus('saving', 'Preparando descarga…');
 
     // Clonamos el HTML, limpiamos atributos de edición y removemos la toolbar
     const clone = document.documentElement.cloneNode(true);
@@ -4090,22 +4266,46 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     clone.querySelectorAll('[data-edit-bound]').forEach(n => n.removeAttribute('data-edit-bound'));
     clone.querySelectorAll('[data-link-bound]').forEach(n => n.removeAttribute('data-link-bound'));
 
-    const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    // Embebemos las imágenes subidas (base64) en el clon
+    // Las imágenes embebidas ya están como src base64 en el DOM real — el cloneNode(true) las copia.
+    // Nos aseguramos de copiar los src de las imágenes embebidas del DOM real al clon.
+    document.querySelectorAll('img.ms-embedded').forEach((img, i) => {
+      const cloneImgs = clone.querySelectorAll('img.ms-embedded');
+      if (cloneImgs[i]) cloneImgs[i].src = img.src;
+    });
+
+    const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
+
+    // Convertimos a bytes para el postMessage de descarga del iframe
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(htmlStr);
     const date = new Date().toISOString().slice(0, 10);
-    a.download = 'manual-atencion-al-cliente-tm-' + date + '.html';
-    document.body.appendChild(a);
+    const filename = 'manual-atencion-al-cliente-tm-' + date + '.html';
 
-    // Delay para asegurar compatibilidad del download
-    setTimeout(() => {
+    // Intentamos la descarga nativa primero (cuando el archivo se abre directamente en browser)
+    try {
+      const blobUrl = URL.createObjectURL(new Blob([htmlStr], { type: 'text/html' }));
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
       a.click();
+      setTimeout(() => { URL.revokeObjectURL(blobUrl); document.body.removeChild(a); }, 500);
+    } catch(e) {}
 
-      setTimeout(() => {
-        URL.revokeObjectURL(a.href);
-        document.body.removeChild(a);
-      }, 300);
-    }, 50);
+    // También enviamos por postMessage para que funcione dentro del iframe de Claude
+    try {
+      window.parent.postMessage({
+        type: 'downloadFile',
+        filename: filename,
+        data: bytes.buffer,
+        mimeType: 'text/html'
+      }, '*');
+    } catch(e) {}
+
+    setSaveStatus('saved', 'Descarga lista');
+    setTimeout(() => { if (!dirty) setSaveStatus('', ''); }, 2500);
 
     if (wasEditing) enableEdit();
   });
@@ -4124,11 +4324,77 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 
   // Restaurar cambios guardados al cargar
-  loadSaved();
+  openIDB().then(() => loadSaved());
 })();
 
 // ─── Embed de imágenes en muestritas ───
 (function() {
+  // Guardado de imágenes en IndexedDB para persistencia entre recargas
+  const IMG_DB = 'tm-manual-imgs';
+  const IMG_STORE = 'imgs';
+  let imgDb = null;
+
+  function openImgDB() {
+    return new Promise(resolve => {
+      try {
+        const req = indexedDB.open(IMG_DB, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore(IMG_STORE);
+        req.onsuccess = e => { imgDb = e.target.result; resolve(); };
+        req.onerror = () => resolve();
+      } catch(e) { resolve(); }
+    });
+  }
+
+  function saveImg(key, dataUrl) {
+    if (!imgDb) return;
+    try {
+      const tx = imgDb.transaction(IMG_STORE, 'readwrite');
+      tx.objectStore(IMG_STORE).put(dataUrl, key);
+    } catch(e) {}
+  }
+
+  function loadImgs() {
+    if (!imgDb) return;
+    ['ms-upload-1','ms-upload-2'].forEach(boxId => {
+      try {
+        const tx = imgDb.transaction(IMG_STORE, 'readonly');
+        const req = tx.objectStore(IMG_STORE).get(boxId);
+        req.onsuccess = e => {
+          if (!e.target.result) return;
+          const box = document.getElementById(boxId);
+          if (!box) return;
+          const ph = box.querySelector('.ms-img-placeholder');
+          if (ph) ph.style.display = 'none';
+          let img = box.querySelector('img.ms-embedded');
+          if (!img) {
+            img = document.createElement('img');
+            img.className = 'ms-embedded';
+            box.appendChild(img);
+          }
+          img.src = e.target.result;
+          // Re-add remove button
+          if (!box.querySelector('.ms-img-remove')) {
+            const rmBtn = document.createElement('button');
+            rmBtn.className = 'ms-img-remove';
+            rmBtn.textContent = '×';
+            rmBtn.style.cssText = 'position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:14px;line-height:1;z-index:10;font-family:Montserrat,sans-serif;';
+            rmBtn.onclick = function(ev) {
+              ev.stopPropagation();
+              img.remove();
+              rmBtn.remove();
+              if (ph) ph.style.display = '';
+              // Borrar de IndexedDB
+              if (imgDb) {
+                try { imgDb.transaction(IMG_STORE,'readwrite').objectStore(IMG_STORE).delete(boxId); } catch(e) {}
+              }
+            };
+            box.appendChild(rmBtn);
+          }
+        };
+      } catch(e) {}
+    });
+  }
+
   function bindUpload(fileInputId, boxId) {
     const inp = document.getElementById(fileInputId);
     const box = document.getElementById(boxId);
@@ -4148,6 +4414,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
           box.appendChild(img);
         }
         img.src = e.target.result;
+        // Guardar en IndexedDB para persistencia
+        saveImg(boxId, e.target.result);
         // Add remove button
         let rmBtn = box.querySelector('.ms-img-remove');
         if (!rmBtn) {
@@ -4161,6 +4429,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
             rmBtn.remove();
             if (ph) ph.style.display = '';
             inp.value = '';
+            if (imgDb) {
+              try { imgDb.transaction(IMG_STORE,'readwrite').objectStore(IMG_STORE).delete(boxId); } catch(e) {}
+            }
           };
           box.appendChild(rmBtn);
         }
@@ -4168,8 +4439,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       reader.readAsDataURL(file);
     });
   }
-  bindUpload('ms-file-1', 'ms-upload-1');
-  bindUpload('ms-file-2', 'ms-upload-2');
+
+  openImgDB().then(() => {
+    loadImgs();
+    bindUpload('ms-file-1', 'ms-upload-1');
+    bindUpload('ms-file-2', 'ms-upload-2');
+  });
 })();
 </script>
 
