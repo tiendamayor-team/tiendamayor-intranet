@@ -20,8 +20,8 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background: var(--black);
-  color: var(--white);
+  background: var(--white);
+  color: var(--black);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
@@ -33,8 +33,8 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 60px;
-  background: rgba(12,12,12,0.92);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.95);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,13 +44,13 @@ nav {
 }
 
 .logo { display: flex; flex-direction: column; line-height: 1; }
-.logo-line1 { font-size: .55rem; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: rgba(255,255,255,.85); }
-.logo-line2 { font-size: .55rem; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: rgba(255,255,255,.85); }
+.logo-line1 { font-size: .55rem; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: rgba(0,0,0,.85); }
+.logo-line2 { font-size: .55rem; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: rgba(0,0,0,.85); }
 
 .nav-badge {
   font-size: .5rem; font-weight: 600; letter-spacing: .22em;
-  text-transform: uppercase; color: rgba(255,255,255,.75);
-  border: 1px solid rgba(255,255,255,.2);
+  text-transform: uppercase; color: rgba(0,0,0,.75);
+  border: 1px solid rgba(0,0,0,.2);
   padding: 5px 12px;
 }
 
@@ -68,20 +68,13 @@ nav {
   overflow: hidden;
 }
 
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,.018) 47px, rgba(255,255,255,.018) 48px),
-    repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,.018) 47px, rgba(255,255,255,.018) 48px);
-  pointer-events: none;
-}
+
 
 .hero-bg-text {
   position: absolute;
   right: 60px; bottom: -20px;
   font-size: 22rem; font-weight: 200;
-  color: rgba(255,255,255,.025);
+  color: rgba(0,0,0,.025);
   line-height: 1; letter-spacing: -.06em;
   pointer-events: none;
   user-select: none;
@@ -91,22 +84,22 @@ nav {
 
 .hero-eyebrow {
   font-size: .58rem; font-weight: 600; letter-spacing: .28em;
-  text-transform: uppercase; color: rgba(255,255,255,.85);
+  text-transform: uppercase; color: rgba(0,0,0,.85);
   margin-bottom: 22px;
   opacity: 0; animation: fadeUp .6s .1s forwards;
 }
 
 .hero-h1 {
   font-size: 4rem; font-weight: 300; line-height: 1.05;
-  color: var(--white); margin-bottom: 24px;
+  color: var(--black); margin-bottom: 24px;
   letter-spacing: -.03em;
   opacity: 0; animation: fadeUp .6s .2s forwards;
 }
-.hero-h1 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,.75); }
+.hero-h1 em { font-style: italic; font-weight: 300; color: rgba(0,0,0,.75); }
 
 .hero-sub {
   font-size: .78rem; font-weight: 400; line-height: 1.9;
-  color: rgba(255,255,255,.75); max-width: 480px;
+  color: rgba(0,0,0,.75); max-width: 480px;
   opacity: 0; animation: fadeUp .6s .35s forwards;
 }
 
@@ -118,7 +111,7 @@ nav {
 /* ═══ DIVIDER ═══ */
 .divider {
   height: 1px;
-  background: rgba(255,255,255,.06);
+  background: rgba(0,0,0,.12);
   margin: 0 80px;
 }
 
@@ -137,30 +130,30 @@ nav {
 
 .sec-label {
   font-size: .54rem; font-weight: 700; letter-spacing: .26em;
-  text-transform: uppercase; color: rgba(255,255,255,.8);
+  text-transform: uppercase; color: rgba(0,0,0,.95);
 }
 
 .sec-count {
   font-size: .54rem; font-weight: 500; letter-spacing: .14em;
-  text-transform: uppercase; color: rgba(255,255,255,.75);
+  text-transform: uppercase; color: rgba(0,0,0,.75);
 }
 
 .manuales-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.08);
 }
 
 .manual-card {
-  background: var(--black);
+  background: #ffffff;
   padding: 44px 40px 40px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 300px;
+  min-height: 380px;
   position: relative;
   overflow: hidden;
   transition: background .25s;
@@ -172,18 +165,18 @@ nav {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 1px;
-  background: rgba(255,255,255,.0);
+  background: rgba(0,0,0,.0);
   transition: background .25s;
 }
 
-.manual-card:hover { background: #141414; }
-.manual-card:hover::after { background: rgba(255,255,255,.08); }
+.manual-card:hover { background: #f3f3f3; }
+.manual-card:hover::after { background: rgba(0,0,0,.08); }
 
 .card-bg-n {
   position: absolute;
   top: 10px; right: 24px;
   font-size: 7rem; font-weight: 200;
-  color: rgba(255,255,255,.03); line-height: 1;
+  color: rgba(0,0,0,.03); line-height: 1;
   letter-spacing: -.05em; pointer-events: none;
 }
 
@@ -191,27 +184,27 @@ nav {
 
 .card-area {
   font-size: .5rem; font-weight: 700; letter-spacing: .24em;
-  text-transform: uppercase; color: rgba(255,255,255,.75);
+  text-transform: uppercase; color: rgba(0,0,0,.75);
   margin-bottom: 18px;
 }
 
 .card-title {
   font-size: 1.45rem; font-weight: 400; line-height: 1.2;
-  color: var(--white); letter-spacing: -.01em;
+  color: var(--black); letter-spacing: -.01em;
   margin-bottom: 6px;
 }
-.card-title em { font-style: italic; font-weight: 300; color: rgba(255,255,255,.8); }
+.card-title em { font-style: italic; font-weight: 300; color: rgba(0,0,0,.95); }
 
 .card-desc {
   font-size: .7rem; font-weight: 400; line-height: 1.8;
-  color: rgba(255,255,255,.72); margin-top: 16px;
+  color: rgba(0,0,0,.72); margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,.06);
+  border-top: 1.5px solid rgba(0,0,0,.18);
 }
 
 .card-bottom {
   position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-end;
   margin-top: 28px;
 }
 
@@ -219,44 +212,44 @@ nav {
 
 .card-tag {
   font-size: .46rem; font-weight: 700; letter-spacing: .16em;
-  text-transform: uppercase; color: rgba(255,255,255,.8);
-  border: 1px solid rgba(255,255,255,.18);
+  text-transform: uppercase; color: rgba(0,0,0,.95);
+  border: 1px solid rgba(0,0,0,.18);
   padding: 4px 8px;
 }
 
 .card-arrow {
   width: 28px; height: 28px;
-  border: 1px solid rgba(255,255,255,.1);
+  border: 1px solid rgba(0,0,0,.1);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   transition: border-color .2s, background .2s;
 }
 .manual-card:hover .card-arrow {
-  border-color: rgba(255,255,255,.3);
-  background: rgba(255,255,255,.05);
+  border-color: rgba(0,0,0,.3);
+  background: rgba(0,0,0,.05);
 }
-.card-arrow svg { width: 12px; height: 12px; stroke: rgba(255,255,255,.8); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.card-arrow svg { width: 12px; height: 12px; stroke: rgba(0,0,0,.8); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
 .manual-card--soon {
-  background: rgba(255,255,255,.012);
+  background: rgba(0,0,0,.012);
   cursor: default;
   pointer-events: none;
 }
-.manual-card--soon .card-title { color: rgba(255,255,255,.25); }
-.manual-card--soon .card-area  { color: rgba(255,255,255,.12); }
-.manual-card--soon .card-desc  { color: rgba(255,255,255,.18); border-top-color: rgba(255,255,255,.04); }
+.manual-card--soon .card-title { color: rgba(0,0,0,.25); }
+.manual-card--soon .card-area  { color: rgba(0,0,0,.12); }
+.manual-card--soon .card-desc  { color: rgba(0,0,0,.18); border-top-color: rgba(0,0,0,.04); }
 
 .soon-badge {
   font-size: .44rem; font-weight: 600; letter-spacing: .18em;
-  text-transform: uppercase; color: rgba(255,255,255,.2);
-  border: 1px solid rgba(255,255,255,.06);
+  text-transform: uppercase; color: rgba(0,0,0,.2);
+  border: 1px solid rgba(0,0,0,.08);
   padding: 4px 10px;
 }
 
 /* ═══ FOOTER ═══ */
 footer {
   padding: 28px 80px;
-  border-top: 1px solid rgba(255,255,255,.05);
+  border-top: 1px solid rgba(0,0,0,.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -264,12 +257,12 @@ footer {
 
 .footer-info {
   font-size: .62rem; font-weight: 400; letter-spacing: .08em;
-  line-height: 1.8; color: rgba(255,255,255,.5);
+  line-height: 1.8; color: rgba(0,0,0,.5);
 }
 
 .footer-copy {
   font-size: .62rem; font-weight: 400; letter-spacing: .08em;
-  color: rgba(255,255,255,.55); text-align: right;
+  color: rgba(0,0,0,.82); text-align: right;
 }
 
 /* ═══ ÁREA BLOCKS ═══ */
@@ -277,13 +270,13 @@ footer {
 
 .area-header {
   padding: 22px 0 16px;
-  border-top: 1px solid rgba(255,255,255,.06);
+  border-top: 1.5px solid rgba(0,0,0,.18);
   margin-bottom: 0;
 }
 
 .area-label {
   font-size: .5rem; font-weight: 700; letter-spacing: .3em;
-  text-transform: uppercase; color: rgba(255,255,255,.55);
+  text-transform: uppercase; color: rgba(0,0,0,.82);
 }
 
 /* ═══ EDIT TOOLBAR ═══ */
@@ -299,13 +292,13 @@ footer {
 .tb-btn {
   padding: 13px 20px; font-size: .58rem; font-weight: 500;
   letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(255,255,255,.6); background: none; border: none;
+  color: rgba(0,0,0,.6); background: none; border: none;
   cursor: pointer; transition: color .15s, background .15s;
   font-family: 'Montserrat', sans-serif; white-space: nowrap;
 }
-.tb-btn:hover { color: #fff; background: rgba(255,255,255,.06); }
-.tb-sep { width: 1px; height: 32px; background: rgba(255,255,255,.1); }
-.tb-status { padding: 13px 20px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(255,255,255,.3); white-space: nowrap; }
+.tb-btn:hover { color: #fff; background: rgba(0,0,0,.12); }
+.tb-sep { width: 1px; height: 32px; background: rgba(0,0,0,.1); }
+.tb-status { padding: 13px 20px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(0,0,0,.3); white-space: nowrap; }
 #toggle-edit {
   padding: 13px 24px; background: #fff; color: #0a0a0a;
   font-size: .58rem; font-weight: 600; letter-spacing: .14em;
@@ -314,8 +307,8 @@ footer {
 }
 #toggle-edit:hover { background: #e8e8e8; }
 #toggle-edit.on { background: #e8e8e8; }
-.edit-mode [data-editable]:hover { outline: 1.5px dashed rgba(255,255,255,.4); outline-offset: 3px; cursor: text; }
-.edit-mode [data-editable]:focus { outline: 2px solid rgba(255,255,255,.7); outline-offset: 3px; }
+.edit-mode [data-editable]:hover { outline: 1.5px dashed rgba(0,0,0,.4); outline-offset: 3px; cursor: text; }
+.edit-mode [data-editable]:focus { outline: 2px solid rgba(0,0,0,.7); outline-offset: 3px; }
 [data-editable] { transition: outline .15s; }
 
 /* ═══ RESPONSIVE ═══ */
@@ -405,7 +398,7 @@ footer {
   <div class="sec-header">
     <span class="sec-label">Incorporación general · Toda la empresa</span>
   </div>
-  <div class="manuales-grid" style="grid-template-columns: 1fr 2fr;">
+  <div class="manuales-grid" style="grid-template-columns: 1fr;">
 
     <a class="manual-card" href="manual-bienvenida.html">
       <div class="card-bg-n">01</div>
@@ -415,23 +408,14 @@ footer {
         <p class="card-desc">Todo lo que necesitás saber al entrar a Tienda Mayor: quiénes somos, cómo está organizado el equipo, las sedes, la cultura y los primeros pasos.</p>
       </div>
       <div class="card-bottom">
-        <div class="card-tags">
-          <span class="card-tag">Equipo</span>
-          <span class="card-tag">Cultura</span>
-          <span class="card-tag">Sedes</span>
-          <span class="card-tag">Primeros pasos</span>
-        </div>
+        
         <div class="card-arrow">
           <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </div>
       </div>
     </a>
 
-    <div class="manual-card" style="background: rgba(255,255,255,.012); cursor:default; pointer-events:none; justify-content:center; align-items:center; display:flex;">
-      <p style="font-size:.52rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.12);">Válido para todo el equipo · Leer primero</p>
     </div>
-
-  </div>
 </div>
 
 <div class="divider" style="margin: 0 0; opacity:.4;"></div>
@@ -454,15 +438,10 @@ footer {
         <div class="card-top">
           <p class="card-area">Manual de área · Atención al cliente</p>
           <p class="card-title">Atención<br><em>al Cliente</em></p>
-          <p class="card-desc">Horarios, dinámica del depósito, grupos de WhatsApp y cómo funciona el área de atención al cliente día a día.</p>
+          <p class="card-desc">Una guía con conceptos básicos para comenzar a entender el área y las tareas diarias.</p>
         </div>
         <div class="card-bottom">
-          <div class="card-tags">
-            <span class="card-tag">Horarios</span>
-            <span class="card-tag">Depósito</span>
-            <span class="card-tag">WhatsApp</span>
-            <span class="card-tag">Clientes</span>
-          </div>
+          
           <div class="card-arrow">
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </div>
@@ -473,15 +452,10 @@ footer {
         <div class="card-top">
           <p class="card-area">Manual de área · Atención al cliente</p>
           <p class="card-title">Guía de<br><em>Textiles</em></p>
-          <p class="card-desc">Catálogo completo de textiles TM: fichas técnicas, colores, anchos, composición, datos generales y guía rápida de consulta.</p>
+          <p class="card-desc">Un resumen de nuestros téxtiles de línea, con información básica sobre ellos.</p>
         </div>
         <div class="card-bottom">
-          <div class="card-tags">
-            <span class="card-tag">Catálogo</span>
-            <span class="card-tag">Textiles</span>
-            <span class="card-tag">Fichas</span>
-            <span class="card-tag">Stock</span>
-          </div>
+          
           <div class="card-arrow">
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </div>
