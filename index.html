@@ -33,7 +33,7 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 60px;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.97);
   border-bottom: 1px solid rgba(0,0,0,0.08);
   display: flex;
   align-items: center;
@@ -41,17 +41,50 @@ nav {
   padding: 0 48px;
   z-index: 300;
   backdrop-filter: blur(12px);
+  gap: 24px;
 }
 
-.logo { display: flex; flex-direction: column; line-height: 1; }
+.logo { display: flex; flex-direction: column; line-height: 1; flex-shrink: 0; }
 .logo-line1 { font-size: .55rem; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: rgba(0,0,0,.85); }
 .logo-line2 { font-size: .55rem; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: rgba(0,0,0,.85); }
+
+/* ─── Nav links ─── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-link {
+  font-size: .5rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,.55);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  transition: color .18s, border-color .18s, background .18s;
+  white-space: nowrap;
+}
+.nav-link:hover {
+  color: rgba(0,0,0,.9);
+  border-color: rgba(0,0,0,.12);
+  background: rgba(0,0,0,.02);
+}
+.nav-link.active {
+  color: rgba(0,0,0,.9);
+  border-color: rgba(0,0,0,.15);
+}
 
 .nav-badge {
   font-size: .5rem; font-weight: 600; letter-spacing: .22em;
   text-transform: uppercase; color: rgba(0,0,0,.75);
   border: 1px solid rgba(0,0,0,.2);
   padding: 5px 12px;
+  flex-shrink: 0;
 }
 
 /* ═══ HERO ═══ */
@@ -67,8 +100,6 @@ nav {
   position: relative;
   overflow: hidden;
 }
-
-
 
 .hero-bg-text {
   position: absolute;
@@ -110,7 +141,7 @@ nav {
 
 /* ═══ DIVIDER ═══ */
 .divider {
-  height: 1px;
+  height: 3px;
   background: rgba(0,0,0,.12);
   margin: 0 80px;
 }
@@ -199,7 +230,7 @@ nav {
   font-size: .7rem; font-weight: 400; line-height: 1.8;
   color: rgba(0,0,0,.72); margin-top: 16px;
   padding-top: 16px;
-  border-top: 1.5px solid rgba(0,0,0,.18);
+  border-top: 3.5px solid rgba(0,0,0,.18);
 }
 
 .card-bottom {
@@ -270,7 +301,7 @@ footer {
 
 .area-header {
   padding: 22px 0 16px;
-  border-top: 1.5px solid rgba(0,0,0,.18);
+  border-top: 3.5px solid rgba(0,0,0,.18);
   margin-bottom: 0;
 }
 
@@ -288,32 +319,69 @@ footer {
   z-index: 9999;
   box-shadow: 0 8px 32px rgba(0,0,0,.22);
   font-family: 'Montserrat', sans-serif;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 32px);
 }
+/* Hidden by default on published sites; JS shows it for localhost/file:// */
+#edit-toolbar { display: none; }
+#edit-toolbar.toolbar-visible { display: flex; }
+
 .tb-btn {
-  padding: 13px 20px; font-size: .58rem; font-weight: 500;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(0,0,0,.6); background: none; border: none;
+  padding: 13px 16px; font-size: .58rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); background: none; border: none;
   cursor: pointer; transition: color .15s, background .15s;
   font-family: 'Montserrat', sans-serif; white-space: nowrap;
 }
-.tb-btn:hover { color: #fff; background: rgba(0,0,0,.12); }
-.tb-sep { width: 1px; height: 32px; background: rgba(0,0,0,.1); }
-.tb-status { padding: 13px 20px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(0,0,0,.3); white-space: nowrap; }
+.tb-btn:hover { color: #fff; background: rgba(255,255,255,.08); }
+.tb-btn.active { color: #fff; background: rgba(255,255,255,.12); }
+.tb-sep { width: 1px; height: 32px; background: rgba(255,255,255,.1); flex-shrink: 0; }
+.tb-status { padding: 13px 16px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(255,255,255,.3); white-space: nowrap; }
+
+/* Formatting controls */
+.tb-select {
+  padding: 6px 8px; font-size: .52rem; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.7); background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1); cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0 6px;
+  appearance: none; -webkit-appearance: none;
+  padding-right: 20px;
+}
+.tb-select option { background: #1a1a1a; color: #fff; }
+
+.tb-color {
+  width: 24px; height: 24px;
+  border: none; border-radius: 2px;
+  cursor: pointer; margin: 0 8px;
+  padding: 0; background: none;
+}
+
 #toggle-edit {
   padding: 13px 24px; background: #fff; color: #0a0a0a;
   font-size: .58rem; font-weight: 600; letter-spacing: .14em;
   text-transform: uppercase; border: none; cursor: pointer;
   font-family: 'Montserrat', sans-serif; transition: background .15s;
+  flex-shrink: 0;
 }
 #toggle-edit:hover { background: #e8e8e8; }
 #toggle-edit.on { background: #e8e8e8; }
+
+/* Edit mode indicators */
 .edit-mode [data-editable]:hover { outline: 1.5px dashed rgba(0,0,0,.4); outline-offset: 3px; cursor: text; }
 .edit-mode [data-editable]:focus { outline: 2px solid rgba(0,0,0,.7); outline-offset: 3px; }
 [data-editable] { transition: outline .15s; }
 
 /* ═══ RESPONSIVE ═══ */
+@media (max-width: 1100px) {
+  .nav-link { padding: 6px 10px; font-size: .46rem; }
+}
+
 @media (max-width: 900px) {
-  nav { padding: 0 28px; }
+  nav { padding: 0 20px; gap: 12px; }
+  .nav-links { gap: 0; }
+  .nav-link { padding: 5px 8px; font-size: .44rem; letter-spacing: .12em; }
 
   .hero { padding-left: 28px; padding-right: 28px; padding-bottom: 48px; min-height: 45vh; }
   .hero-bg-text { font-size: 12rem; right: 20px; }
@@ -326,6 +394,10 @@ footer {
   .manuales-grid { grid-template-columns: 1fr 1fr !important; }
 
   footer { padding: 28px 28px; gap: 20px; }
+}
+
+@media (max-width: 700px) {
+  .nav-links { display: none; }
 }
 
 @media (max-width: 600px) {
@@ -362,8 +434,8 @@ footer {
     transform: none;
     overflow-x: auto;
   }
-  .tb-btn { padding: 11px 14px; font-size: .5rem; }
-  .tb-status { padding: 11px 14px; }
+  .tb-btn { padding: 11px 12px; font-size: .5rem; }
+  .tb-status { padding: 11px 12px; }
   #toggle-edit { padding: 11px 16px; }
 }
 </style>
@@ -376,6 +448,15 @@ footer {
     <span class="logo-line1">Tienda</span>
     <span class="logo-line2">Mayor</span>
   </div>
+
+  <nav class="nav-links" aria-label="Secciones">
+    <a class="nav-link" href="#institucional">Institucional</a>
+    <a class="nav-link" href="#atencion">At. al Cliente</a>
+    <a class="nav-link" href="#cobranzas" style="display: none;">Administración &amp; Cobranzas</a>
+    <a class="nav-link" href="#produccion" style="display: none;">Producción</a>
+    <a class="nav-link active" href="#comunicacion" style="display: none;">Comunicación</a>
+  </nav>
+
   <span class="nav-badge">Intranet · Uso interno</span>
 </nav>
 
@@ -393,12 +474,12 @@ footer {
 
 <!-- MANUALES -->
 
-<!-- BIENVENIDA -->
-<div class="manuales-section" style="padding-bottom: 0;">
+<!-- BIENVENIDA / INSTITUCIONAL -->
+<div id="institucional" class="manuales-section" style="padding-bottom: 0;">
   <div class="sec-header">
     <span class="sec-label">Incorporación general · Toda la empresa</span>
   </div>
-  <div class="manuales-grid" style="grid-template-columns: 1fr;">
+  <div class="manuales-grid" style="grid-template-columns: 1fr; background: none; border: none;">
 
     <a class="manual-card" href="manual-bienvenida.html">
       <div class="card-bg-n">01</div>
@@ -408,17 +489,16 @@ footer {
         <p class="card-desc">Todo lo que necesitás saber al entrar a Tienda Mayor: quiénes somos, cómo está organizado el equipo, las sedes, la cultura y los primeros pasos.</p>
       </div>
       <div class="card-bottom">
-        
         <div class="card-arrow">
           <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </div>
       </div>
     </a>
 
-    </div>
+  </div>
 </div>
 
-<div class="divider" style="margin: 0 0; opacity:.4;"></div>
+<div class="divider" style="margin: 0; opacity:.4;"></div>
 
 <!-- AREAS -->
 <div class="manuales-section" style="padding-top: 64px;">
@@ -428,7 +508,7 @@ footer {
   </div>
 
   <!-- ── Área Atención al Cliente ── -->
-  <div class="area-block" style="margin-bottom: 1px;">
+  <div id="atencion" class="area-block" style="margin-bottom: 1px;">
     <div class="area-header">
       <span class="area-label">Área Atención al Cliente</span>
     </div>
@@ -441,7 +521,6 @@ footer {
           <p class="card-desc">Una guía con conceptos básicos para comenzar a entender el área y las tareas diarias.</p>
         </div>
         <div class="card-bottom">
-          
           <div class="card-arrow">
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </div>
@@ -455,13 +534,12 @@ footer {
           <p class="card-desc">Un resumen de nuestros téxtiles de línea, con información básica sobre ellos.</p>
         </div>
         <div class="card-bottom">
-          
           <div class="card-arrow">
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </div>
         </div>
       </a>
-      <div class="manual-card manual-card--soon">
+      <div class="manual-card manual-card--soon" style="display: none;">
         <div class="card-bg-n">03</div>
         <div class="card-top">
           <p class="card-area">Manual de área · Atención al cliente</p>
@@ -474,9 +552,9 @@ footer {
   </div>
 
   <!-- ── Área Cobranzas ── -->
-  <div class="area-block" style="margin-bottom: 1px; margin-top: 48px;">
+  <div id="cobranzas" class="area-block" style="margin-bottom: 1px; margin-top: 48px; display: none;">
     <div class="area-header">
-      <span class="area-label">Área Cobranzas</span>
+      <span class="area-label">Área Administración &amp; Cobranzas</span>
     </div>
     <div class="manuales-grid">
       <div class="manual-card manual-card--soon">
@@ -510,7 +588,7 @@ footer {
   </div>
 
   <!-- ── Área Producción ── -->
-  <div class="area-block" style="margin-top: 48px;">
+  <div id="produccion" class="area-block" style="margin-top: 48px; display: none;">
     <div class="area-header">
       <span class="area-label">Área Producción</span>
     </div>
@@ -546,7 +624,7 @@ footer {
   </div>
 
   <!-- ── Área Comunicación ── -->
-  <div class="area-block" style="margin-top: 48px;">
+  <div id="comunicacion" class="area-block" style="margin-top: 48px; display: none;">
     <div class="area-header">
       <span class="area-label">Área Comunicación</span>
     </div>
@@ -600,12 +678,30 @@ footer {
 </footer>
 
 <!-- ══ EDIT TOOLBAR ══ -->
-<div id="edit-toolbar">
+<div id="edit-toolbar" class="toolbar-visible" style="display: none;">
   <span class="tb-status" id="tb-hint">Modo lectura</span>
   <div class="tb-sep"></div>
+
+  <!-- Formatting (visible only in edit mode) -->
+  <div id="fmt-controls" style="display:none; align-items:center;">
+    <button class="tb-btn" id="btn-bold" title="Negrita (Ctrl+B)"><strong>B</strong></button>
+    <button class="tb-btn" id="btn-italic" title="Cursiva (Ctrl+I)"><em>I</em></button>
+    <div class="tb-sep"></div>
+    <select class="tb-select" id="sel-size" title="Tamaño de texto">
+      <option value="">Tamaño</option>
+      <option value=".46rem">XS</option>
+      <option value=".58rem">S</option>
+      <option value=".78rem">M</option>
+      <option value="1rem">L</option>
+      <option value="1.45rem">XL</option>
+      <option value="2.5rem">2X</option>
+      <option value="4rem">3X</option>
+    </select>
+    <input class="tb-color" type="color" id="pick-color" title="Color de texto" value="#0c0c0c">
+    <div class="tb-sep"></div>
+  </div>
+
   <button class="tb-btn" id="btn-undo">↩ Deshacer</button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-copy-html">Copiar HTML</button>
   <div class="tb-sep"></div>
   <button class="tb-btn" id="btn-download">↓ Descargar</button>
   <div class="tb-sep"></div>
@@ -614,6 +710,62 @@ footer {
 
 <script>
 (function () {
+  /* ─── Show toolbar only on localhost / file:// (not on published sites) ─── */
+  (function showToolbarLocally() {
+    const h = window.location.hostname;
+    const isLocal = h === '' || h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+    const forceEdit = new URLSearchParams(window.location.search).has('edit');
+    if (isLocal || forceEdit) {
+      document.getElementById('edit-toolbar').classList.add('toolbar-visible');
+    }
+  })();
+
+  /* ─── Hide area-blocks where every card is --soon ─── */
+  (function hideEmptyBlocks() {
+    document.querySelectorAll('.area-block').forEach(block => {
+      const all = block.querySelectorAll('.manual-card');
+      const hasDocs = Array.from(all).some(c => !c.classList.contains('manual-card--soon'));
+      if (!hasDocs) {
+        // Hide the entire block and its nav link
+        block.style.display = 'none';
+        const id = block.id;
+        if (id) {
+          const link = document.querySelector('.nav-link[href="#' + id + '"]');
+          if (link) link.style.display = 'none';
+        }
+      } else {
+        // Hide individual soon cards within a visible block
+        all.forEach(card => {
+          if (card.classList.contains('manual-card--soon')) {
+            card.style.display = 'none';
+          }
+        });
+      }
+    });
+  })();
+
+  /* ─── Active nav link on scroll ─── */
+  (function navHighlight() {
+    const sections = ['institucional','atencion','cobranzas','produccion','comunicacion'];
+    const links = {};
+    sections.forEach(id => {
+      links[id] = document.querySelector('.nav-link[href="#' + id + '"]');
+    });
+    function update() {
+      let current = '';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 100) current = id;
+      });
+      sections.forEach(id => {
+        if (links[id]) links[id].classList.toggle('active', id === current);
+      });
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  /* ─── Edit toolbar ─── */
   const SELECTORS = [
     '.hero-eyebrow', '.hero-h1', '.hero-sub',
     '.sec-label', '.sec-count',
@@ -625,11 +777,15 @@ footer {
   ];
 
   let editMode = false;
+  let activeEl = null;
   const body = document.body;
   const toggleBtn = document.getElementById('toggle-edit');
   const hint = document.getElementById('tb-hint');
-  const btnCopy = document.getElementById('btn-copy-html');
-  const btnDl = document.getElementById('btn-download');
+  const fmtControls = document.getElementById('fmt-controls');
+  const btnBold = document.getElementById('btn-bold');
+  const btnItalic = document.getElementById('btn-italic');
+  const selSize = document.getElementById('sel-size');
+  const pickColor = document.getElementById('pick-color');
 
   function getEditables() {
     return document.querySelectorAll(SELECTORS.join(','));
@@ -641,6 +797,7 @@ footer {
     toggleBtn.textContent = 'Listo';
     toggleBtn.classList.add('on');
     hint.textContent = 'Clic para editar';
+    fmtControls.style.display = 'flex';
     getEditables().forEach(el => {
       el.setAttribute('data-editable', '');
       el.setAttribute('contenteditable', 'true');
@@ -650,10 +807,12 @@ footer {
 
   function disableEdit() {
     editMode = false;
+    activeEl = null;
     body.classList.remove('edit-mode');
     toggleBtn.textContent = 'Editar';
     toggleBtn.classList.remove('on');
     hint.textContent = 'Modo lectura';
+    fmtControls.style.display = 'none';
     getEditables().forEach(el => {
       el.removeAttribute('data-editable');
       el.removeAttribute('contenteditable');
@@ -662,29 +821,74 @@ footer {
 
   toggleBtn.addEventListener('click', () => { editMode ? disableEdit() : enableEdit(); });
 
+  /* Track active editable element */
+  document.addEventListener('focusin', e => {
+    if (e.target.hasAttribute('contenteditable')) activeEl = e.target;
+  });
+  document.addEventListener('selectionchange', () => {
+    if (!editMode) return;
+    btnBold.classList.toggle('active', document.queryCommandState('bold'));
+    btnItalic.classList.toggle('active', document.queryCommandState('italic'));
+  });
+
+  /* Bold / Italic */
+  btnBold.addEventListener('click', () => { document.execCommand('bold'); });
+  btnItalic.addEventListener('click', () => { document.execCommand('italic'); });
+
+  /* Font size — applies to active element or selection */
+  selSize.addEventListener('change', () => {
+    const size = selSize.value;
+    if (!size || !activeEl) return;
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount && !sel.isCollapsed) {
+      // Apply to selection via a span
+      const range = sel.getRangeAt(0);
+      const span = document.createElement('span');
+      span.style.fontSize = size;
+      try { range.surroundContents(span); } catch(e) { activeEl.style.fontSize = size; }
+    } else {
+      activeEl.style.fontSize = size;
+    }
+    selSize.value = '';
+  });
+
+  /* Color */
+  pickColor.addEventListener('input', () => {
+    const color = pickColor.value;
+    if (!activeEl) return;
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount && !sel.isCollapsed) {
+      document.execCommand('foreColor', false, color);
+    } else {
+      activeEl.style.color = color;
+    }
+  });
+
+  /* Undo */
   document.getElementById('btn-undo').addEventListener('click', () => {
     document.execCommand('undo');
   });
 
-  btnCopy.addEventListener('click', () => {
-    navigator.clipboard.writeText('<!DOCTYPE html>\n' + document.documentElement.outerHTML).then(() => {
-      btnCopy.textContent = '✓ Copiado';
-      setTimeout(() => btnCopy.textContent = 'Copiar HTML', 2000);
-    });
-  });
-
-  btnDl.addEventListener('click', () => {
+  /* Download */
+  document.getElementById('btn-download').addEventListener('click', () => {
     const wasEditing = editMode;
     if (wasEditing) disableEdit();
-    const blob = new Blob(['<!DOCTYPE html>\n' + document.documentElement.outerHTML], { type: 'text/html' });
+    // Remove toolbar from the saved snapshot
+    const toolbar = document.getElementById('edit-toolbar');
+    const toolbarDisplay = toolbar.style.display;
+    toolbar.style.display = 'none';
+    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    toolbar.style.display = toolbarDisplay;
+    if (wasEditing) enableEdit();
+    const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'index-tienda-mayor.html';
     a.click();
     URL.revokeObjectURL(a.href);
-    if (wasEditing) enableEdit();
   });
 
+  /* Keyboard shortcuts */
   document.addEventListener('keydown', e => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'e') { e.preventDefault(); editMode ? disableEdit() : enableEdit(); }
     if (e.key === 'Escape' && editMode) disableEdit();
