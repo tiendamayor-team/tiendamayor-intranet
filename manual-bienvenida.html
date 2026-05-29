@@ -121,16 +121,7 @@ nav {
   overflow: hidden;
 }
 
-/* trama textil sutil */
-.hero-left::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,0.022) 47px, rgba(255,255,255,0.022) 48px),
-    repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,0.022) 47px, rgba(255,255,255,0.022) 48px);
-  pointer-events: none;
-}
+
 
 .hero-logo-white {
   position: relative;
@@ -831,6 +822,7 @@ section { padding: 96px 0; }
   border-bottom: 1px solid var(--mid);
   background: var(--white);
   transition: background 0.15s;
+  min-width: 0;
 }
 
 .c-row:last-child { border-bottom: none; }
@@ -854,12 +846,16 @@ section { padding: 96px 0; }
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--black);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .c-rol {
   font-size: 0.64rem;
   font-weight: 300;
   color: var(--gray);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .c-area-tag {
@@ -1050,6 +1046,9 @@ footer {
   font-size: .52rem; font-weight: 700; letter-spacing: .18em;
   text-transform: uppercase; color: var(--dark);
   margin-bottom: 8px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 .vest-title {
   font-size: 1.1rem; font-weight: 400; color: var(--black);
@@ -1134,7 +1133,7 @@ footer {
 }
 
 @media (max-width: 880px) {
-  .beneficios-grid { grid-template-columns: 1fr; }
+  .beneficios-grid { grid-template-columns: 1fr 1fr; }
   .benefit-card--full { grid-column: auto; }
   /* Vestimenta */
   .vestimenta-grid { grid-template-columns: 1fr; }
@@ -1551,7 +1550,7 @@ footer {
     <div class="vestimenta-grid">
 
       <div class="vest-card">
-        <p class="vest-area" data-original="Área Atención al Cliente / Comercial / Comunicación / Producción / Administración" spellcheck="false">Área Atención al Cliente / Comercial / Comunicación / Producción / Administración</p>
+        <p class="vest-area" data-original="Área Atención al Cliente / Comercial / Comunicación / Producción / Administración" spellcheck="false">Área Atención al Cliente /<wbr> Comercial /<wbr> Comunicación /<wbr> Producción /<wbr> Administración</p>
         <p class="vest-title" data-original="Indumentaria general" spellcheck="false">Indumentaria general</p>
         <p class="vest-text" data-original="
           Remera y Buzo de TM + Pantalón jean o negro.&lt;br&gt;
@@ -2329,6 +2328,69 @@ footer {
   line-height: 1.85;
   color: var(--dark);
   letter-spacing: 0.01em;
+}
+
+/* ── Global overflow safety ── */
+* { min-width: 0; }
+
+/* ── Mobile: full responsive overhaul ── */
+@media (max-width: 540px) {
+  /* Vestimenta: long area label wraps properly */
+  .vest-area {
+    font-size: 0.50rem;
+    letter-spacing: 0.10em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .vest-title { font-size: 0.95rem; }
+
+  /* c-row: hide the area tag on very small screens so name has room */
+  .c-area-tag { display: none; }
+  .c-row { grid-template-columns: 34px 1fr; gap: 10px; }
+
+  /* c-rol with email: allow break */
+  .c-rol { word-break: break-all; font-size: 0.60rem; }
+
+  /* Beneficios: single col on mobile */
+  .beneficios-grid { grid-template-columns: 1fr; }
+  .benefit-card--full { grid-column: auto; }
+
+  /* Nav: tighter */
+  nav { padding: 0 14px; gap: 8px; }
+  .nav-back { padding: 6px 10px; font-size: 0.52rem; }
+
+  /* Horarios nota */
+  .horarios-nota-bloque { padding: 18px 16px; }
+
+  /* Section padding */
+  section { padding: 44px 0; }
+  .container { padding: 0 16px; }
+
+  /* Vestimenta card padding */
+  .vest-card { padding: 24px 16px; }
+
+  /* Sedes: nombre más chico */
+  .sede-nombre { font-size: 1.4rem; }
+
+  /* Directorio: nombre más chico */
+  .dir-card { padding: 24px 16px; }
+  .dir-nombre { font-size: 1.2rem; }
+  .dir-inicial { font-size: 3.5rem; }
+
+  /* Horario card */
+  .horario-card { padding: 24px 16px; }
+  .hc-nombre { font-size: 0.9rem; }
+
+  /* Pasos */
+  .paso-row { grid-template-columns: 28px 1fr; gap: 14px; }
+
+  /* Benefit cards */
+  .benefit-card { padding: 28px 20px; }
+
+  /* Footer */
+  footer { padding: 36px 16px; grid-template-columns: 1fr; gap: 20px; }
+  .footer-copy { text-align: left; }
 }
 </style>
 
