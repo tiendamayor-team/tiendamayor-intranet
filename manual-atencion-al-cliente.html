@@ -1345,7 +1345,9 @@ footer {
   margin-bottom: 22px;
   font-family: 'Montserrat', sans-serif;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--white);
+  max-width: 100%;
 }
 
 .planilla-mock-table {
@@ -1659,7 +1661,7 @@ footer {
   .stock-sidebar { position: static; }
   .stock-tags-grid { grid-template-columns: 1fr; }
   .stock-planilla-head { padding: 16px 22px; flex-wrap: wrap; gap: 10px; }
-  .stock-planilla-body { padding: 24px 22px 20px; }
+  .stock-planilla-body { padding: 20px 16px 18px; }
   .stock-tags-head { padding: 16px 22px; }
   .stock-tags-intro { padding: 22px 22px 18px; }
   .tag-card { padding: 24px 22px; }
@@ -1667,21 +1669,24 @@ footer {
   .stock-deposito-body { padding: 22px 22px 18px; }
   .stock-warning { padding: 16px 18px; }
   .planilla-mock { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .planilla-mock-table { font-size: .5rem; min-width: 580px; }
+  .planilla-mock-table { font-size: .5rem; min-width: 560px; }
   .planilla-mock-table th, .planilla-mock-table td { padding: 5px 6px; }
 }
 @media (max-width: 600px) {
-  .stock-planilla-head { padding: 14px 16px; }
-  .stock-planilla-body { padding: 18px 16px 16px; }
+  .stock-planilla { border-left: none; border-right: none; margin-left: -20px; margin-right: -20px; }
+  .stock-planilla-head { padding: 14px 20px; }
+  .stock-planilla-body { padding: 16px 12px 14px; }
   .stock-tags-head { padding: 14px 16px; }
   .stock-tags-intro { padding: 18px 16px 14px; }
   .tag-card { padding: 20px 16px; }
   .stock-deposito-head { padding: 14px 16px; }
   .stock-deposito-body { padding: 18px 16px 14px; }
-  .planilla-mock-table { font-size: .46rem; min-width: 500px; }
-  .planilla-mock-caption { font-size: .46rem; margin-top: 8px; }
-  .stock-head-title { font-size: .64rem; }
+  .planilla-mock { border-radius: 0; }
+  .planilla-mock-table { font-size: .44rem; min-width: 480px; }
+  .planilla-mock-caption { font-size: .44rem; margin-top: 8px; }
+  .stock-head-title { font-size: .62rem; }
   .stock-footnote { padding: 14px 16px; }
+  .stock-tags-block { border-left: none; border-right: none; margin-left: -20px; margin-right: -20px; }
 }
 
 /* ═══ PEDIDOS ═══ */
@@ -2547,7 +2552,7 @@ footer {
     <span class="logo-line1">Tienda</span>
     <span class="logo-line2">Mayor</span>
   </div>
-  <a class="nav-back" href="index.html" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
+  <a class="nav-back" href="#hero-anchor" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -4429,12 +4434,27 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open);
   });
-  // Close on link click
+  // Close on link click and scroll to target
   list.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', function() {
+    a.addEventListener('click', function(e) {
+      const href = a.getAttribute('href');
+      // Close menu
       list.classList.remove('open');
       btn.classList.remove('open');
       btn.setAttribute('aria-expanded', 'false');
+      // If it's an anchor link, handle scroll manually after menu closes
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          // Small delay to let menu collapse before scroll
+          setTimeout(function() {
+            const navHeight = document.querySelector('nav') ? document.querySelector('nav').getBoundingClientRect().height : 60;
+            const top = target.getBoundingClientRect().top + window.scrollY - navHeight;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }, 80);
+        }
+      }
     });
   });
 })();
