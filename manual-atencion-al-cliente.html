@@ -65,6 +65,7 @@ nav {
   text-decoration: none;
   border: 1px solid var(--mid);
   padding: 7px 14px;
+  margin-left: 32px;
   transition: color .2s, border-color .2s;
 }
 .nav-back:hover { color: var(--black); border-color: var(--black); }
@@ -2389,44 +2390,44 @@ nav { flex-wrap: wrap; height: auto; min-height: 60px; align-items: center; }
     <!-- 1. Institucional -->
     <div class="nav-category">
       <button class="nav-category-btn" data-cat="institucional">
-        <span class="nav-cat-label">Institucional</span>
+        <span class="nav-cat-label" spellcheck="true">Institucional</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
       <div class="nav-submenu" id="sub-institucional">
-        <a href="#recursos">Consultas</a>
-        <a href="#comunicacion">Grupos de WhatsApp</a>
-        <a href="#atc">Cómo funciona Atención al Cliente</a>
+        <a href="#recursos" spellcheck="true">Consultas</a>
+        <a href="#comunicacion" spellcheck="true">Grupos de WhatsApp</a>
+        <a href="#atc" spellcheck="true">Cómo funciona Atención al Cliente</a>
       </div>
     </div>
 
     <!-- 2. Básicos de AT al cliente -->
     <div class="nav-category">
       <button class="nav-category-btn" data-cat="basicos">
-        <span class="nav-cat-label">Básicos de AT al cliente</span>
+        <span class="nav-cat-label" spellcheck="true">Básicos de AT al cliente</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
       <div class="nav-submenu" id="sub-basicos">
-        <a href="#tareas">Tareas del día a día</a>
-        <a href="#muestritas">Cómo se cortan las muestritas</a>
-        <a href="#showroom">Qué hacer cuando nos visita el cliente</a>
-        <a href="#stock">Cómo sé si hay stock de un textil</a>
-        <a href="#pedidos">Cómo tomar un pedido</a>
-        <a href="#pagos">Formas de pago y descuentos</a>
-        <a href="#logistica">Logística y envíos</a>
-        <a href="#reclamos">Reclamos y devoluciones</a>
+        <a href="#tareas" spellcheck="true">Tareas del día a día</a>
+        <a href="#muestritas" spellcheck="true">Cómo se cortan las muestritas</a>
+        <a href="#showroom" spellcheck="true">Qué hacer cuando nos visita el cliente</a>
+        <a href="#stock" spellcheck="true">Cómo sé si hay stock de un textil</a>
+        <a href="#pedidos" spellcheck="true">Cómo tomar un pedido</a>
+        <a href="#pagos" spellcheck="true">Formas de pago y descuentos</a>
+        <a href="#logistica" spellcheck="true">Logística y envíos</a>
+        <a href="#reclamos" spellcheck="true">Reclamos y devoluciones</a>
       </div>
     </div>
 
     <!-- 3. Datos productivos -->
     <div class="nav-category">
       <button class="nav-category-btn" data-cat="datos">
-        <span class="nav-cat-label">Datos productivos</span>
+        <span class="nav-cat-label" spellcheck="true">Datos productivos</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
       <div class="nav-submenu" id="sub-datos">
-        <a href="#proceso-pedido">Proceso de un pedido</a>
-        <a href="#dinamica-deposito">Dinámica del depósito</a>
-        <a href="#entrega">Entrega inmediata</a>
+        <a href="#proceso-pedido" spellcheck="true">Proceso de un pedido</a>
+        <a href="#dinamica-deposito" spellcheck="true">Dinámica del depósito</a>
+        <a href="#entrega" spellcheck="true">Entrega inmediata</a>
       </div>
     </div>
 
@@ -3794,14 +3795,138 @@ nav { flex-wrap: wrap; height: auto; min-height: 60px; align-items: center; }
 
 <!-- ══ TOOLBAR ══ -->
 <!-- Botón flotante minimizado -->
-
-
+<button id="tb-toggle-panel" aria-label="Herramientas">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</button>
+<div id="tb-mini-dot"></div>
 
 <!-- Panel expandido -->
+<div id="edit-toolbar">
+  <div class="tb-row">
+    <button id="toggle-edit" class="tb-btn">✏️ Modo edición</button>
+    <span id="tb-save-status" class="tb-status"></span>
+    <span class="tb-save-dot" id="tb-save-dot"></span>
+  </div>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="tb-copy-html">Copiar HTML</button>
+  <button class="tb-btn" id="tb-download-html">Descargar HTML</button>
+</div>
 
+<script>
+(function () {
+  /* ── Hamburger ── */
+  var hamburger = document.getElementById('nav-hamburger');
+  var navMenu   = document.getElementById('nav-menu');
 
+  if (hamburger && navMenu) {
+    hamburger.addEventListener('click', function () {
+      var isOpen = navMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
+  }
 
+  /* ── Category submenus ── */
+  document.querySelectorAll('.nav-category-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var cat    = btn.getAttribute('data-cat');
+      var sub    = document.getElementById('sub-' + cat);
+      if (!sub) return;
+      var isOpen = sub.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+    });
+  });
 
+  /* ── Close menu when clicking a nav link ── */
+  document.querySelectorAll('.nav-submenu a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      navMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ── Toolbar toggle ── */
+  var tbToggle  = document.getElementById('tb-toggle-panel');
+  var toolbar   = document.getElementById('edit-toolbar');
+
+  if (tbToggle && toolbar) {
+    tbToggle.addEventListener('click', function () {
+      toolbar.classList.toggle('open');
+    });
+  }
+
+  /* ── Edit mode toggle ── */
+  var toggleEdit = document.getElementById('toggle-edit');
+
+  function blockNavInEditMode(e) {
+    if (document.body.classList.contains('edit-mode')) e.preventDefault();
+  }
+
+  if (toggleEdit) {
+    toggleEdit.addEventListener('click', function () {
+      document.body.classList.toggle('edit-mode');
+      var on = document.body.classList.contains('edit-mode');
+      toggleEdit.classList.toggle('on', on);
+      toggleEdit.textContent = on ? '✅ Modo edición activo' : '✏️ Modo edición';
+      if (on) {
+        document.querySelectorAll('[spellcheck]').forEach(function (el) {
+          el.setAttribute('contenteditable', 'true');
+          el.setAttribute('data-editable', '');
+          if (el.tagName === 'A') el.addEventListener('click', blockNavInEditMode);
+        });
+        // Abrir menú para que los items sean visibles mientras se edita
+        if (navMenu) navMenu.classList.add('open');
+        if (hamburger) hamburger.classList.add('open');
+      } else {
+        document.querySelectorAll('[contenteditable]').forEach(function (el) {
+          el.removeAttribute('contenteditable');
+          if (el.tagName === 'A') el.removeEventListener('click', blockNavInEditMode);
+        });
+      }
+    });
+  }
+
+  /* ── Copy HTML ── */
+  var tbCopy = document.getElementById('tb-copy-html');
+  if (tbCopy) {
+    tbCopy.addEventListener('click', function () {
+      navigator.clipboard.writeText(document.documentElement.outerHTML).then(function () {
+        tbCopy.textContent = '✅ Copiado';
+        setTimeout(function () { tbCopy.textContent = 'Copiar HTML'; }, 2000);
+      });
+    });
+  }
+
+  /* ── Download HTML ── */
+  var tbDownload = document.getElementById('tb-download-html');
+  if (tbDownload) {
+    tbDownload.addEventListener('click', function () {
+      var blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+      var a    = document.createElement('a');
+      a.href   = URL.createObjectURL(blob);
+      a.download = 'manual-atencion-al-cliente.html';
+      a.click();
+    });
+  }
+
+  /* ── Timeline animations (IntersectionObserver) ── */
+  var tlItems = document.querySelectorAll('.tl-item');
+  if (tlItems.length && 'IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    tlItems.forEach(function (el) { obs.observe(el); });
+  } else {
+    tlItems.forEach(function (el) { el.classList.add('visible'); });
+  }
+})();
+</script>
 
 
 </body></html>
