@@ -2428,6 +2428,30 @@ footer {
   #edit-toolbar { width: calc(100% - 32px); justify-content: center; flex-wrap: wrap; bottom: 16px; }
 }
 
+/* ── Hamburger button ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+  order: 3;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--black);
+  transition: transform .25s, opacity .25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
 /* ── Mobile (≤ 600px) ── */
 @media (max-width: 600px) {
 
@@ -2487,6 +2511,33 @@ footer {
   .tag-card { padding: 22px 20px; }
 }
 
+/* ── Mobile nav drawer (≤ 900px) ── */
+@media (max-width: 900px) {
+  nav { flex-wrap: wrap; height: auto; min-height: 60px; align-items: center; }
+
+  .nav-hamburger { display: flex; }
+
+  #nav-links-list {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    order: 4;
+    background: var(--white);
+    border-top: 1px solid var(--mid);
+    padding: 12px 0 16px;
+    gap: 0;
+  }
+  #nav-links-list.open { display: flex; }
+  #nav-links-list li { width: 100%; }
+  #nav-links-list a {
+    display: block;
+    padding: 10px 24px;
+    font-size: .62rem;
+    letter-spacing: .12em;
+  }
+  #nav-links-list a:hover { background: var(--off); }
+}
+
 </style>
 </head>
 <body class="" id="artifacts-component-root-html">
@@ -2497,8 +2548,11 @@ footer {
     <span class="logo-line1">Tienda</span>
     <span class="logo-line2">Mayor</span>
   </div>
-  <a class="nav-back" href="#hero-anchor" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
-  <ul class="nav-links">
+  <a class="nav-back" href="index.html" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links-list">
     <li><a href="#atc" class="">Atención al Cliente</a></li>
     <li><a href="#tareas" class="">Día a día</a></li>
     <li><a href="#muestritas" class="">Muestritas</a></li>
@@ -4117,16 +4171,20 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
   }
 
   function pathFor(el) {
-    // Identificador estable basado en sección y posición entre elementos del mismo tipo
-    const section = el.closest('section, footer, .hero');
-    const sectionId = section ? (section.id || section.tagName.toLowerCase()) : 'root';
-    const firstClass = (el.className || '').split(' ')[0] || el.tagName.toLowerCase();
-    const siblings = section ? Array.from(section.querySelectorAll('.' + firstClass + ', ' + firstClass)) : [el];
-    const sameType = Array.from(section ? section.querySelectorAll('*') : [el]).filter(n =>
-      n.tagName === el.tagName && n.className === el.className
-    );
-    const idx = sameType.indexOf(el);
-    return sectionId + '::' + el.tagName.toLowerCase() + '.' + (el.className || '') + '::' + idx;
+    // Identificador estable: recorre el árbol DOM acumulando tag+posición desde body
+    const parts = [];
+    let node = el;
+    while (node && node !== document.body) {
+      const parent = node.parentElement;
+      if (!parent) break;
+      const siblings = Array.from(parent.children);
+      const idx = siblings.indexOf(node);
+      const tag = node.tagName.toLowerCase();
+      const id = node.id ? '#' + node.id : '';
+      parts.unshift(tag + id + '[' + idx + ']');
+      node = parent;
+    }
+    return parts.join('>');
   }
 
   // ─── Guardado ───
@@ -4255,8 +4313,20 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
 
   btnReset.addEventListener('click', async () => {
     if (!confirm('¿Restaurar el manual al estado original? Se perderán todos los cambios guardados en este navegador.')) return;
+    // Limpiar ediciones de texto
     try { ls.removeItem(STORAGE_KEY); } catch (err) { console.error(err); }
     await idbDelete(STORAGE_KEY);
+    // Limpiar imágenes de localStorage
+    try {
+      Object.keys(localStorage).filter(k => k.startsWith('tm-img::')).forEach(k => localStorage.removeItem(k));
+    } catch(e) {}
+    // Limpiar imágenes de IndexedDB de imágenes
+    try {
+      await new Promise(resolve => {
+        const req = indexedDB.deleteDatabase('tm-manual-imgs');
+        req.onsuccess = req.onerror = () => resolve();
+      });
+    } catch(e) {}
     location.reload();
   });
 
@@ -4265,6 +4335,10 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     if (wasEditing) disableEdit();
 
     setSaveStatus('saving', 'Preparando descarga…');
+
+    // Asegurar que todas las imágenes embebidas tienen su src base64 actualizado en el DOM
+    // (por si alguna se cargó desde IndexedDB y el src ya está, o por si falta alguna)
+    await new Promise(resolve => setTimeout(resolve, 50)); // micro-tick para que el DOM se estabilice
 
     // Clonamos el HTML, limpiamos atributos de edición y removemos la toolbar
     const clone = document.documentElement.cloneNode(true);
@@ -4275,12 +4349,24 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     clone.querySelectorAll('[data-edit-bound]').forEach(n => n.removeAttribute('data-edit-bound'));
     clone.querySelectorAll('[data-link-bound]').forEach(n => n.removeAttribute('data-link-bound'));
 
-    // Embebemos las imágenes subidas (base64) en el clon
-    // Las imágenes embebidas ya están como src base64 en el DOM real — el cloneNode(true) las copia.
-    // Nos aseguramos de copiar los src de las imágenes embebidas del DOM real al clon.
+    // Copiar explícitamente los src base64 de las imágenes embebidas del DOM real al clon
+    // Esto garantiza que las imágenes queden embebidas en el HTML descargado
     document.querySelectorAll('img.ms-embedded').forEach((img, i) => {
       const cloneImgs = clone.querySelectorAll('img.ms-embedded');
-      if (cloneImgs[i]) cloneImgs[i].src = img.src;
+      if (cloneImgs[i] && img.src && img.src.startsWith('data:')) {
+        cloneImgs[i].src = img.src;
+      }
+    });
+    // También aseguramos que los recuadros de imagen muestren la imagen en el clone
+    // (aunque el placeholder esté oculto en el DOM real, lo ocultamos también en el clone)
+    document.querySelectorAll('.ms-img-upload-box[id]').forEach(box => {
+      const cloneBox = clone.querySelector('#' + box.id);
+      if (!cloneBox) return;
+      const ph = box.querySelector('.ms-img-placeholder');
+      const clonePh = cloneBox.querySelector('.ms-img-placeholder');
+      if (ph && clonePh && ph.style.display === 'none') {
+        clonePh.style.display = 'none';
+      }
     });
 
     const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
@@ -4336,11 +4422,31 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
   openIDB().then(() => loadSaved());
 })();
 
-// ─── Embed de imágenes en muestritas ───
+// ─── Hamburger menu ───
 (function() {
-  // Guardado de imágenes en IndexedDB para persistencia entre recargas
-  const IMG_DB = 'tm-manual-imgs';
+  const btn = document.getElementById('nav-hamburger');
+  const list = document.getElementById('nav-links-list');
+  if (!btn || !list) return;
+  btn.addEventListener('click', function() {
+    const open = list.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+  });
+  // Close on link click
+  list.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      list.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+
+// ─── Imágenes embebidas: guardado robusto (IndexedDB + localStorage) ───
+(function() {
+  const IMG_DB    = 'tm-manual-imgs';
   const IMG_STORE = 'imgs';
+  const LS_PREFIX = 'tm-img::';
   let imgDb = null;
 
   function openImgDB() {
@@ -4354,36 +4460,62 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     });
   }
 
+  // Guardar en IndexedDB y en localStorage como doble respaldo
   function saveImg(key, dataUrl) {
-    if (!imgDb) return;
-    try {
-      const tx = imgDb.transaction(IMG_STORE, 'readwrite');
-      tx.objectStore(IMG_STORE).put(dataUrl, key);
-    } catch(e) {}
+    // IndexedDB
+    if (imgDb) {
+      try {
+        const tx = imgDb.transaction(IMG_STORE, 'readwrite');
+        tx.objectStore(IMG_STORE).put(dataUrl, key);
+      } catch(e) {}
+    }
+    // localStorage fallback (base64 puede ser grande, intentamos igualmente)
+    try { localStorage.setItem(LS_PREFIX + key, dataUrl); } catch(e) {}
+  }
+
+  function getImg(key) {
+    return new Promise(resolve => {
+      // Intentar IndexedDB primero
+      if (imgDb) {
+        try {
+          const tx = imgDb.transaction(IMG_STORE, 'readonly');
+          const req = tx.objectStore(IMG_STORE).get(key);
+          req.onsuccess = e => {
+            if (e.target.result) { resolve(e.target.result); return; }
+            // Fallback: localStorage
+            try { resolve(localStorage.getItem(LS_PREFIX + key)); } catch(ex) { resolve(null); }
+          };
+          req.onerror = () => {
+            try { resolve(localStorage.getItem(LS_PREFIX + key)); } catch(ex) { resolve(null); }
+          };
+          return;
+        } catch(e) {}
+      }
+      // Fallback directo
+      try { resolve(localStorage.getItem(LS_PREFIX + key)); } catch(ex) { resolve(null); }
+    });
+  }
+
+  function applyImg(boxId, dataUrl) {
+    const box = document.getElementById(boxId);
+    if (!box || !dataUrl) return;
+    const ph = box.querySelector('.ms-img-placeholder');
+    if (ph) ph.style.display = 'none';
+    let img = box.querySelector('img.ms-embedded');
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'ms-embedded';
+      box.appendChild(img);
+    }
+    img.src = dataUrl;
+    img.dataset.imgKey = boxId; // para que el download la incluya por key
   }
 
   function loadImgs() {
-    if (!imgDb) return;
-    ['ms-upload-1','ms-upload-2'].forEach(boxId => {
-      try {
-        const tx = imgDb.transaction(IMG_STORE, 'readonly');
-        const req = tx.objectStore(IMG_STORE).get(boxId);
-        req.onsuccess = e => {
-          if (!e.target.result) return;
-          const box = document.getElementById(boxId);
-          if (!box) return;
-          const ph = box.querySelector('.ms-img-placeholder');
-          if (ph) ph.style.display = 'none';
-          let img = box.querySelector('img.ms-embedded');
-          if (!img) {
-            img = document.createElement('img');
-            img.className = 'ms-embedded';
-            box.appendChild(img);
-          }
-          img.src = e.target.result;
-          // Sin botón de borrar — las imágenes embebidas son permanentes
-        };
-      } catch(e) {}
+    // Detectar dinámicamente todos los recuadros de imagen existentes
+    const boxes = document.querySelectorAll('.ms-img-upload-box[id]');
+    boxes.forEach(box => {
+      getImg(box.id).then(dataUrl => { if (dataUrl) applyImg(box.id, dataUrl); });
     });
   }
 
@@ -4395,20 +4527,9 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
       const file = this.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = function(e) {
-        // Remove placeholder, embed image
-        const ph = box.querySelector('.ms-img-placeholder');
-        if (ph) ph.style.display = 'none';
-        let img = box.querySelector('img.ms-embedded');
-        if (!img) {
-          img = document.createElement('img');
-          img.className = 'ms-embedded';
-          box.appendChild(img);
-        }
-        img.src = e.target.result;
-        // Guardar en IndexedDB para persistencia
-        saveImg(boxId, e.target.result);
-        // Sin botón de borrar — las imágenes son permanentes una vez subidas
+      reader.onload = function(ev) {
+        applyImg(boxId, ev.target.result);
+        saveImg(boxId, ev.target.result);
       };
       reader.readAsDataURL(file);
     });
@@ -4416,8 +4537,11 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
 
   openImgDB().then(() => {
     loadImgs();
-    bindUpload('ms-file-1', 'ms-upload-1');
-    bindUpload('ms-file-2', 'ms-upload-2');
+    // Enlazar todos los inputs de archivo a sus recuadros
+    document.querySelectorAll('.ms-img-upload-box[id]').forEach(box => {
+      const inp = box.querySelector('input[type="file"]');
+      if (inp && inp.id) bindUpload(inp.id, box.id);
+    });
   });
 })();
 </script>
