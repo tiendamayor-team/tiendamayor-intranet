@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="./Manual de Área — Atención al Cliente · Tienda Mayor_files/html-to-image.min.js.descarga" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <script>
       (function() {
         const originalConsole = window.console;
@@ -4529,6 +4529,14 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
 
     // Clonamos el HTML, limpiamos atributos de edición y removemos toda la toolbar
     const clone = document.documentElement.cloneNode(true);
+
+    // ── Eliminar el boilerplate de Claude (primer <script> del <head>) ──
+    // Ese script intercepta clicks, fetch y createObjectURL — rompe el archivo fuera del iframe.
+    const cloneHeadScripts = clone.querySelectorAll('head script');
+    if (cloneHeadScripts.length > 0) {
+      // El primer script es siempre el boilerplate de Claude
+      cloneHeadScripts[0].remove();
+    }
 
     // Aplicar los cambios editados directamente al clon (los embebe en el HTML estático)
     try {
