@@ -65,6 +65,7 @@
         };
 
         let pendingBlobs = new Map();
+        window._nativeCreateObjectURL = URL.createObjectURL.bind(URL);
         URL.createObjectURL = (blob) => {
           // Store the blob and create an ID and URL for it
           const blobId = `blob-${Date.now()}-${Math.random()}`;
@@ -347,14 +348,7 @@ nav {
 .logo-line1 { font-size: .55rem; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: var(--black); }
 .logo-line2 { font-size: .55rem; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: var(--black); }
 
-.nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a {
-  font-size: .58rem; font-weight: 500; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--gray);
-  text-decoration: none; transition: color .2s;
-}
-.nav-links a:hover,
-.nav-links a.active { color: var(--black); }
+.nav-links { display: none; }
 
 .nav-back {
   display: flex;
@@ -2411,7 +2405,6 @@ footer {
 
   /* Nav */
   nav { padding: 0 24px; }
-  .nav-links { display: none; }
 
   /* Hero */
   .hero { grid-template-columns: 1fr; min-height: auto; }
@@ -2511,9 +2504,74 @@ footer {
   #tb-mini-dot { right: 10px; bottom: 44px; }
 }
 
+
+/* ── Submenu nav ── */
+.nav-menu {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  order: 4;
+  background: var(--white);
+  border-top: 1px solid var(--mid);
+  padding: 8px 0 14px;
+}
+.nav-menu.open { display: flex; }
+
+.nav-category {
+  width: 100%;
+}
+
+.nav-category-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--black);
+  transition: background .15s;
+}
+.nav-category-btn:hover { background: var(--off); }
+.nav-category-btn svg {
+  width: 10px; height: 10px;
+  stroke: var(--gray); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.nav-category-btn.open svg { transform: rotate(180deg); }
+
+.nav-submenu {
+  display: none;
+  flex-direction: column;
+  padding: 2px 0 6px;
+  border-bottom: 1px solid var(--mid);
+}
+.nav-submenu.open { display: flex; }
+
+.nav-submenu a {
+  display: block;
+  padding: 8px 24px 8px 36px;
+  font-size: .56rem;
+  font-weight: 400;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  transition: color .15s, background .15s;
+}
+.nav-submenu a:hover { color: var(--black); background: var(--off); }
+
 /* ── Hamburger button ── */
 .nav-hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
@@ -2605,32 +2663,8 @@ footer {
   .tag-card { padding: 22px 20px; }
 }
 
-/* ── Mobile nav drawer (≤ 900px) ── */
-@media (max-width: 900px) {
-  nav { flex-wrap: wrap; height: auto; min-height: 60px; align-items: center; }
-
-  .nav-hamburger { display: flex; }
-
-  #nav-links-list {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    order: 4;
-    background: var(--white);
-    border-top: 1px solid var(--mid);
-    padding: 12px 0 16px;
-    gap: 0;
-  }
-  #nav-links-list.open { display: flex; }
-  #nav-links-list li { width: 100%; }
-  #nav-links-list a {
-    display: block;
-    padding: 10px 24px;
-    font-size: .62rem;
-    letter-spacing: .12em;
-  }
-  #nav-links-list a:hover { background: var(--off); }
-}
+/* ── Nav always wraps for hamburger ── */
+nav { flex-wrap: wrap; height: auto; min-height: 60px; align-items: center; }
 
 </style>
 </head>
@@ -2646,21 +2680,54 @@ footer {
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
-  <ul class="nav-links" id="nav-links-list">
-    <li><a href="#atc" class="">Atención al Cliente</a></li>
-    <li><a href="#tareas" class="active">Día a día</a></li>
-    <li><a href="#muestritas" class="">Muestritas</a></li>
-    <li><a href="#showroom" class="">Showroom</a></li>
-    <li><a href="#stock" class="">Stock</a></li>
-    <li><a href="#comunicacion" class="">WhatsApp</a></li>
-    <li><a href="#pedidos" class="">Pedidos</a></li>
-    <li><a href="#proceso-pedido" class="">Armado Pedidos</a></li>
-    <li><a href="#entrega" class="">Entrega Inmediata</a></li>
-    <li><a href="#pagos" class="">Pagos</a></li>
-    <li><a href="#logistica" class="">Logística</a></li>
-    <li><a href="#reclamos" class="">Reclamos</a></li>
-    <li><a href="#recursos" class="">Consultas</a></li>
-  </ul>
+  <ul class="nav-links" id="nav-links-list"></ul>
+  <div class="nav-menu" id="nav-menu">
+
+    <!-- 1. Institucional -->
+    <div class="nav-category">
+      <button class="nav-category-btn" data-cat="institucional">
+        <span class="nav-cat-label" spellcheck="true">Institucional</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="nav-submenu" id="sub-institucional">
+        <a href="#recursos" spellcheck="true">Consultas</a>
+        <a href="#comunicacion" spellcheck="true">Grupos de WhatsApp</a>
+        <a href="#atc" spellcheck="true">Cómo funciona Atención al Cliente</a>
+      </div>
+    </div>
+
+    <!-- 2. Básicos de AT al cliente -->
+    <div class="nav-category">
+      <button class="nav-category-btn" data-cat="basicos">
+        <span class="nav-cat-label" spellcheck="true">Básicos de AT al cliente</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="nav-submenu" id="sub-basicos">
+        <a href="#tareas" spellcheck="true">Tareas del día a día</a>
+        <a href="#muestritas" spellcheck="true">Cómo se cortan las muestritas</a>
+        <a href="#showroom" spellcheck="true">Qué hacer cuando nos visita el cliente</a>
+        <a href="#stock" spellcheck="true">Cómo sé si hay stock de un textil</a>
+        <a href="#pedidos" spellcheck="true">Cómo tomar un pedido</a>
+        <a href="#pagos" spellcheck="true">Formas de pago y descuentos</a>
+        <a href="#logistica" spellcheck="true">Logística y envíos</a>
+        <a href="#reclamos" spellcheck="true">Reclamos y devoluciones</a>
+      </div>
+    </div>
+
+    <!-- 3. Datos productivos -->
+    <div class="nav-category">
+      <button class="nav-category-btn" data-cat="datos">
+        <span class="nav-cat-label" spellcheck="true">Datos productivos</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="nav-submenu" id="sub-datos">
+        <a href="#proceso-pedido" spellcheck="true">Proceso de un pedido</a>
+        <a href="#dinamica-deposito" spellcheck="true">Dinámica del depósito</a>
+        <a href="#entrega" spellcheck="true">Entrega inmediata</a>
+      </div>
+    </div>
+
+  </div>
 </nav>
 
 <div id="hero-anchor" style="position:absolute;top:0;"></div>
@@ -2686,6 +2753,49 @@ footer {
     </div>
   </div>
 </div>
+
+<!-- ══ RECURSOS Y CONSULTAS ══ -->
+<section id="recursos" style="background:var(--off);border-top:1px solid var(--mid);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:80px;align-items:start;">
+
+      <div style="position:sticky;top:80px;">
+        <p class="sec-label" spellcheck="true">información y recursos</p>
+        <h2 class="sec-title" style="font-size:1.9rem;" spellcheck="true">Consultas<br>&amp; <em style="font-style:italic;font-weight:200">próximos pasos</em></h2>
+        <div class="sec-rule"></div>
+        <p class="recursos-intro" style="font-size:.63rem;font-weight:300;line-height:1.9;color:var(--dark);" spellcheck="true"><i>Este documento es un resumen de info básica para comenzar a trabajar. No reemplaza Instructivos del área, es solo para dar un pantallazo general.</i></p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1px;background:var(--mid);border:1px solid var(--mid);">
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">01</span>
+            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Instructivo de Atención al Cliente</p>
+          </div>
+          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Luego de leer este documento, comenzá a leer el instructivo del área para profundizar conocimientos y entrar en detalle de cada tema puntual.&nbsp;<br><a href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Instructivo de Atención al Cliente" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing','_blank');return false;})(event);return false;"><strong>Instructivo de Atención al Cliente</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.&nbsp;&nbsp;(referencia explicativa principal del área)<br>Vas a acceder a instrucciones detalladas sobre tus tareas e info del área y las sedes, este documento no lo reemplaza.</p>
+        </div>
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">02</span>
+            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Documento de Preguntas Frecuentes</p>
+          </div>
+          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Para consultar paso a paso, dinámicas diarias, formas de responder, resolver dudas sobre situaciones habituales, entre otras. Vas a acceder al&nbsp;<a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al Documento de Preguntas Frecuentes" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;"><strong>Documento de Preguntas Frecuentes</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>&nbsp;</p>
+        </div>
+
+        <div style="background:var(--white);padding:36px 36px 32px;">
+          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
+            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">03</span>
+            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Responsable de área</p>
+          </div>
+          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Para cualquier otra consulta que no esté cubierta por los documentos mencionados, podés consultar al <strong>responsable de área</strong> lo que necesites.<br>También se realizan reuniones semanales (ver día y horario asignado en instructivo) dónde se charlan inquietudes, así que anotaté todas las dudas para verlas en conjunto.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ══ ATC ══ -->
 <section id="atc">
@@ -2753,7 +2863,7 @@ footer {
         </div>
 
         <div style="background:var(--black); padding:28px 28px; margin-top:1px;">
-          <p class="atc-quote-text" style="font-size:.78rem;font-weight:400;font-style:italic;line-height:1.85;color:rgba(255,255,255,.75);letter-spacing:.01em;">Somos el vínculo entre el producto y quien lo elige. Cada consulta bien respondida, cada pedido resuelto con atención, es una forma de decir quiénes somos.</p>
+          <p class="atc-quote-text" style="font-size:.78rem;font-weight:400;font-style:italic;line-height:1.85;color:rgba(255,255,255,.75);letter-spacing:.01em;" spellcheck="true">Somos el vínculo entre el producto y quien lo elige. Cada consulta bien respondida, cada pedido resuelto con atención, es una forma de decir quiénes somos.</p>
         </div>
 
       </div>
@@ -2797,7 +2907,7 @@ footer {
         <div class="tarea-card">
           <span class="tarea-num">04</span>
           <p class="tarea-titulo" spellcheck="true">Orden del perchero de exhibición</p>
-          <p class="tarea-text" spellcheck="true">El espacio de trabajo y el perchero deben estar <strong>siempre prolijos y ordenados</strong>. Los paños se pueden descolgar para que el cliente arme paletas; después hay que <strong>volver a ubicarlos en su lugar</strong> según el documento <a href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing" class="tarea-link" target="_blank" data-editable-href="https://bit.ly/ORDENPERCHERO" title="Orden de perchero" data-link-bound="1" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing','_blank');return false;})(event);return false;">Orden de perchero<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</p>
+          <p class="tarea-text" spellcheck="true">El espacio de trabajo y el perchero deben estar <strong>siempre prolijos y ordenados</strong>. Los paños se pueden descolgar para que el cliente arme paletas; después hay que <strong>volver a ubicarlos en su lugar</strong> según el documento <a href="https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing" class="tarea-link" target="_blank" data-editable-href="https://bit.ly/ORDENPERCHERO" title="Orden de perchero" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing','_blank');return false;})(event);return false;">Orden de perchero<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</p>
         </div>
 
         <div class="tarea-card">
@@ -2871,7 +2981,7 @@ footer {
         <div class="ms-block" id="ms-images-block">
           <div class="ms-block-head" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
             <span class="ms-block-num" style="opacity:.4">img</span>
-            <p class="ms-block-title" style="color:var(--gray);font-weight:400;">Imágenes de referencia</p>
+            <p class="ms-block-title" style="color:var(--gray);font-weight:400;" spellcheck="true">Imágenes de referencia</p>
           </div>
           <div class="ms-images" style="margin-top:18px;">
             <div class="ms-img-upload-box" id="ms-upload-1">
@@ -3092,7 +3202,7 @@ footer {
               <p class="tag-card-color" spellcheck="true">Amarillo</p>
               <p class="tag-card-title" spellcheck="true">Tag amarillo</p>
               <p class="tag-card-text" spellcheck="true">
-                El textil se encuentra <strong>fraccionado</strong> o con <strong>muchos paños</strong> en stock. <em>Podemos consultarlo en la planilla "Paños Stock TM" — ver más info en <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al documento de Preguntas Frecuentes" data-link-bound="1" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;">Preguntas Frecuentes<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</em>
+                El textil se encuentra <strong>fraccionado</strong> o con <strong>muchos paños</strong> en stock. <em>Podemos consultarlo en la planilla "Paños Stock TM" — ver más info en <a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al documento de Preguntas Frecuentes" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;">Preguntas Frecuentes<svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.</em>
               </p>
             </div>
 
@@ -3429,7 +3539,7 @@ footer {
     <!-- Dinámica del depósito -->
     <div class="proceso-ext-divider"></div>
 
-<div class="container">
+<div class="container" id="dinamica-deposito">
     <p class="sec-label" spellcheck="true">Cómo funciona el depósito</p>
     <h2 class="sec-title" spellcheck="true">Dinámica del<br><em style="font-style:italic;font-weight:200">depósito</em></h2>
     <div class="sec-rule"></div>
@@ -3486,8 +3596,8 @@ footer {
           <div class="prod-badge">Desde producción</div>
           <p class="dep-block-title" style="color:var(--white);margin-bottom:16px;" spellcheck="true">Tareas de producción que se articulan con depósito</p>
           <ul class="dep-list">
-            <li><span><strong style="color:rgba(255,255,255,.85);">14 – 15 hs</strong> &nbsp;·&nbsp; Se cambian los estados de los pedidos que ya están armados.</span></li>
-            <li><span><strong style="color:rgba(255,255,255,.85);">16:30 – 17 hs</strong> &nbsp;·&nbsp; Se generan las listas de armado para el día siguiente.</span></li>
+            <li spellcheck="true"><span><strong style="color:rgba(255,255,255,.85);">14 – 15 hs</strong> &nbsp;·&nbsp; Se cambian los estados de los pedidos que ya están armados.</span></li>
+            <li spellcheck="true"><span><strong style="color:rgba(255,255,255,.85);">16:30 – 17 hs</strong> &nbsp;·&nbsp; Se generan las listas de armado para el día siguiente.</span></li>
           </ul>
         </div>
 
@@ -3497,9 +3607,9 @@ footer {
           <p class="dep-block-title" style="color:var(--white);margin-bottom:10px;" spellcheck="true">¿Cómo se guarda la mercadería?</p>
           <p class="dep-block-text" style="margin-bottom:12px;" spellcheck="true">Los textiles se guardan en rollo/cajas o en paños plegados.</p>
           <ul class="dep-list">
-            <li><span>La mayoría se almacena <strong style="color:rgba(255,255,255,.85);">enrollada</strong> en estanterías.</span></li>
-            <li><span>Otra parte se guarda en <strong style="color:rgba(255,255,255,.85);">paños plegados</strong>, también en estanterías.</span></li>
-            <li><span>Los <strong style="color:rgba(255,255,255,.85);">terciopelos y panas</strong> se almacenan en cajas de cartón apoyadas horizontalmente, para preservar la estructura del tejido.</span></li>
+            <li spellcheck="true"><span>La mayoría se almacena <strong style="color:rgba(255,255,255,.85);">enrollada</strong> en estanterías.</span></li>
+            <li spellcheck="true"><span>Otra parte se guarda en <strong style="color:rgba(255,255,255,.85);">paños plegados</strong>, también en estanterías.</span></li>
+            <li spellcheck="true"><span>Los <strong style="color:rgba(255,255,255,.85);">terciopelos y panas</strong> se almacenan en cajas de cartón apoyadas horizontalmente, para preservar la estructura del tejido.</span></li>
           </ul>
         </div>
 
@@ -3960,48 +4070,7 @@ footer {
   </div>
 </section>
 
-<!-- ══ RECURSOS Y CONSULTAS ══ -->
-<section id="recursos" style="background:var(--off);border-top:1px solid var(--mid);">
-  <div class="container">
-    <div style="display:grid;grid-template-columns:260px 1fr;gap:80px;align-items:start;">
 
-      <div style="position:sticky;top:80px;">
-        <p class="sec-label" spellcheck="true">información y recursos</p>
-        <h2 class="sec-title" style="font-size:1.9rem;" spellcheck="true">Consultas<br>&amp; <em style="font-style:italic;font-weight:200">próximos pasos</em></h2>
-        <div class="sec-rule"></div>
-        <p class="recursos-intro" style="font-size:.63rem;font-weight:300;line-height:1.9;color:var(--dark);" spellcheck="true"><i>Este documento es un resumen de info básica para comenzar a trabajar. No reemplaza Instructivos del área, es solo para dar un pantallazo general.</i></p>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:1px;background:var(--mid);border:1px solid var(--mid);">
-
-        <div style="background:var(--white);padding:36px 36px 32px;">
-          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
-            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">01</span>
-            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Instructivo de Atención al Cliente</p>
-          </div>
-          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Luego de leer este documento, comenzá a leer el instructivo del área para profundizar conocimientos y entrar en detalle de cada tema puntual.&nbsp;<br><a href="https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Instructivo de Atención al Cliente" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing','_blank');return false;})(event);return false;" data-link-bound="1"><strong>Instructivo de Atención al Cliente</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>.&nbsp;&nbsp;(referencia explicativa principal del área)<br>Vas a acceder a instrucciones detalladas sobre tus tareas e info del área y las sedes, este documento no lo reemplaza.</p>
-        </div>
-
-        <div style="background:var(--white);padding:36px 36px 32px;">
-          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
-            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">02</span>
-            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Documento de Preguntas Frecuentes</p>
-          </div>
-          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Para consultar paso a paso, dinámicas diarias, formas de responder, resolver dudas sobre situaciones habituales, entre otras. Vas a acceder al&nbsp;<a href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" class="ff-link" target="_blank" data-editable-href="" title="Pegá acá el link al Documento de Preguntas Frecuentes" onclick="(function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{window.parent.postMessage({type:'openExternal',href:'https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing'},'*')}catch(x){}window.open('https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing','_blank');return false;})(event);return false;" data-link-bound="1"><strong>Documento de Preguntas Frecuentes</strong><svg viewBox="0 0 24 24"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a>&nbsp;</p>
-        </div>
-
-        <div style="background:var(--white);padding:36px 36px 32px;">
-          <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--mid);">
-            <span style="font-size:1.6rem;font-weight:200;color:var(--mid);letter-spacing:-.03em;line-height:1;flex-shrink:0;">03</span>
-            <p class="recursos-block-title" style="font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);line-height:1.4;" spellcheck="true">Responsable de área</p>
-          </div>
-          <p class="recursos-block-text" style="font-size:.76rem;font-weight:300;line-height:1.85;color:var(--dark);" spellcheck="true">Para cualquier otra consulta que no esté cubierta por los documentos mencionados, podés consultar al <strong>responsable de área</strong> lo que necesites.<br>También se realizan reuniones semanales (ver día y horario asignado en instructivo) dónde se charlan inquietudes, así que anotaté todas las dudas para verlas en conjunto.</p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ══ FOOTER ══ -->
 <footer>
@@ -4022,34 +4091,11 @@ footer {
 
 <!-- ══ TOOLBAR ══ -->
 <!-- Botón flotante minimizado -->
-<div id="tb-mini-dot"></div>
-<button id="tb-toggle-panel" title="Herramientas de edición" aria-label="Abrir herramientas">
-  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-</button>
+
+
 
 <!-- Panel expandido -->
-<div id="edit-toolbar">
-  <div class="tb-sep"></div>
-  <button id="toggle-edit">Editar</button>
-  <div class="tb-sep"></div>
-  <div class="tb-rich-row">
-    <button class="tb-rich-btn" id="btn-bold" title="Negrita"><b>N</b></button>
-    <button class="tb-rich-btn" id="btn-italic" title="Cursiva"><i>I</i></button>
-    <input type="color" class="tb-color-pick" id="btn-color" title="Color de texto" value="#f1c40f">
-    <span class="tb-status" id="tb-hint"></span>
-  </div>
-  <div class="tb-sep"></div>
-  <div class="tb-row">
-    <div class="tb-save-dot" id="tb-save-dot"></div>
-    <span class="tb-status" id="tb-save-status"></span>
-  </div>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-undo">↩ Deshacer</button>
-  <button class="tb-btn" id="btn-reset">Restaurar</button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" id="btn-download">⬇ Descargar</button>
-  <div class="tb-sep"></div>
-</div>
+
 
 
 <script>
@@ -4095,6 +4141,21 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     }
 
     var rawHref = el.getAttribute('href') || '';
+
+    // — Links relativos (.html) → navegar —
+    if (rawHref && !rawHref.startsWith('#') && !rawHref.startsWith('http://') && !rawHref.startsWith('https://')) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      try {
+        if (window.parent && window !== window.parent) {
+          window.parent.postMessage({ type: 'openExternal', href: el.href }, '*');
+        } else {
+          window.location.href = el.href;
+        }
+      } catch(err) { window.location.href = el.href; }
+      return;
+    }
 
     // — Links internos (#hash) → smooth scroll —
     if (rawHref.startsWith('#')) {
@@ -4201,6 +4262,8 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     '.atc-quote-text',
     // Consultas & recursos
     '.recursos-intro', '.recursos-block-title', '.recursos-block-text',
+    // Nav menú
+    '.nav-cat-label', '.nav-submenu a',
   ];
 
   const STORAGE_KEY = 'tm-manual-edits-v1';
@@ -4535,16 +4598,22 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     const date = new Date().toISOString().slice(0, 10);
     const filename = 'manual-atencion-al-cliente-tm-' + date + '.html';
 
-    // Intentamos la descarga nativa primero (cuando el archivo se abre directamente en browser)
+    // Descarga nativa — usa createObjectURL real (no el override del iframe)
     try {
-      const blobUrl = URL.createObjectURL(new Blob([htmlStr], { type: 'text/html' }));
+      const createObjURL = window._nativeCreateObjectURL || URL.createObjectURL.bind(URL);
+      const blobUrl = createObjURL(new Blob([htmlStr], { type: 'text/html' }));
       const a = document.createElement('a');
       a.href = blobUrl;
       a.download = filename;
       a.style.display = 'none';
       document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(blobUrl); document.body.removeChild(a); }, 500);
+      document.body.removeChild(a); // remove before click to avoid interceptor
+      // Trigger via hidden link outside DOM
+      const tempA = document.createElement('a');
+      tempA.href = blobUrl;
+      tempA.download = filename;
+      tempA.dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: false }));
+      setTimeout(() => { URL.revokeObjectURL(blobUrl); }, 2000);
     } catch(e) {}
 
     // También enviamos por postMessage para que funcione dentro del iframe de Claude
@@ -4580,38 +4649,49 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
   openIDB().then(() => loadSaved());
 })();
 
-// ─── Hamburger menu ───
+// ─── Hamburger menu + submenus ───
 (function() {
-  const btn = document.getElementById('nav-hamburger');
-  const list = document.getElementById('nav-links-list');
-  if (!btn || !list) return;
+  const btn  = document.getElementById('nav-hamburger');
+  const menu = document.getElementById('nav-menu');
+  if (!btn || !menu) return;
+
+  // Toggle main menu
   btn.addEventListener('click', function() {
-    const open = list.classList.toggle('open');
+    const open = menu.classList.toggle('open');
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open);
   });
-  // Close on link click and scroll to target
-  list.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      const href = a.getAttribute('href');
-      // Close menu
-      list.classList.remove('open');
-      btn.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-      // If it's an anchor link, handle scroll manually after menu closes
-      if (href && href.startsWith('#')) {
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          // Small delay to let menu collapse before scroll
-          setTimeout(function() {
-            const navHeight = document.querySelector('nav') ? document.querySelector('nav').getBoundingClientRect().height : 60;
-            const top = target.getBoundingClientRect().top + window.scrollY - navHeight;
-            window.scrollTo({ top: top, behavior: 'smooth' });
-          }, 80);
-        }
-      }
+
+  // Toggle sub-categories
+  document.querySelectorAll('.nav-category-btn').forEach(function(catBtn) {
+    catBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const cat = catBtn.dataset.cat;
+      const sub = document.getElementById('sub-' + cat);
+      if (!sub) return;
+      const isOpen = sub.classList.toggle('open');
+      catBtn.classList.toggle('open', isOpen);
     });
+  });
+
+  function closeAllMenus() {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-submenu').forEach(function(s) { s.classList.remove('open'); });
+    document.querySelectorAll('.nav-category-btn').forEach(function(b) { b.classList.remove('open'); });
+  }
+
+  // Close menu on submenu link click
+  menu.querySelectorAll('.nav-submenu a').forEach(function(a) {
+    a.addEventListener('click', closeAllMenus);
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      closeAllMenus();
+    }
   });
 })();
 
