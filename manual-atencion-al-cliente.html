@@ -322,6 +322,11 @@ body {
   background: var(--white);
   color: var(--black);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 /* ═══ NAV ═══ */
@@ -2186,31 +2191,82 @@ footer {
 }
 
 /* ═══ EDIT TOOLBAR ═══ */
-#edit-toolbar {
-  position: fixed; bottom: 28px; left: 50%;
-  transform: translateX(-50%);
-  background: #0a0a0a; color: #fff;
-  display: flex; align-items: center; gap: 0;
+
+/* Botón flotante minimizado (siempre visible) */
+#tb-toggle-panel {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 40px; height: 40px;
+  background: #0a0a0a;
+  border: none; border-radius: 50%;
+  cursor: pointer;
   z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,.22);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.28);
+  transition: background .15s, transform .15s;
   font-family: 'Montserrat', sans-serif;
 }
+#tb-toggle-panel:hover { background: #222; transform: scale(1.08); }
+#tb-toggle-panel svg { width: 16px; height: 16px; stroke: rgba(255,255,255,.7); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Dot de estado sobre el botón */
+#tb-mini-dot {
+  position: fixed;
+  bottom: 52px; right: 22px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  z-index: 10000;
+  pointer-events: none;
+  transition: background .2s, box-shadow .2s;
+  display: none;
+}
+#tb-mini-dot.dirty  { display: block; background: #e67e22; }
+#tb-mini-dot.saving { display: block; background: #f1c40f; box-shadow: 0 0 0 3px rgba(241,196,15,.22); }
+#tb-mini-dot.saved  { display: block; background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.22); }
+
+/* Panel expandido */
+#edit-toolbar {
+  position: fixed; bottom: 72px; right: 24px;
+  background: #0a0a0a; color: #fff;
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  z-index: 9998;
+  box-shadow: 0 8px 32px rgba(0,0,0,.32);
+  font-family: 'Montserrat', sans-serif;
+  min-width: 200px;
+  transform-origin: bottom right;
+  animation: tbFadeIn .15s ease;
+}
+#edit-toolbar.open { display: flex; }
+@keyframes tbFadeIn {
+  from { opacity: 0; transform: scale(.95) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .tb-btn {
   padding: 13px 20px; font-size: .58rem; font-weight: 500;
   letter-spacing: .14em; text-transform: uppercase;
   color: rgba(255,255,255,.6); background: none; border: none;
   cursor: pointer; transition: color .15s, background .15s;
   font-family: 'Montserrat', sans-serif; white-space: nowrap;
+  text-align: left;
 }
 .tb-btn:hover { color: #fff; background: rgba(255,255,255,.06); }
-.tb-sep { width: 1px; height: 32px; background: rgba(255,255,255,.1); }
-.tb-status { padding: 13px 20px; font-size: .55rem; font-weight: 400; letter-spacing: .1em; color: rgba(255,255,255,.3); white-space: nowrap; }
+.tb-sep { width: 100%; height: 1px; background: rgba(255,255,255,.08); }
+
+.tb-row {
+  display: flex; align-items: center;
+}
+.tb-status { padding: 10px 16px; font-size: .5rem; font-weight: 400; letter-spacing: .1em; color: rgba(255,255,255,.3); white-space: nowrap; }
 
 .tb-save-dot {
   width: 7px; height: 7px;
   border-radius: 50%;
   background: rgba(255,255,255,.2);
-  margin-left: -12px;
+  margin-left: 4px;
   transition: background .2s, box-shadow .2s;
   flex-shrink: 0;
 }
@@ -2218,12 +2274,21 @@ footer {
 .tb-save-dot.saved   { background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.18); }
 .tb-save-dot.dirty   { background: #e67e22; }
 
-#tb-save-status { padding-left: 8px; padding-right: 8px; min-width: 70px; }
+#tb-save-status { font-size: .48rem; padding: 0 8px; color: rgba(255,255,255,.3); }
+
+.tb-rich-row {
+  display: flex; align-items: center; gap: 0; padding: 4px 12px;
+}
+.tb-rich-btn { padding: 8px 10px; font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.75); background: none; border: none; cursor: pointer; transition: color .15s, background .15s; font-family: "Montserrat", sans-serif; }
+.tb-rich-btn:hover { color: #fff; background: rgba(255,255,255,.06); }
+.tb-color-pick { width: 22px; height: 22px; border: 1px solid rgba(255,255,255,.25); border-radius: 2px; background: #f1c40f; cursor: pointer; margin: 0 4px; flex-shrink: 0; padding: 0; }
+
 #toggle-edit {
-  padding: 13px 24px; background: #fff; color: #0a0a0a;
+  padding: 13px 20px; background: #fff; color: #0a0a0a;
   font-size: .58rem; font-weight: 600; letter-spacing: .14em;
   text-transform: uppercase; border: none; cursor: pointer;
   font-family: 'Montserrat', sans-serif; transition: background .15s;
+  text-align: left;
 }
 #toggle-edit:hover { background: #e8e8e8; }
 #toggle-edit.on { background: #e8e8e8; }
@@ -2378,9 +2443,21 @@ footer {
 
   /* Stock */
   .stock-layout { grid-template-columns: 1fr; gap: 40px; }
+  .stock-layout > * { min-width: 0; }
   .stock-sidebar { position: static; }
   .stock-tags-grid { grid-template-columns: 1fr; }
-  .planilla-mock-table { font-size: .5rem; }
+  .planilla-mock { max-width: 100%; overflow-x: auto; }
+  .planilla-mock-table { font-size: .5rem; min-width: 560px; }
+  .planilla-mock-table th, .planilla-mock-table td { padding: 5px 6px; }
+  .stock-planilla-head { padding: 16px 22px; flex-wrap: wrap; gap: 10px; }
+  .stock-planilla-body { padding: 20px 16px 18px; overflow: hidden; }
+  .stock-tags-head { padding: 16px 22px; }
+  .stock-tags-intro { padding: 22px 22px 18px; }
+  .tag-card { padding: 24px 22px; }
+  .stock-deposito-head { padding: 16px 22px; }
+  .stock-deposito-body { padding: 22px 22px 18px; }
+  .stock-warning { padding: 16px 18px; word-break: break-word; }
+  .stock-steps li { word-break: break-word; }
 
   /* Comunicación */
   .grupos-grid { grid-template-columns: 1fr; }
@@ -2429,7 +2506,9 @@ footer {
   .footer-copy { text-align: center; }
 
   /* Toolbar */
-  #edit-toolbar { width: calc(100% - 32px); justify-content: center; flex-wrap: wrap; bottom: 16px; }
+  #edit-toolbar { right: 12px; bottom: 68px; min-width: 180px; }
+  #tb-toggle-panel { right: 12px; bottom: 16px; }
+  #tb-mini-dot { right: 10px; bottom: 44px; }
 }
 
 /* ── Hamburger button ── */
@@ -2497,8 +2576,19 @@ footer {
   .proceso-tl { min-width: 700px; }
 
   /* Stock planilla */
-  .stock-planilla-head { padding: 14px 16px; }
+  .stock-planilla { border-left: none; border-right: none; margin-left: -20px; margin-right: -20px; }
+  .stock-planilla-head { padding: 14px 20px; }
+  .stock-planilla-body { padding: 16px 12px 14px; }
+  .stock-tags-block { border-left: none; border-right: none; margin-left: -20px; margin-right: -20px; }
+  .stock-tags-head { padding: 14px 16px; }
+  .stock-tags-intro { padding: 18px 16px 14px; }
+  .tag-card { padding: 20px 16px; }
+  .stock-deposito-head { padding: 14px 16px; }
   .stock-deposito-body { padding: 18px 16px 14px; }
+  .stock-head-title { font-size: .62rem; }
+  .stock-footnote { padding: 14px 16px; }
+  .planilla-mock-table { font-size: .44rem; min-width: 480px; }
+  .planilla-mock-caption { font-size: .44rem; margin-top: 8px; }
 
   /* Nav */
   nav { padding: 0 16px; }
@@ -2552,7 +2642,7 @@ footer {
     <span class="logo-line1">Tienda</span>
     <span class="logo-line2">Mayor</span>
   </div>
-  <a class="nav-back" href="#hero-anchor" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
+  <a class="nav-back" href="index.html" id="btn-inicio"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -3931,24 +4021,34 @@ footer {
 </footer>
 
 <!-- ══ TOOLBAR ══ -->
+<!-- Botón flotante minimizado -->
+<div id="tb-mini-dot"></div>
+<button id="tb-toggle-panel" title="Herramientas de edición" aria-label="Abrir herramientas">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
+
+<!-- Panel expandido -->
 <div id="edit-toolbar">
-  <span class="tb-status" id="tb-hint">Modo lectura</span>
   <div class="tb-sep"></div>
-  <button class="tb-rich-btn" id="btn-bold" title="Negrita"><b>N</b></button>
-  <button class="tb-rich-btn" id="btn-italic" title="Cursiva"><i>I</i></button>
+  <button id="toggle-edit">Editar</button>
   <div class="tb-sep"></div>
-  <input type="color" class="tb-color-pick" id="btn-color" title="Color de texto" value="#f1c40f">
+  <div class="tb-rich-row">
+    <button class="tb-rich-btn" id="btn-bold" title="Negrita"><b>N</b></button>
+    <button class="tb-rich-btn" id="btn-italic" title="Cursiva"><i>I</i></button>
+    <input type="color" class="tb-color-pick" id="btn-color" title="Color de texto" value="#f1c40f">
+    <span class="tb-status" id="tb-hint"></span>
+  </div>
   <div class="tb-sep"></div>
-  <div class="tb-save-dot" id="tb-save-dot"></div>
-  <span class="tb-status" id="tb-save-status"></span>
+  <div class="tb-row">
+    <div class="tb-save-dot" id="tb-save-dot"></div>
+    <span class="tb-status" id="tb-save-status"></span>
+  </div>
   <div class="tb-sep"></div>
   <button class="tb-btn" id="btn-undo">↩ Deshacer</button>
-  <div class="tb-sep"></div>
   <button class="tb-btn" id="btn-reset">Restaurar</button>
   <div class="tb-sep"></div>
   <button class="tb-btn" id="btn-download">⬇ Descargar</button>
   <div class="tb-sep"></div>
-  <button id="toggle-edit">Editar</button>
 </div>
 
 
@@ -3985,6 +4085,14 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     // Subir hasta el <a> más cercano
     while (el && el.tagName !== 'A') el = el.parentElement;
     if (!el) return;
+
+    // Cerrar menú hamburguesa si el link está dentro del nav
+    var navList = document.getElementById('nav-links-list');
+    var navBtn  = document.getElementById('nav-hamburger');
+    if (navList && navList.contains(el)) {
+      navList.classList.remove('open');
+      if (navBtn) { navBtn.classList.remove('open'); navBtn.setAttribute('aria-expanded', 'false'); }
+    }
 
     var rawHref = el.getAttribute('href') || '';
 
@@ -4191,6 +4299,8 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
 
   // ─── Guardado ───
   function setSaveStatus(state, text) {
+    var miniDot = document.getElementById('tb-mini-dot');
+    if (miniDot) { miniDot.className = state || ''; }
     saveDot.className = 'tb-save-dot' + (state ? ' ' + state : '');
     saveStatus.textContent = text || '';
   }
@@ -4342,10 +4452,56 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
     // (por si alguna se cargó desde IndexedDB y el src ya está, o por si falta alguna)
     await new Promise(resolve => setTimeout(resolve, 50)); // micro-tick para que el DOM se estabilice
 
-    // Clonamos el HTML, limpiamos atributos de edición y removemos la toolbar
+    // Asegurar que los cambios están guardados antes de clonar
+    if (dirty) await saveNow();
+
+    // Clonamos el HTML, limpiamos atributos de edición y removemos toda la toolbar
     const clone = document.documentElement.cloneNode(true);
-    const tb = clone.querySelector('#edit-toolbar');
-    if (tb) tb.remove();
+
+    // Aplicar los cambios editados directamente al clon (los embebe en el HTML estático)
+    try {
+      let raw = await idbGet(STORAGE_KEY);
+      if (!raw) raw = ls.getItem(STORAGE_KEY);
+      if (raw) {
+        const map = JSON.parse(raw);
+        // Aplicar textos editables al clon
+        const cloneBody = clone.querySelector('body');
+        if (cloneBody) {
+          // Crear un documento temporal para aplicar los edits al clon
+          const tmpDoc = document.implementation.createHTMLDocument('');
+          tmpDoc.documentElement.innerHTML = clone.innerHTML;
+          const cloneEditables = tmpDoc.querySelectorAll(SELECTORS.join(','));
+          cloneEditables.forEach(el => {
+            // Recalcular el path igual que pathFor() pero en el clon
+            const parts = [];
+            let node = el;
+            while (node && node !== tmpDoc.body) {
+              const parent = node.parentElement;
+              if (!parent) break;
+              const siblings = Array.from(parent.children);
+              const idx = siblings.indexOf(node);
+              const tag = node.tagName.toLowerCase();
+              const id = node.id ? '#' + node.id : '';
+              parts.unshift(tag + id + '[' + idx + ']');
+              node = parent;
+            }
+            const k = parts.join('>');
+            if (map[k] !== undefined) el.innerHTML = map[k];
+          });
+          // Aplicar hrefs editables
+          tmpDoc.querySelectorAll('a[data-editable-href]').forEach((a, i) => {
+            const k = '__href__' + i;
+            if (map[k] !== undefined) a.setAttribute('href', map[k]);
+          });
+          clone.querySelector('body').innerHTML = tmpDoc.body.innerHTML;
+        }
+      }
+    } catch(e) { console.warn('No se pudieron embeber ediciones:', e); }
+
+    // Remover toolbar completa (panel + botón flotante + dot)
+    ['#edit-toolbar', '#tb-toggle-panel', '#tb-mini-dot'].forEach(sel => {
+      const el = clone.querySelector(sel); if (el) el.remove();
+    });
     clone.querySelectorAll('[data-editable]').forEach(n => n.removeAttribute('data-editable'));
     clone.querySelectorAll('[contenteditable]').forEach(n => n.removeAttribute('contenteditable'));
     clone.querySelectorAll('[data-edit-bound]').forEach(n => n.removeAttribute('data-edit-bound'));
@@ -4456,6 +4612,25 @@ document.querySelectorAll('.tl-item').forEach((el, i) => {
         }
       }
     });
+  });
+})();
+
+// ─── Toggle panel de edición ───
+(function() {
+  var toggleBtn = document.getElementById('tb-toggle-panel');
+  var panel     = document.getElementById('edit-toolbar');
+  if (!toggleBtn || !panel) return;
+
+  toggleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+
+  // Cerrar al hacer click fuera
+  document.addEventListener('click', function(e) {
+    if (!panel.contains(e.target) && e.target !== toggleBtn) {
+      panel.classList.remove('open');
+    }
   });
 })();
 
