@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentos del Área — Atención al Cliente</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; min-width: 0; }
+
+:root {
+  --black:  #0c0c0c;
+  --white:  #ffffff;
+  --off:    #f6f6f6;
+  --mid:    #e8e8e8;
+  --gray:   #999;
+  --dark:   #444;
+  --accent: #0c0c0c;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════
+   NAV
+═══════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--mid);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 300;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.logo-line1 {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+.logo-line2 {
+  font-size: 0.55rem;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+
+/* hamburger */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--black);
+  transition: transform 0.3s, opacity 0.3s, width 0.3s;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* edit mode: activated via Alt+E shortcut only */
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* back to home button */
+.nav-back-home {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  border: 1px solid var(--mid);
+  padding: 6px 12px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-back-home:hover { color: var(--black); border-color: var(--black); }
+
+/* ═══════════════════════════════
+   DROPDOWN MENU
+═══════════════════════════════ */
+.menu-overlay {
+  position: fixed;
+  top: 60px; left: 0; right: 0; bottom: 0;
+  background: rgba(12,12,12,0.45);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.menu-overlay.open { opacity: 1; pointer-events: all; }
+
+.menu-panel {
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--mid);
+  z-index: 250;
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.25s;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+.menu-panel.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+
+.menu-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 40px 48px 48px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+}
+
+.menu-label-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-right: 1px solid var(--mid);
+  padding-right: 40px;
+}
+.menu-section-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 14px;
+}
+.menu-section-title {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--black);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+.menu-section-desc {
+  font-size: 0.7rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--gray);
+  letter-spacing: 0.01em;
+}
+
+.menu-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  text-decoration: none;
+  background: var(--off);
+  transition: background 0.18s;
+  cursor: pointer;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
+}
+.menu-item:hover { background: var(--mid); }
+
+.menu-item-icon {
+  width: 30px;
+  height: 30px;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.menu-item-icon svg {
+  width: 13px; height: 13px;
+  stroke: var(--white); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.menu-item-text {}
+.menu-item-name {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 3px;
+}
+.menu-item-desc {
+  font-size: 0.65rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--gray);
+  letter-spacing: 0.01em;
+}
+
+/* ═══════════════════════════════
+   HERO
+═══════════════════════════════ */
+.hero {
+  padding-top: 60px;
+  min-height: 52vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.hero-left {
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 64px 56px 72px;
+}
+
+.hero-logo-white .logo-line1,
+.hero-logo-white .logo-line2 { color: rgba(255,255,255,0.4); }
+
+.hero-eyebrow {
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 20px;
+}
+
+.hero-h1 {
+  font-size: 2.8rem;
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--white);
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+}
+.hero-h1 em { font-style: italic; font-weight: 200; color: var(--white); }
+
+.hero-sub {
+  font-size: 0.76rem;
+  font-weight: 400;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.75);
+  max-width: 340px;
+  letter-spacing: 0.01em;
+}
+
+.hero-right {
+  background: var(--off);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 56px 56px 72px;
+}
+
+.hero-right-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 18px;
+}
+
+.hero-manifiesto {
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.9;
+  color: var(--black);
+  border-left: 1px solid var(--black);
+  padding-left: 22px;
+  letter-spacing: 0.01em;
+}
+
+/* ═══════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════ */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section-intro {
+  padding: 80px 0 0;
+  border-bottom: 1px solid var(--mid);
+}
+
+.sec-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 12px;
+}
+.sec-title {
+  font-size: 2.2rem;
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--black);
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+.sec-rule { width: 24px; height: 1px; background: var(--black); margin-bottom: 32px; }
+
+.intro-text {
+  font-size: 0.82rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--dark);
+  max-width: 640px;
+  margin-bottom: 60px;
+  letter-spacing: 0.01em;
+}
+
+/* ═══════════════════════════════
+   DOCUMENT CARDS
+═══════════════════════════════ */
+.docs-section {
+  padding: 72px 0 96px;
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--mid);
+  border: 1px solid var(--mid);
+}
+
+.doc-card {
+  background: var(--white);
+  padding: 40px 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: background 0.2s;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.doc-card:hover { background: var(--off); }
+.doc-card:hover .doc-arrow { transform: translate(3px, -3px); }
+
+.doc-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.doc-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.doc-icon svg {
+  width: 16px; height: 16px;
+  stroke: var(--white); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.doc-arrow {
+  width: 16px; height: 16px;
+  stroke: var(--gray); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.22s, stroke 0.2s;
+  flex-shrink: 0;
+}
+.doc-card:hover .doc-arrow { stroke: var(--black); }
+
+.doc-type {
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+
+.doc-name {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--black);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.doc-hr { width: 16px; height: 1px; background: var(--mid); margin-bottom: 16px; }
+
+.doc-desc {
+  font-size: 0.74rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--dark);
+  letter-spacing: 0.01em;
+  flex: 1;
+}
+
+.doc-link-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-top: 20px;
+  transition: color 0.2s;
+}
+.doc-card:hover .doc-link-label { color: var(--black); }
+.doc-link-label svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* doc type tags */
+.tag-doc   { background: #f0f0f0; }
+.tag-sheet { background: #eaf4ea; }
+
+.doc-type-badge {
+  display: inline-block;
+  font-size: 0.44rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  background: var(--off);
+  border: 1px solid var(--mid);
+  padding: 3px 8px;
+  margin-bottom: 14px;
+}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer {
+  background: var(--black);
+  padding: 56px 48px 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-logo .logo-line1,
+.footer-logo .logo-line2 { color: rgba(255,255,255,0.35); }
+.footer-info {
+  font-size: 0.68rem;
+  font-weight: 300;
+  line-height: 2;
+  color: rgba(255,255,255,0.45);
+  margin-top: 20px;
+}
+.footer-copy {
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.3);
+  text-align: right;
+  align-self: end;
+}
+
+/* ═══════════════════════════════
+   EDIT MODE TOOLBAR
+═══════════════════════════════ */
+.edit-toolbar {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--black);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  z-index: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  white-space: nowrap;
+}
+.edit-toolbar.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.tb-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.12);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.tb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.18s, background 0.18s;
+  flex-shrink: 0;
+}
+.tb-btn:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+.tb-btn.active { color: var(--white); background: rgba(255,255,255,0.1); }
+.tb-btn svg {
+  width: 13px; height: 13px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.tb-btn--save {
+  background: var(--white);
+  color: var(--black);
+  padding: 0 16px;
+}
+.tb-btn--save:hover { background: #e8e8e8; color: var(--black); }
+
+.tb-select {
+  height: 32px;
+  padding: 0 8px;
+  background: rgba(255,255,255,0.07);
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+}
+.tb-select option { background: #1a1a1a; color: #fff; }
+
+/* editing state */
+body.edit-mode [contenteditable] {
+  outline: none;
+  border-bottom: 1px dashed rgba(0,0,0,0.25);
+  cursor: text;
+  min-width: 10px;
+}
+body.edit-mode .doc-card { cursor: default; pointer-events: auto; }
+body.edit-mode .doc-card [contenteditable] { pointer-events: auto; }
+
+.edit-mode-notice {
+  position: fixed;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  z-index: 400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.edit-mode-notice.visible { opacity: 1; }
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media (max-width: 1024px) {
+  .container { padding: 0 32px; }
+  .hero-h1 { font-size: 2.2rem; }
+  .sec-title { font-size: 1.9rem; }
+  nav { padding: 0 32px; }
+  footer { padding: 48px 32px 40px; }
+}
+
+@media (max-width: 860px) {
+  nav { padding: 0 20px; }
+  .container { padding: 0 20px; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { display: none; }
+  .hero-left { padding: 72px 24px 56px; }
+  .hero-h1 { font-size: 2rem; }
+  .docs-grid { grid-template-columns: 1fr; }
+  .menu-inner { grid-template-columns: 1fr; gap: 28px; padding: 32px 24px 40px; }
+  .menu-label-col { border-right: none; padding-right: 0; border-bottom: 1px solid var(--mid); padding-bottom: 24px; }
+  .menu-items { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; gap: 24px; padding: 40px 20px 36px; }
+  .footer-copy { text-align: left; }
+  .edit-toolbar { bottom: 16px; padding: 6px 8px; width: calc(100% - 32px); overflow-x: auto; justify-content: flex-start; }
+}
+
+@media (max-width: 540px) {
+  .hero-h1 { font-size: 1.7rem; }
+  .sec-title { font-size: 1.5rem; }
+  .doc-card { padding: 28px 22px 24px; }
+  nav { padding: 0 14px; }
+  .container { padding: 0 16px; }
+  .docs-section { padding: 48px 0 72px; }
+  .section-intro { padding: 56px 0 0; }
+  .intro-text { margin-bottom: 44px; }
+}
+</style>
+</head>
+
+<body class="">
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <a href="index.html" class="nav-back-home" title="Volver al inicio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Inicio
+    </a>
+  </div>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ EDIT MODE NOTICE ═══ -->
+<div class="edit-mode-notice" id="editNotice">Modo edición activo (Alt + E para salir) — hacé clic en cualquier texto para editarlo</div>
+
+<!-- ═══ MENU PANEL ═══ -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="menu-panel" id="menuPanel">
+  <div class="menu-inner">
+    <div class="menu-label-col">
+      <div class="menu-section-label">Documentos</div>
+      <div class="menu-section-title">Atención al Cliente</div>
+      <div class="menu-section-desc">Acceso rápido a todos los recursos del área</div>
+    </div>
+    <div class="menu-items" id="menuItems">
+      <!-- populated by JS -->
+    <button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Instructivo At. al Cliente</div>
+      <div class="menu-item-desc">Tareas e info del área</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Preguntas Frecuentes</div>
+      <div class="menu-item-desc">Paso a paso y dinámicas</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">TM 2021</div>
+      <div class="menu-item-desc">Planilla madre</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Entrega Inmediata</div>
+      <div class="menu-item-desc">Depósito ↔ Atención</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Paños Stock</div>
+      <div class="menu-item-desc">Mercadería en depósito</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Base de Datos Clientes</div>
+      <div class="menu-item-desc">Clientes y potenciales</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Orden de Perchero</div>
+      <div class="menu-item-desc">Exhibición showroom</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Orden Muestras Catálogo</div>
+      <div class="menu-item-desc">Módulos de catálogos</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Base de Datos Textiles</div>
+      <div class="menu-item-desc">Info técnica y productiva</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Guía de Textiles</div>
+      <div class="menu-item-desc">Datos claves para atención</div>
+    </div></button><button class="menu-item">
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">Datos TM</div>
+      <div class="menu-item-desc">Usuarios y cuentas</div>
+    </div></button></div>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-logo-white logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-eyebrow" contenteditable="false">Área — Atención al Cliente</div>
+      <h1 class="hero-h1" contenteditable="false">Documentos<br><em>del área</em></h1>
+      <p class="hero-sub" contenteditable="false">Acá vas a encontrar acceso directo a todos los documentos que necesitas para trabajar en Atención al Cliente.</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-label">Acceso rápido</div>
+    <p class="hero-manifiesto" contenteditable="false">Instructivos, planillas, bases de datos y guías del área, todo en un solo lugar para que puedas trabajar con facilidad desde el primer día.</p>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="section-intro">
+  <div class="container">
+    <div class="sec-label" contenteditable="false">Recursos del área</div>
+    <h2 class="sec-title" contenteditable="false">Todos tus documentos</h2>
+    <div class="sec-rule"></div>
+    <p class="intro-text" contenteditable="false">Acá vas a encontrar acceso directo a todos los documentos que necesitas para trabajar en Atención al Cliente.</p>
+  </div>
+</div>
+
+<div class="docs-section">
+  <div class="container">
+    <div class="docs-grid" id="docsGrid">
+
+      <!-- 1. Instructivo -->
+      <a class="doc-card" id="doc-instructivo" target="_blank" rel="noopener" data-href="https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing" style="" href="https://docs.google.com/document/d/1NomBroTg8rrDqUHuvdmxwBulLuGLacBkLNne6Y6yrcQ/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Instructivo Atención al Cliente</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Acceso a instrucciones detalladas sobre tus tareas e info del área y las sedes.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+      <!-- 2. Preguntas Frecuentes -->
+      <a class="doc-card" id="doc-faq" target="_blank" rel="noopener" data-href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing" style="" href="https://docs.google.com/document/d/1vk3WKw52adfAjBcDMclO6KfDzv5uN0viZxosMZhoJZQ/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Preguntas Frecuentes</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Para consultar paso a paso, dinámicas diarias, formas de responder y resolver dudas sobre situaciones habituales, entre otras.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+      <!-- 3. TM 2021 -->
+      <a class="doc-card" id="doc-tm" target="_blank" rel="noopener" data-href="https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing" style="" href="https://docs.google.com/spreadsheets/d/1xOfX0SB7v-v9Gab3edKJcrE_ecVZPq3dYCiF2c4kOiI/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Sheets</div>
+        <div class="doc-name" contenteditable="false">TM 2021</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Es la planilla madre que usamos en la empresa. Vas a trabajar en la hoja <strong>Encargos</strong> para realizar presupuestos y cargar pedidos. También podés consultar stock de todos nuestros textiles.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir planilla</div>
+      </a>
+
+      <!-- 4. Entrega Inmediata -->
+      <a class="doc-card" id="doc-entrega" target="_blank" rel="noopener" data-href="https://docs.google.com/spreadsheets/d/1KZofUExKRqm5X51krNTpEiiZO2yiYePjgQoXhGQuQr8/edit?usp=sharing" style="" href="https://docs.google.com/spreadsheets/d/1KZofUExKRqm5X51krNTpEiiZO2yiYePjgQoXhGQuQr8/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Sheets</div>
+        <div class="doc-name" contenteditable="false">Entrega Inmediata</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Comunicación entre depósito y atención al cliente Zona Norte para registrar pedidos con entrega en el momento. Ver más info sobre E. Inmediata en la guía de At. al Cliente.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir planilla</div>
+      </a>
+
+      <!-- 5. Paños Stock -->
+      <a class="doc-card" id="doc-panos" target="_blank" rel="noopener" data-href="https://docs.google.com/spreadsheets/d/19m4Q9vjz2wIrtQJBYAg3iptTYwzQ3L4tu5IUVDm9oJo/edit?usp=sharing" style="" href="https://docs.google.com/spreadsheets/d/19m4Q9vjz2wIrtQJBYAg3iptTYwzQ3L4tu5IUVDm9oJo/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Sheets</div>
+        <div class="doc-name" contenteditable="false">Paños Stock</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false"><span style="letter-spacing: 0.1184px;">Acceso rápido a la mercadería ya cortada en depósito.<br></span>Vas a encontrar todos los paños plegados que tenemos en stock depósito con su metraje exacto y fecha de partida.&nbsp;</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir planilla</div>
+      </a>
+
+      <!-- 6. Base de Datos Clientes -->
+      <a class="doc-card" id="doc-clientes" target="_blank" rel="noopener" data-href="https://docs.google.com/spreadsheets/d/1ZEuoepflRZo0YqF2WiV5xLuXvkNcp6dH1Qky0dPjoxc/edit?usp=sharing" style="" href="https://docs.google.com/spreadsheets/d/1ZEuoepflRZo0YqF2WiV5xLuXvkNcp6dH1Qky0dPjoxc/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Sheets</div>
+        <div class="doc-name" contenteditable="false">Base de Datos Clientes</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Documento donde registramos a todos los clientes y potenciales clientes.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir planilla</div>
+      </a>
+
+      <!-- 7. Orden de Perchero -->
+      <a class="doc-card" id="doc-perchero" target="_blank" rel="noopener" data-href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing" style="" href="https://docs.google.com/document/d/1Pmrt2K41kWbFYAoRqg9Ldv5XabBMxzJ_RX-trf4jL0Y/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><polyline points="4 6 8 2 12 6"></polyline><line x1="8" y1="2" x2="8" y2="22"></line><line x1="4" y1="22" x2="20" y2="22"></line><line x1="20" y1="7" x2="4" y2="7"></line></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Orden de Perchero</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Acá encontras el orden de exhibición de los paños colgados en el showroom.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+      <!-- 8. Orden Muestras Catálogo -->
+      <a class="doc-card" id="doc-muestras" target="_blank" rel="noopener" data-href="https://docs.google.com/document/d/1oVn_GxncRmYtQGX34TISmS3O_JyWVGZXqibJahfyGjc/edit?usp=sharing" style="" href="https://docs.google.com/document/d/1oVn_GxncRmYtQGX34TISmS3O_JyWVGZXqibJahfyGjc/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Orden Muestras de Catálogo</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Accedé al orden de las muestras de cada módulo de catálogos.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+      <!-- 9. Base de Datos Textiles -->
+      <a class="doc-card" id="doc-textiles-db" target="_blank" rel="noopener" data-href="https://docs.google.com/spreadsheets/d/1CLmJOQQF23XRGFEYoeRUdceiO5k9GaaNh8TOVOo4r-o/edit?usp=sharing" style="" href="https://docs.google.com/spreadsheets/d/1CLmJOQQF23XRGFEYoeRUdceiO5k9GaaNh8TOVOo4r-o/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Sheets</div>
+        <div class="doc-name" contenteditable="false">Base de Datos Textiles</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Acá vas a encontrar información técnica y productiva sobre nuestros textiles de línea.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir planilla</div>
+      </a>
+
+      <!-- 10. Guía de Textiles -->
+      <a class="doc-card" id="doc-guia-textiles" target="_blank" rel="noopener" data-href="https://docs.google.com/document/d/1X3jdRbWPbOEdtAyroyj_b5iWX4pfUT-FIeY3qRitCEo/edit?usp=sharing" style="" href="https://docs.google.com/document/d/1X3jdRbWPbOEdtAyroyj_b5iWX4pfUT-FIeY3qRitCEo/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Guía de Textiles</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Nuestra guía informativa de todos los textiles y datos claves de los mismos para atención al cliente.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+      <!-- 11. Datos TM -->
+      <a class="doc-card" id="doc-datostm" target="_blank" rel="noopener" style="grid-column: 1 / -1; max-width: 50%;" data-href="https://docs.google.com/document/d/1qaYKDzEDKaxcc13pj3GvdsxIuropPsQJDQjG-Lj6w-Y/edit?usp=sharing" href="https://docs.google.com/document/d/1qaYKDzEDKaxcc13pj3GvdsxIuropPsQJDQjG-Lj6w-Y/edit?usp=sharing">
+        <div class="doc-card-top">
+          <div class="doc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+          <svg class="doc-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+        <div class="doc-type-badge">Google Docs</div>
+        <div class="doc-name" contenteditable="false">Datos TM</div>
+        <div class="doc-hr"></div>
+        <div class="doc-desc" contenteditable="false">Datos de usuarios, cuentas bancarias, entre otros.</div>
+        <div class="doc-link-label"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Abrir documento</div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>
+    <div class="footer-logo logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <p class="footer-info" contenteditable="false">Área Atención al Cliente — Manual de documentos</p>
+  </div>
+  <div class="footer-copy" contenteditable="false">Tienda Mayor © 2024</div>
+</footer>
+
+<!-- ═══ EDIT TOOLBAR ═══ -->
+<div class="edit-toolbar" id="editToolbar">
+  <select class="tb-select" id="tbSize" title="Tamaño de texto">
+    <option value="">Tamaño</option>
+    <option value="0.65rem">Pequeño</option>
+    <option value="0.82rem">Normal</option>
+    <option value="1rem">Mediano</option>
+    <option value="1.3rem">Grande</option>
+    <option value="1.8rem">Muy grande</option>
+    <option value="2.2rem">Título</option>
+  </select>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="tbBold" title="Negrita">
+    <svg viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
+    N
+  </button>
+  <button class="tb-btn" id="tbItalic" title="Cursiva">
+    <svg viewBox="0 0 24 24"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg>
+    I
+  </button>
+  <button class="tb-btn" id="tbUnderline" title="Subrayado">
+    <svg viewBox="0 0 24 24"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>
+    S
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn tb-btn--save" id="tbSave">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    Descargar HTML
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" id="tbClose" title="Cerrar modo edición">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   MENU DATA
+══════════════════════════════════════ */
+const menuData = [
+  { id: 'doc-instructivo',  name: 'Instructivo At. al Cliente', desc: 'Tareas e info del área' },
+  { id: 'doc-faq',          name: 'Preguntas Frecuentes',       desc: 'Paso a paso y dinámicas' },
+  { id: 'doc-tm',           name: 'TM 2021',                    desc: 'Planilla madre' },
+  { id: 'doc-entrega',      name: 'Entrega Inmediata',          desc: 'Depósito ↔ Atención' },
+  { id: 'doc-panos',        name: 'Paños Stock',                desc: 'Mercadería en depósito' },
+  { id: 'doc-clientes',     name: 'Base de Datos Clientes',     desc: 'Clientes y potenciales' },
+  { id: 'doc-perchero',     name: 'Orden de Perchero',          desc: 'Exhibición showroom' },
+  { id: 'doc-muestras',     name: 'Orden Muestras Catálogo',    desc: 'Módulos de catálogos' },
+  { id: 'doc-textiles-db',  name: 'Base de Datos Textiles',     desc: 'Info técnica y productiva' },
+  { id: 'doc-guia-textiles',name: 'Guía de Textiles',           desc: 'Datos claves para atención' },
+  { id: 'doc-datostm',      name: 'Datos TM',                   desc: 'Usuarios y cuentas' },
+];
+
+/* Build menu items */
+const menuItemsEl = document.getElementById('menuItems');
+menuItemsEl.innerHTML = ''; // clear any static items from prior download
+menuData.forEach(item => {
+  const el = document.createElement('button');
+  el.className = 'menu-item';
+  el.innerHTML = `
+    <div class="menu-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+    <div class="menu-item-text">
+      <div class="menu-item-name">${item.name}</div>
+      <div class="menu-item-desc">${item.desc}</div>
+    </div>`;
+  el.addEventListener('click', () => {
+    closeMenu();
+    setTimeout(() => {
+      const target = document.getElementById(item.id);
+      if (target) {
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 80);
+  });
+  menuItemsEl.appendChild(el);
+});
+
+/* ══════════════════════════════════════
+   HAMBURGER / MENU TOGGLE
+══════════════════════════════════════ */
+const hamburger   = document.getElementById('hamburger');
+const menuPanel   = document.getElementById('menuPanel');
+const menuOverlay = document.getElementById('menuOverlay');
+
+function openMenu() {
+  hamburger.classList.add('open');
+  menuPanel.classList.add('open');
+  menuOverlay.classList.add('open');
+}
+function closeMenu() {
+  hamburger.classList.remove('open');
+  menuPanel.classList.remove('open');
+  menuOverlay.classList.remove('open');
+}
+
+hamburger.addEventListener('click', () => {
+  if (menuPanel.classList.contains('open')) closeMenu();
+  else openMenu();
+});
+menuOverlay.addEventListener('click', closeMenu);
+
+/* ══════════════════════════════════════
+   EDIT MODE
+══════════════════════════════════════ */
+const editToolbar   = document.getElementById('editToolbar');
+const editNotice    = document.getElementById('editNotice');
+let editMode = false;
+
+function setEditMode(on) {
+  editMode = on;
+  document.body.classList.toggle('edit-mode', on);
+  editToolbar.classList.toggle('visible', on);
+  editNotice.classList.toggle('visible', on);
+
+  // Toggle contenteditable on all target elements
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    el.contentEditable = on ? 'true' : 'false';
+  });
+
+  // In edit mode, prevent doc-card link navigation
+  document.querySelectorAll('.doc-card').forEach(card => {
+    if (on) {
+      card.dataset.href = card.getAttribute('href');
+      card.removeAttribute('href');
+      card.style.cursor = 'default';
+    } else {
+      if (card.dataset.href) {
+        card.setAttribute('href', card.dataset.href);
+        card.style.cursor = '';
+      }
+    }
+  });
+}
+
+/* Alt+E toggles edit mode */
+document.addEventListener('keydown', (e) => {
+  if (e.altKey && e.key.toLowerCase() === 'e') {
+    e.preventDefault();
+    setEditMode(!editMode);
+  }
+});
+document.getElementById('tbClose').addEventListener('click', () => setEditMode(false));
+
+/* Formatting buttons */
+document.getElementById('tbBold').addEventListener('click', () => {
+  document.execCommand('bold');
+  document.getElementById('tbBold').classList.toggle('active', document.queryCommandState('bold'));
+});
+document.getElementById('tbItalic').addEventListener('click', () => {
+  document.execCommand('italic');
+  document.getElementById('tbItalic').classList.toggle('active', document.queryCommandState('italic'));
+});
+document.getElementById('tbUnderline').addEventListener('click', () => {
+  document.execCommand('underline');
+  document.getElementById('tbUnderline').classList.toggle('active', document.queryCommandState('underline'));
+});
+
+/* Font size */
+document.getElementById('tbSize').addEventListener('change', function() {
+  const val = this.value;
+  if (!val) return;
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+  if (range.collapsed) return;
+  const span = document.createElement('span');
+  span.style.fontSize = val;
+  try { range.surroundContents(span); } catch(e) {}
+  this.value = '';
+});
+
+/* Update toolbar state on selection */
+document.addEventListener('selectionchange', () => {
+  if (!editMode) return;
+  document.getElementById('tbBold').classList.toggle('active', document.queryCommandState('bold'));
+  document.getElementById('tbItalic').classList.toggle('active', document.queryCommandState('italic'));
+  document.getElementById('tbUnderline').classList.toggle('active', document.queryCommandState('underline'));
+});
+
+/* ══════════════════════════════════════
+   DOWNLOAD HTML
+══════════════════════════════════════ */
+document.getElementById('tbSave').addEventListener('click', () => {
+  // Turn off edit mode temporarily for clean export
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    el.contentEditable = 'false';
+  });
+  document.body.classList.remove('edit-mode');
+  editToolbar.classList.remove('visible');
+  editNotice.classList.remove('visible');
+  // Restore hrefs before saving
+  document.querySelectorAll('.doc-card[data-href]').forEach(card => {
+    card.setAttribute('href', card.dataset.href);
+    card.style.cursor = '';
+  });
+
+  // Clear dynamic menu items before capturing HTML so they don't accumulate on re-download
+  const menuItemsSnap = document.getElementById('menuItems');
+  const menuItemsBackup = menuItemsSnap.innerHTML;
+  menuItemsSnap.innerHTML = '';
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  menuItemsSnap.innerHTML = menuItemsBackup;
+
+  // Restore edit state
+  setTimeout(() => {
+    if (editMode) {
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        el.contentEditable = 'true';
+      });
+      document.body.classList.add('edit-mode');
+      editToolbar.classList.add('visible');
+      editNotice.classList.add('visible');
+      document.querySelectorAll('.doc-card').forEach(card => {
+        if (card.dataset.href) {
+          card.removeAttribute('href');
+          card.style.cursor = 'default';
+        }
+      });
+    }
+  }, 200);
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'documentos-del-area.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+</script>
+
+
+
+</body></html>
