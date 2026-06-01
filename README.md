@@ -12,6 +12,8 @@ Portal de documentación interna del equipo · Tienda Mayor · Laboratorio Texti
 | `manual-bienvenida.html` | Manual de Bienvenida general · Toda la empresa |
 | `manual-atencion-al-cliente.html` | Manual de Área · Atención al Cliente |
 | `manual-textiles.html` | Guía de Textiles · Área Atención al Cliente |
+| `documentos-del-area.html` | Documentos del Área · Atención al Cliente |
+| `manual-cobranzas.html` | Manual de Área · Cobranzas |
 
 ---
 
@@ -24,9 +26,12 @@ index.html  ← Home principal
 │
 └── Área Atención al Cliente
 │   ├── manual-atencion-al-cliente.html
-│   └── manual-textiles.html
+│   ├── manual-textiles.html
+│   └── documentos-del-area.html
 │
-├── Área Cobranzas                    (en preparación)
+├── Área Cobranzas
+│   └── manual-cobranzas.html
+│
 ├── Área Producción                   (en preparación)
 └── Área Comunicación                 (en preparación)
 ```
