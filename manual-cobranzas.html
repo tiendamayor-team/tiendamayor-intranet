@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Cobranzas — Tienda Mayor</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root { --black:#0c0c0c; --white:#fff; --off:#f6f6f6; --mid:#e8e8e8; --gray:#999; --dark:#444; --toolbar-h:0px; --nav-h:60px; }
+html { scroll-behavior:smooth; }
+body { font-family:'Montserrat',sans-serif; background:var(--white); color:var(--black); -webkit-font-smoothing:antialiased; }
+
+/* EDIT TOOLBAR */
+#edit-toolbar {
+  position:fixed; top:0; left:0; right:0; height:52px;
+  background:#1a1a1a; border-bottom:1px solid #333;
+  display:flex; align-items:center; z-index:500;
+  padding:0 16px; overflow-x:auto; gap:0;
+  transform:translateY(-100%);
+  transition:transform .25s ease;
+}
+body.toolbar-visible #edit-toolbar { transform:translateY(0); }
+#edit-toolbar::-webkit-scrollbar { height:3px; }
+#edit-toolbar::-webkit-scrollbar-thumb { background:#444; border-radius:2px; }
+
+.tb-sep { width:1px; height:24px; background:#333; flex-shrink:0; margin:0 8px; }
+
+.tb-btn {
+  display:flex; align-items:center; gap:6px;
+  font-family:'Montserrat',sans-serif; font-size:.48rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,.65); background:transparent; border:1px solid transparent;
+  padding:6px 10px; cursor:pointer; white-space:nowrap; flex-shrink:0;
+  transition:color .15s, border-color .15s, background .15s;
+}
+.tb-btn:hover { color:#fff; border-color:#444; }
+.tb-btn.active { color:#fff; background:#333; border-color:#555; }
+.tb-btn svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+
+.tb-label {
+  font-size:.42rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(255,255,255,.35); white-space:nowrap; flex-shrink:0; padding:0 4px;
+}
+
+#font-size-select {
+  font-family:'Montserrat',sans-serif; font-size:.5rem; font-weight:600;
+  letter-spacing:.1em; color:rgba(255,255,255,.8); background:#111;
+  border:1px solid #444; padding:5px 8px; cursor:pointer; flex-shrink:0;
+  appearance:none; -webkit-appearance:none; min-width:60px; text-align:center;
+}
+#font-size-select:focus { outline:none; border-color:#888; }
+
+.tb-home {
+  display:flex; align-items:center; gap:7px;
+  font-size:.48rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.9); text-decoration:none;
+  border:1px solid rgba(255,255,255,.25); padding:6px 12px; flex-shrink:0;
+  transition:background .15s, border-color .15s;
+}
+.tb-home:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.5); }
+.tb-home svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+.tb-save {
+  display:flex; align-items:center; gap:7px;
+  font-size:.48rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:#0c0c0c; background:rgba(255,255,255,.9); border:none;
+  padding:6px 14px; cursor:pointer; flex-shrink:0;
+  font-family:'Montserrat',sans-serif; transition:background .15s;
+}
+.tb-save:hover { background:#fff; }
+.tb-save svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+.tb-edit-toggle {
+  display:flex; align-items:center; gap:6px;
+  font-size:.48rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,.65); background:transparent; border:1px solid #444;
+  padding:6px 10px; cursor:pointer; flex-shrink:0;
+  font-family:'Montserrat',sans-serif; transition:all .15s;
+}
+.tb-edit-toggle.on { color:#fff; background:#2a6496; border-color:#2a6496; }
+.tb-edit-toggle svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Editing mode visual */
+body.editing-on [contenteditable="true"] {
+  outline:1px dashed rgba(42,100,150,.5); border-radius:2px; cursor:text;
+}
+body.editing-on [contenteditable="true"]:hover {
+  outline:1px dashed rgba(42,100,150,.9); background:rgba(42,100,150,.04);
+}
+body.editing-on [contenteditable="true"]:focus {
+  outline:2px solid rgba(42,100,150,.8); background:rgba(42,100,150,.06);
+}
+
+/* NAV */
+nav {
+  position:fixed; top:var(--toolbar-h); left:0; right:0; height:var(--nav-h);
+  background:var(--white); border-bottom:1px solid var(--mid);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; z-index:300;
+}
+.nav-left { display:flex; align-items:center; gap:16px; }
+.logo { display:flex; flex-direction:column; line-height:1; }
+.logo-line1 { font-size:.55rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--black); }
+.logo-line2 { font-size:.55rem; font-weight:300; letter-spacing:.35em; text-transform:uppercase; color:var(--black); }
+.nav-back { display:flex; align-items:center; gap:8px; font-size:.56rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--gray); text-decoration:none; border:1px solid var(--mid); padding:7px 14px; transition:color .2s,border-color .2s; }
+.nav-back:hover { color:var(--black); border-color:var(--black); }
+.nav-back svg { width:11px; height:11px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.nav-right { display:flex; align-items:center; gap:16px; }
+.nav-links { display:none; gap:20px; list-style:none; }
+.nav-links a { font-size:.56rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--gray); text-decoration:none; transition:color .2s; }
+.nav-links a:hover, .nav-links a.active { color:var(--black); }
+
+.nav-hamburger { display:flex; background:none; border:1px solid var(--mid); padding:6px 8px; cursor:pointer; flex-direction:column; gap:4px; align-items:center; justify-content:center; width:38px; height:38px; transition:border-color .2s; }
+.nav-hamburger:hover { border-color:var(--black); }
+.nav-hamburger span { display:block; width:16px; height:1.5px; background:var(--black); transition:transform .25s, opacity .25s; transform-origin:center; }
+.nav-hamburger.open span:nth-child(1) { transform:translateY(5.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity:0; }
+.nav-hamburger.open span:nth-child(3) { transform:translateY(-5.5px) rotate(-45deg); }
+
+.nav-drawer {
+  display:none; position:fixed;
+  top:calc(var(--toolbar-h) + var(--nav-h)); left:0; right:0;
+  background:var(--white); border-bottom:1px solid var(--mid);
+  padding:16px 16px 20px; z-index:299; flex-direction:column; gap:0;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+.nav-drawer.open { display:flex; }
+.nav-drawer a { font-size:.58rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--gray); text-decoration:none; padding:12px 0; border-bottom:1px solid var(--mid); transition:color .2s; }
+.nav-drawer a:last-child { border-bottom:none; }
+.nav-drawer a:hover { color:var(--black); }
+
+/* HERO */
+.hero { padding-top:calc(var(--toolbar-h) + var(--nav-h)); min-height:100vh; display:grid; grid-template-columns:1fr 1fr; }
+.hero-left { background:var(--black); display:flex; flex-direction:column; justify-content:space-between; padding:56px 56px 64px; position:relative; overflow:hidden; }
+.hero-left::before { content:''; position:absolute; inset:0; background-image:repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(255,255,255,.022) 47px,rgba(255,255,255,.022) 48px),repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(255,255,255,.022) 47px,rgba(255,255,255,.022) 48px); pointer-events:none; }
+.hero-logo-w { position:relative; z-index:1; }
+.hero-logo-w .logo-line1 { color:var(--white); }
+.hero-logo-w .logo-line2 { color:var(--white); }
+.hero-bottom { position:relative; z-index:1; }
+.hero-eyebrow { font-size:.55rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,255,255,.7); margin-bottom:24px; }
+.hero-h1 { font-size:2.8rem; font-weight:400; line-height:1.1; color:var(--white); margin-bottom:28px; letter-spacing:-.01em; }
+.hero-h1 em { font-style:italic; font-weight:300; }
+.hero-sub { font-size:.76rem; font-weight:400; line-height:1.9; color:rgba(255,255,255,.8); max-width:320px; letter-spacing:.02em; }
+.hero-right { background:var(--white); display:flex; flex-direction:column; justify-content:flex-end; padding:56px 56px 64px; position:relative; }
+.hero-right-label { font-size:.55rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--gray); margin-bottom:20px; }
+.hero-manifesto { font-size:.88rem; font-weight:400; line-height:1.85; color:var(--black); border-left:1px solid var(--black); padding-left:24px; }
+.hero-scroll { position:absolute; bottom:36px; right:52px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.scroll-line { width:1px; height:36px; background:var(--mid); animation:pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.3;transform:scaleY(.6)} }
+.scroll-label { font-size:.5rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gray); }
+
+/* SECTIONS */
+section { padding:80px 0; }
+.container { max-width:1200px; margin:0 auto; padding:0 48px; }
+.sec-label { font-size:.52rem; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--black); margin-bottom:12px; }
+.sec-title { font-size:2.2rem; font-weight:200; line-height:1.15; color:var(--black); margin-bottom:32px; letter-spacing:-.02em; }
+.sec-rule { width:28px; height:1px; background:var(--black); margin-bottom:40px; }
+
+/* TASK CARDS GRID */
+.tasks-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--mid); border:1px solid var(--mid); }
+.task-card { background:var(--white); padding:36px 28px; transition:background .2s; }
+.task-card:hover { background:var(--off); }
+.task-icon { width:36px; height:36px; background:var(--black); display:flex; align-items:center; justify-content:center; margin-bottom:20px; flex-shrink:0; }
+.task-icon svg { width:16px; height:16px; stroke:var(--white); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.task-num { font-size:.4rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+.task-nombre { font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--black); margin-bottom:12px; line-height:1.4; }
+.task-desc { font-size:.72rem; font-weight:300; line-height:1.85; color:var(--dark); }
+.task-desc strong { font-weight:600; color:var(--black); }
+
+.slide-section { border-bottom:1px solid var(--mid); }
+.slide-section:last-of-type { border-bottom:none; }
+.slide-inner { display:grid; grid-template-columns:300px 1fr; gap:0; }
+.slide-inner.reverse { grid-template-columns:1fr 300px; }
+.slide-meta { padding:56px 48px; border-right:1px solid var(--mid); display:flex; flex-direction:column; justify-content:space-between; }
+.slide-inner.reverse .slide-meta { border-right:none; border-left:1px solid var(--mid); order:2; }
+.slide-content { padding:56px 48px; }
+.slide-inner.reverse .slide-content { order:1; }
+.slide-n { font-size:4rem; font-weight:200; color:var(--mid); letter-spacing:-.04em; line-height:1; margin-bottom:20px; }
+.slide-tag { font-size:.42rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+.slide-titulo { font-size:.9rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--black); line-height:1.4; }
+.slide-body { font-size:.76rem; font-weight:300; line-height:1.9; color:var(--dark); }
+.slide-body strong { font-weight:600; color:var(--black); }
+.slide-body em { font-style:italic; }
+.slide-body p + p { margin-top:14px; }
+
+.slide-list { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.slide-list li { font-size:.72rem; font-weight:300; line-height:1.7; color:var(--dark); padding-left:16px; position:relative; }
+.slide-list li::before { content:'—'; position:absolute; left:0; color:var(--gray); }
+.slide-list li strong { font-weight:600; color:var(--black); }
+
+.pills { display:flex; gap:6px; flex-wrap:wrap; margin-top:20px; }
+.pill { font-size:.42rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--black); border:1px solid var(--dark); padding:5px 12px; }
+
+.note-box { border:1px solid var(--mid); padding:20px 24px; margin-top:20px; background:var(--off); }
+.note-box-label { font-size:.38rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gray); margin-bottom:6px; }
+.note-box p { font-size:.68rem; font-weight:300; line-height:1.75; color:var(--dark); }
+.note-box p strong { font-weight:600; color:var(--black); }
+
+.link-row { display:flex; align-items:center; gap:12px; margin-top:20px; padding:14px 18px; border:1px solid var(--mid); background:var(--white); flex-wrap:wrap; }
+.link-row-label { font-size:.44rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--black); flex:1; min-width:100px; }
+.link-row a { font-size:.44rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--black); text-decoration:none; border:1px solid var(--black); padding:6px 12px; white-space:nowrap; }
+.link-row a:hover { background:var(--black); color:var(--white); }
+
+.dark-section { background:var(--black); }
+.dark-section .sec-label { color:rgba(255,255,255,.5); }
+.dark-section .sec-title { color:var(--white); }
+.dark-section .sec-rule { background:rgba(255,255,255,.2); }
+.dark-section .slide-n { color:rgba(255,255,255,.15); }
+.dark-section .slide-tag { color:rgba(255,255,255,.4); }
+.dark-section .slide-titulo { color:rgba(255,255,255,.95); }
+.dark-section .slide-body { color:rgba(255,255,255,.75); }
+.dark-section .slide-body strong { color:var(--white); }
+.dark-section .slide-meta { border-color:rgba(255,255,255,.08); }
+.dark-section .slide-inner.reverse .slide-meta { border-color:rgba(255,255,255,.08); }
+.dark-section .slide-list li { color:rgba(255,255,255,.7); }
+.dark-section .slide-list li strong { color:var(--white); }
+.dark-section .task-card { background:var(--black); }
+.dark-section .task-card:hover { background:#141414; }
+.dark-section .task-nombre { color:rgba(255,255,255,.95); }
+.dark-section .task-num { color:rgba(255,255,255,.3); }
+.dark-section .task-desc { color:rgba(255,255,255,.7); }
+.dark-section .task-desc strong { color:var(--white); }
+.dark-section .tasks-grid { background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.07); }
+.dark-section .pill { color:rgba(255,255,255,.9); border-color:rgba(255,255,255,.35); }
+.dark-section .note-box { background:#141414; border-color:rgba(255,255,255,.1); }
+.dark-section .note-box p { color:rgba(255,255,255,.65); }
+.dark-section .note-box p strong { color:var(--white); }
+.dark-section .note-box-label { color:rgba(255,255,255,.35); }
+.dark-section .link-row { border-color:rgba(255,255,255,.12); background:#141414; }
+.dark-section .link-row-label { color:rgba(255,255,255,.8); }
+.dark-section .link-row a { color:var(--white); border-color:rgba(255,255,255,.35); }
+.dark-section .link-row a:hover { background:var(--white); color:var(--black); }
+.dark-section .slide-section { border-color:rgba(255,255,255,.07); }
+.dark-section .slide-content { border-color:rgba(255,255,255,.07); }
+
+.off-section { background:var(--off); }
+
+.clientes-table { width:100%; border-collapse:collapse; margin-top:16px; }
+.clientes-table th { font-size:.42rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--black); border-bottom:2px solid var(--black); padding:10px 0; text-align:left; }
+.clientes-table td { font-size:.72rem; font-weight:300; color:var(--dark); padding:10px 0; border-bottom:1px solid var(--mid); vertical-align:top; }
+.clientes-table td strong { font-weight:600; color:var(--black); }
+
+footer { background:var(--black); padding:40px 48px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,.06); flex-wrap:wrap; gap:16px; }
+.footer-logo .logo-line1 { color:var(--white); }
+.footer-logo .logo-line2 { color:var(--white); }
+.footer-info { font-size:.6rem; font-weight:300; letter-spacing:.06em; line-height:1.9; color:rgba(255,255,255,.55); text-align:center; }
+.footer-copy { font-size:.6rem; font-weight:300; letter-spacing:.06em; line-height:1.9; color:rgba(255,255,255,.4); text-align:right; }
+
+/* Responsive grid helpers */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+.three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.07); margin-bottom:48px; }
+.two-col-gap { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--mid); border:1px solid var(--mid); margin-bottom:40px; }
+.two-col-dark { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.07); margin-bottom:40px; }
+
+/* RESPONSIVE */
+@media (max-width:1024px) {
+  nav { padding:0 24px; }
+  .container { padding:0 24px; }
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-left { padding:48px 24px; min-height:50vh; }
+  .hero-right { padding:40px 24px 48px; }
+  .hero-h1 { font-size:2.2rem; }
+  .tasks-grid { grid-template-columns:repeat(2,1fr); }
+  .slide-inner, .slide-inner.reverse { grid-template-columns:1fr; }
+  .slide-meta { border-right:none; border-bottom:1px solid var(--mid); padding:32px 32px 24px; }
+  .slide-inner.reverse .slide-meta { order:1; border-left:none; border-bottom:1px solid var(--mid); }
+  .slide-inner.reverse .slide-content { order:2; }
+  .dark-section .slide-meta { border-color:rgba(255,255,255,.08); }
+  .two-col { grid-template-columns:1fr; gap:24px; }
+  .two-col-gap { grid-template-columns:1fr; background:none; border:none; gap:1px; }
+  .two-col-gap > div { border:1px solid var(--mid); }
+  .three-col { grid-template-columns:repeat(2,1fr); }
+  .two-col-dark { grid-template-columns:1fr; background:none; border:none; gap:12px; }
+  .two-col-dark > div { border:1px solid rgba(255,255,255,.1) !important; }
+}
+
+@media (max-width:768px) {
+  :root { --nav-h:52px; }
+  nav { padding:0 16px; }
+  .container { padding:0 16px; }
+  section { padding:48px 0; }
+  .hero { grid-template-columns:1fr; }
+  .hero-left { padding:40px 16px; min-height:40vh; }
+  .hero-right { padding:32px 16px 40px; }
+  .hero-h1 { font-size:1.8rem; }
+  .hero-scroll { display:none; }
+  .sec-title { font-size:1.6rem; }
+  .tasks-grid { grid-template-columns:1fr; }
+  .slide-meta { padding:28px 16px 20px; }
+  .slide-content { padding:24px 16px 32px; }
+  .slide-n { font-size:2.8rem; }
+  footer { flex-direction:column; gap:12px; padding:28px 16px; text-align:center; }
+  .footer-copy { text-align:center; }
+  .two-col { grid-template-columns:1fr; gap:20px; }
+  .two-col-gap { grid-template-columns:1fr; background:none; border:none; gap:12px; }
+  .two-col-gap > div { border:1px solid var(--mid); }
+  .three-col { grid-template-columns:1fr; }
+  #edit-toolbar { padding:0 10px; }
+  .tb-label { display:none; }
+}
+
+@media (max-width:480px) {
+  .hero-h1 { font-size:1.5rem; }
+  .slide-titulo { font-size:.8rem; }
+  .tb-btn span { display:none; }
+}
+
+/* Toast */
+#toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:#1a1a1a; color:#fff; border:1px solid #444;
+  font-family:'Montserrat',sans-serif; font-size:.5rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:10px 20px; z-index:9999; opacity:0; transition:all .3s;
+  pointer-events:none; white-space:nowrap;
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body class="">
+
+<!-- EDIT TOOLBAR -->
+<div id="edit-toolbar">
+  <a class="tb-home" href="index.html">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Inicio</span>
+  </a>
+
+  <div class="tb-sep"></div>
+
+  <button class="tb-edit-toggle on" id="edit-toggle" onclick="toggleEditing()">
+    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+    <span id="edit-toggle-label">Editando</span>
+  </button>
+
+  <div class="tb-sep"></div>
+
+  <span class="tb-label">Tamaño</span>
+  <select id="font-size-select" onchange="applyFontSize(this.value)" title="Tamaño de fuente">
+    <option value="">—</option>
+    <option value="0.6rem">XS</option>
+    <option value="0.72rem">S</option>
+    <option value="0.88rem">M</option>
+    <option value="1rem">L</option>
+    <option value="1.2rem">XL</option>
+    <option value="1.5rem">XXL</option>
+  </select>
+
+  <div class="tb-sep"></div>
+
+  <button class="tb-btn" id="btn-bold" onclick="applyFormat('bold')" title="Negrita">
+    <svg viewBox="0 0 24 24" style="stroke-width:2.5;"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
+    <span>Negrita</span>
+  </button>
+
+  <button class="tb-btn" id="btn-italic" onclick="applyFormat('italic')" title="Cursiva">
+    <svg viewBox="0 0 24 24"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg>
+    <span>Cursiva</span>
+  </button>
+
+  <button class="tb-btn" id="btn-underline" onclick="applyFormat('underline')" title="Subrayado">
+    <svg viewBox="0 0 24 24"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>
+    <span>Subrayado</span>
+  </button>
+
+  <div class="tb-sep"></div>
+
+  <button class="tb-save" onclick="downloadDoc()">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    <span>Guardar y descargar</span>
+  </button>
+</div>
+
+<div id="toast" class="">Documento descargado ✓</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <div class="logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <a class="nav-back" href="index.html">
+      <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Inicio
+    </a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#tareas" class="active">Tareas diarias</a></li>
+      <li><a href="#pedidos" class="">Pedidos</a></li>
+      <li><a href="#pagos" class="">Pagos</a></li>
+      <li><a href="#logistica" class="">Logística</a></li>
+      <li><a href="#admin" class="">Administración</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="nav-drawer" id="nav-drawer">
+  <a href="#tareas" onclick="closeDrawer()">Tareas diarias</a>
+  <a href="#pedidos" onclick="closeDrawer()">Pedidos</a>
+  <a href="#pagos" onclick="closeDrawer()">Pagos</a>
+  <a href="#logistica" onclick="closeDrawer()">Logística</a>
+  <a href="#admin" onclick="closeDrawer()">Administración</a>
+  <a href="index.html">← Inicio</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-logo-w logo">
+      <span class="logo-line1">Tienda</span>
+      <span class="logo-line2">Mayor</span>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-eyebrow" contenteditable="false">Manual de área · Uso interno</p>
+      <h1 class="hero-h1" contenteditable="false">Manual de<br><em>Cobranzas&nbsp;</em><div>TM</div></h1>
+      <p class="hero-sub" contenteditable="false">Guía de procesos, tareas y responsabilidades del área de Cobranzas de Tienda Mayor.</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <p class="hero-right-label" contenteditable="false">Sobre este manual</p>
+    <p class="hero-manifesto" contenteditable="false">En este documento vas a encontrar el detalle de las tareas diarias, procesos clave y responsabilidades del área de Cobranzas. Está pensado como material de consulta y referencia para el equipo.</p>
+    <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-label">Scroll</span></div>
+  </div>
+</div>
+
+<!-- TAREAS DIARIAS -->
+<section id="tareas" class="off-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Tareas<br>Diarias</h2>
+    <div class="sec-rule"></div>
+    <div class="tasks-grid">
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M9 9h6M9 13h4"></path></svg></div>
+        <p class="task-num" contenteditable="false">01</p>
+        <p class="task-nombre" contenteditable="false">Revisar y responder mails</p>
+        <p class="task-desc" contenteditable="false">Todos los días recibimos <strong>comprobantes de pago</strong> que es necesario responder a la brevedad. <br>Parte del servicio de TM es dar respuesta inmediata a nuestros clientes.</p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"></path></svg></div>
+        <p class="task-num" contenteditable="false">02</p>
+        <p class="task-nombre" contenteditable="false">Atender consultas por WhatsApp</p>
+        <p class="task-desc" contenteditable="false">Uno de los principales canales de comunicación de Tienda Mayor. Cobranzas es el encargado de responder y, en caso necesario, <strong>derivar a Atención al Cliente</strong>.</p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
+        <p class="task-num" contenteditable="false">03</p>
+        <p class="task-nombre" contenteditable="false">recibir y registrar pagos</p>
+        <p class="task-desc" contenteditable="false">Para que un pedido entre en proceso de armado es necesario confirmarlo con el <strong>50% de anticipo</strong>. Cobranzas confirma los pedidos y gestiona el saldo para entregarlos una vez listos.</p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+        <p class="task-num" contenteditable="false">04</p>
+        <p class="task-nombre" contenteditable="false">Remitido</p>
+        <p class="task-desc" contenteditable="false">Para asegurar una correcta entrega es necesario que todas los pedidos estén remitidos. (<b><i><span style="font-size: 0.72rem;">Excepto pedidos de Entrega inmediata) </span></i></b>— podes ver más info sobre esto en Manual de At. al Cliente.</p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+        <p class="task-num" contenteditable="false">05</p>
+        <p class="task-nombre" contenteditable="false">Entrega de pedidos</p>
+        <p class="task-desc" contenteditable="false">Cobranzas avisa al cliente cuando su pedido está listo, envía un mail y gestiona la entrega del mismo. Si el cliente retira en nuestras sedes se lo entrega en persona. También puede ser que el cliente haya elegido envío a través de correo, en esos casos se gestiona el envío.&nbsp;<br>Todos los pedidos deben estar<strong> saldados antes del retiro</strong> <i><span style="font-size: 0.6rem;">(hay pocas excepciones de clientes puntuales que entregamos sin que salde en el momento).</span></i></p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></div>
+        <p class="task-num" contenteditable="false">06</p>
+        <p class="task-nombre" contenteditable="false">Arqueo y cierre de caja</p>
+        <p class="task-desc" contenteditable="false">Al final del día, con todas las ventas y gastos registrados en el cuaderno, Administración pasa los datos a la hoja de administración y <strong>Cobranzas realiza el conteo de billetes</strong> ingresados en caja.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PREPARACIÓN DE PEDIDOS -->
+<section id="pedidos" class="slide-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Preparación de<br>pedidos armados</h2>
+    <div class="sec-rule"></div>
+
+    <div style="border:1px solid var(--mid); padding:32px; margin-bottom:1px;">
+      <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--black); margin-bottom:16px;" contenteditable="false">Proceso de preparación</p>
+      <ul class="slide-list">
+        <li contenteditable="false">Cada textil está <b>etiquetado </b>desde producción con: nombre del cliente, info del proyecto, N° de pedido, artículo, color, código textil, cantidad de piezas y sede de retiro/envío.</li>
+        <li contenteditable="false">Cobranzas es el encargado de <strong>remitir, revisar y preparar</strong> los pedidos antes de entregarlos.</li>
+        <li contenteditable="false">La preparación consiste en chequear que la información de la etiqueta <strong>coincida con el remito del pedido,&nbsp;</strong>embolsar si el pedido está en paños, separar rollos y colocar los remitos correspondientes en cada pedido. Una vez remitidos se trasladan a las estanterias de pedidos ya remitidos.<br>- Se envía un mail al cliente avisando de pedido listo<br><br>Si el pedido tiene envío se sigue proceso de envío - ver en Instructivo</li>
+      </ul>
+    </div>
+
+    <div class="two-col-gap">
+      <div style="background:var(--white); padding:32px 28px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--black); margin-bottom:10px;" contenteditable="false">En rollo</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.8; color:var(--dark);" contenteditable="false"><span style="font-size: 11.52px;">Corroborar que la información coincida con el remito y pegar el remito en el rollo.</span><br>Se enrollan pedidos de <strong style="color:var(--black); font-weight:600;">terciopelo/pana</strong> o <strong style="color:var(--black); font-weight:600;">+10 mts de textiles de ancho simple</strong>.<br></p>
+      </div>
+      <div style="background:var(--white); padding:32px 28px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--black); margin-bottom:10px;" contenteditable="false">En paños plegados</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.8; color:var(--dark);" contenteditable="false">Hay que embolsarlos, taggear las bolsas y asignar el remito con el detalle de cada textil del pedido.&nbsp;<br><span style="font-size: 11.52px;">Se preparan en paños pedidos de </span><span style="font-size: 11.52px; color: rgb(12, 12, 12); font-weight: 600;">-10 mts ancho simple</span><span style="font-size: 11.52px;"> y todos los </span><span style="font-size: 11.52px; color: rgb(12, 12, 12); font-weight: 600;">textiles de doble ancho</span><span style="font-size: 11.52px;">.</span><br style="font-size: 11.52px;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMAS DE PAGO -->
+<section id="pagos" class="dark-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Formas de pago</h2>
+    <div class="sec-rule"></div>
+    <div class="three-col">
+
+      <div style="background: var(--black); padding: 32px 28px; transition: background 0.2s;" onmouseover="this.style.background='#141414'" onmouseout="this.style.background='var(--black)'">
+        <p style="font-size:2.2rem; font-weight:200; color:rgba(255,255,255,.15); line-height:1; margin-bottom:14px; letter-spacing:-.04em;">$</p>
+        <p style="font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:8px;" contenteditable="false">Efectivo</p>
+        <p style="font-size:.7rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.65);" contenteditable="false">Pesos billete. También aceptamos <strong style="color:var(--white);">USD</strong> al tipo de cambio del día blue venta.<br><span style="font-size:.6rem; color:rgba(255,255,255,.4);">Ver en: <a href="https://dolarhoy.com/" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65); text-decoration:underline;">dolarhoy</a></span></p>
+      </div>
+
+      <div style="background: var(--black); padding: 32px 28px; transition: background 0.2s;" onmouseover="this.style.background='#141414'" onmouseout="this.style.background='var(--black)'">
+        <p style="font-size:2.2rem; font-weight:200; color:rgba(255,255,255,.15); line-height:1; margin-bottom:14px; letter-spacing:-.04em;">↔</p>
+        <p style="font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:8px;" contenteditable="false">Transferencia / Depósito</p>
+        <p style="font-size:.7rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.65);" contenteditable="false">Pago bancarizado. <br><i>Requiere facturación.</i></p>
+      </div>
+
+      <div style="background: var(--black); padding: 32px 28px; transition: background 0.2s;" onmouseover="this.style.background='#141414'" onmouseout="this.style.background='var(--black)'">
+        <p style="font-size:2.2rem; font-weight:200; color:rgba(255,255,255,.15); line-height:1; margin-bottom:14px; letter-spacing:-.04em;">⊡</p>
+        <p style="font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:8px;" contenteditable="false">Tarjeta débito / crédito</p>
+        <p style="font-size:.7rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.65);" contenteditable="false">En <strong style="color:var(--white);">1 pago</strong>. <br><i>Requiere facturación.</i></p>
+      </div>
+
+      <div style="background: var(--black); padding: 32px 28px; transition: background 0.2s;" onmouseover="this.style.background='#141414'" onmouseout="this.style.background='var(--black)'">
+        <p style="font-size:2.2rem; font-weight:200; color:rgba(255,255,255,.15); line-height:1; margin-bottom:14px; letter-spacing:-.04em;">MP</p>
+        <p style="font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:8px;" contenteditable="false">Mercado Pago</p>
+        <p style="font-size:.7rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.65);" contenteditable="false">Pagos a través de Tienda Nube.<br><i>&nbsp;Requiere facturación.</i></p>
+      </div>
+
+      <div style="background: var(--black); padding: 32px 28px; transition: background 0.2s;" onmouseover="this.style.background='#141414'" onmouseout="this.style.background='var(--black)'">
+        <p style="font-size:2.2rem; font-weight:200; color:rgba(255,255,255,.15); line-height:1; margin-bottom:14px; letter-spacing:-.04em;">✓</p>
+        <p style="font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:8px;" contenteditable="false">Cheque</p>
+        <p style="font-size:.7rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.65);" contenteditable="false"><strong style="color:var(--white);">Solo clientes particulares.</strong> Consultar con administración. <i>Requiere facturación.</i></p>
+      </div>
+
+      <div style="background:#141414; padding:32px 28px; display:flex; flex-direction:column; justify-content:flex-end;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:8px;" contenteditable="false">Nota</p>
+        <p style="font-size:.68rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,.55);" contenteditable="false">Todos los pagos bancarizados <strong style="color:rgba(255,255,255,.8);">deben ser facturados</strong>.<br>En efectivo se ofrece <strong style="color:rgba(255,255,255,.8);">10% de descuento</strong>.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FACTURACIÓN -->
+<section id="facturacion" class="off-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Facturación</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <ul class="slide-list">
+          <li contenteditable="false">Todos los pagos recibidos por <strong>medios bancarizados</strong> (transferencia, depósito, Mercado Pago, posnet, cheque) tienen que ser facturados.</li>
+          <li contenteditable="false">Una vez por semana se deben facturar las <strong>ventas semanales</strong> correspondientes a cada sede.</li>
+          <li contenteditable="false">Todos nuestros precios <strong>incluyen IVA</strong>.</li>
+          <li contenteditable="false">Si un cliente quiere pagar en efectivo sin factura, le ofrecemos <strong>10% de descuento</strong> por pago en efectivo.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="note-box">
+          <p class="note-box-label" contenteditable="false"><b>Para conocer el paso a paso</b></p>
+          <p contenteditable="false">El proceso de facturación está documentado en detalle en el instructivo correspondiente. Es necesario leerlo antes de comenzar a facturar.</p>
+        </div>
+        <div class="link-row" style="margin-top:12px;">
+          <p class="link-row-label" contenteditable="false">paso a paso de facturación</p>
+          <a href="https://docs.google.com/document/d/1nQgQkryjxKHFp-imMafC8Sv_93q8ztJvmrQfDjs-hvY/edit?usp=sharing" target="_blank" rel="noopener">Ver instructivo →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGÍSTICA + ENVÍOS -->
+<section id="logistica" class="slide-section" style="border-top:1px solid var(--mid);">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Logística<br>+ Envíos</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col-gap">
+      <div style="background:var(--white); padding:48px 40px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gray); margin-bottom:16px;" contenteditable="false">Logística clientes TM</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:var(--dark); margin-bottom:28px;" contenteditable="false">Tienda Mayor realiza <strong style="color:var(--black); font-weight:600;">fletes internos los lunes y jueves</strong> para trasladar mercadería del depósito a la sede de Villa Crespo. Esos días ofrecemos entrega sin cargo a clientes especiales que se encuentran en zonas cercanas a nuestras sedes y suelen realizar compras recurrentes.</p>
+        <table class="clientes-table" style="border:1px solid var(--mid); border-radius:2px; overflow:hidden;">
+          <thead>
+            <tr style="background:var(--off);"><th style="padding:12px 16px;">Sede</th><th style="padding:12px 16px;">Día</th><th style="padding:12px 16px;">Clientes</th></tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--mid);">
+              <td style="padding:14px 16px;"><strong>VC</strong></td>
+              <td style="padding:14px 16px;" contenteditable="false">Lunes</td>
+              <td style="padding:14px 16px;" contenteditable="false">Mesopotamia · Estudio Marini · Helmut · Bull · Federico Churba</td>
+            </tr>
+            <tr>
+              <td style="padding:14px 16px;"><strong>ZN</strong></td>
+              <td style="padding:14px 16px;" contenteditable="false">Jueves</td>
+              <td style="padding:14px 16px;" contenteditable="false">Melazza · Estudio Te · Lacroze Design Studio (si lo solicitan)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:var(--white); padding:36px 32px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gray); margin-bottom:12px;" contenteditable="false">Envíos a domicilio</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:var(--dark); margin-bottom:16px;" contenteditable="false">Ofrecemos envíos a todo el país a través de <strong style="color:var(--black); font-weight:600;">Correo Argentino</strong>. El correo retira por la sede de Zona Norte donde se encuentra el depósito.</p>
+        <ul class="slide-list" style="margin-top:0;">
+          <li contenteditable="false"><strong>Cobranzas ZN</strong> es el encargado de cargar los envíos en la plataforma del correo.</li>
+          <li contenteditable="false">En lo posible se intentan&nbsp;<strong>acumular varios envíos</strong>&nbsp;juntos para realizar solo una carga semanal y que retiren todo junto. (Se evalua según días de demora de cada pedido)</li>
+        </ul>
+        <div class="link-row">
+          <p class="link-row-label" contenteditable="false">ver paso a paso de Correo Argentino</p>
+          <a href="https://docs.google.com/document/d/1nQgQkryjxKHFp-imMafC8Sv_93q8ztJvmrQfDjs-hvY/edit?usp=sharing" target="_blank" rel="noopener">Ver instructivo →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSUMOS -->
+<section id="insumos" class="dark-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false">compras recurrentes</p>
+    <h2 class="sec-title" contenteditable="false">Insumos</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:rgba(255,255,255,.75); margin-bottom:20px;" contenteditable="false">Cobranzas garantiza que tengamos los <strong style="color:var(--white);">insumos necesarios</strong> para la entrega de pedidos.</p>
+        <div style="display:flex; flex-direction:column; gap:1px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.07);">
+          <div style="background:var(--black); padding:16px 20px; font-size:.72rem; font-weight:300; color:rgba(255,255,255,.75);" contenteditable="false">Bolsas <span style="color:rgba(255,255,255,.4); font-size:.65rem;">(papel: grandes, chicas, sobres, rafia y ecommerce)</span></div>
+          <div style="background:var(--black); padding:16px 20px; font-size:.72rem; font-weight:300; color:rgba(255,255,255,.75);" contenteditable="false">Tags para identificar las bolsas</div>
+          <div style="background:var(--black); padding:16px 20px; font-size:.72rem; font-weight:300; color:rgba(255,255,255,.75);" contenteditable="false">Cartones para muestras</div>
+        </div>
+      </div>
+      <div>
+        <div class="note-box">
+          <p class="note-box-label" contenteditable="false">Recordatorio mensual</p>
+          <p contenteditable="false">El <strong>último miércoles de cada mes</strong> llega un recordatorio al mail de cobranzas para contabilizar los insumos de cada sede y considerar si es necesario hacer un pedido.<br><i><span style="font-size: 0.6rem;"><span style="font-size: 0.72rem;">*Hay que tener en cuenta hacer chequeo de insumos siempre previsionando fechas especiales como la Feria TM.</span></span></i></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPRA SUPERMERCADO -->
+<section id="super" class="off-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false">pantry corporativo</p>
+    <h2 class="sec-title" contenteditable="false">Compra mensual<br>Supermercado</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col">
+      <div>
+        <p class="slide-body" contenteditable="false">Todos los meses cobranzas de cada sede realiza una <strong>compra mensual en Coto Digital</strong> para abastecer de productos básicos la sede correspondiente.&nbsp;</p>
+        <div class="link-row" style="margin-top:24px;">
+          <p class="link-row-label" contenteditable="false">Ver listado de compras</p>
+          <a href="https://docs.google.com/document/d/1OnoXI2N6u4clj9dyovfWqppWHkI4lcVg/edit?usp=sharing&ouid=110057340732771956946&rtpof=true&sd=true" target="_blank" rel="noopener">Ver listado →</a>
+        </div>
+      </div>
+      <div>
+        <div class="note-box">
+          <p class="note-box-label" contenteditable="false">A tener en cuenta</p>
+          <p contenteditable="false">Siempre <strong>chequear qué hay antes de comprar</strong>, consultar a los integrantes que trabajan en la sede si se necesita algo, y guiarse por los productos del listado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="dark-section">
+  <div class="container">
+    <p class="sec-label" contenteditable="false">tareas administrativas del área</p>
+    <h2 class="sec-title" contenteditable="false">Administración</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col-dark">
+
+      <div style="background:var(--black); padding:36px 32px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:12px;" contenteditable="false">actualización&nbsp; Listas de precios</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:rgba(255,255,255,.75); margin-bottom:16px;" contenteditable="false">Tienda Mayor se rige con <strong style="color:var(--white);">dos listas</strong>: una minorista y una mayorista.</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.08); padding-bottom:8px;">
+            <span style="font-size:.68rem; font-weight:300; color:rgba(255,255,255,.65);" contenteditable="false">50 mts</span>
+            <span style="font-size:.68rem; font-weight:600; color:rgba(255,255,255,.9);" contenteditable="false">−20% del precio de lista</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:.68rem; font-weight:300; color:rgba(255,255,255,.65);" contenteditable="false">100 mts</span>
+            <span style="font-size:.68rem; font-weight:600; color:rgba(255,255,255,.9);" contenteditable="false">−25% del precio de lista</span>
+          </div>
+        </div>
+        <ul class="slide-list" style="margin-top:0;">
+          <li contenteditable="false">Las listas se actualizan <strong>cada ~3 meses (aprox)</strong>. <br>Administración es el encargado de actualizar los precios.</li>
+          <li contenteditable="false"><strong>Cobranzas VC</strong> arma las nuevas listas para que At. al Cliente las envíe a todos los clientes, también las actualice en los documentos de WhastApp y QR de catálogos.</li>
+          <li contenteditable="false"><strong>Cobranzas ZN</strong>&nbsp;es responsable de actualizar los costos de Correo Argentino según los valores cotizados en la plataforma de envíos.</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--black); padding:36px 32px;">
+        <p style="font-size:.44rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:12px;" contenteditable="false">&nbsp;Repaso de Saldos y bultos</p>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:rgba(255,255,255,.75); margin-bottom:16px;" contenteditable="false">Es muy importante el control de:</p>
+        <ul class="slide-list" style="margin-top:0; margin-bottom:20px;">
+          <li contenteditable="false">Pedidos entregados y saldos pendientes por cobrar.</li>
+          <li contenteditable="false">Fechas de vencimiento y cobros.</li>
+          <li contenteditable="false">Bultos pendientes por retirar.</li>
+        </ul>
+        <p style="font-size:.72rem; font-weight:300; line-height:1.85; color:rgba(255,255,255,.75); margin-bottom:16px;" contenteditable="false">Este proceso de control se realiza <strong style="color:var(--white);">semanalmente en ambas sedes</strong>.</p>
+        <div class="link-row">
+          <p class="link-row-label" contenteditable="false">ver paso a paso en Instructivo de cobranzas</p>
+          <a href="https://docs.google.com/document/d/1nQgQkryjxKHFp-imMafC8Sv_93q8ztJvmrQfDjs-hvY/edit?usp=sharing" target="_blank" rel="noopener">Ver instructivo →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BACKUP AT CLIENTE -->
+<section id="backup" style="background:var(--white); border-top:1px solid var(--mid);">
+  <div class="container">
+    <p class="sec-label" contenteditable="false"><br></p>
+    <h2 class="sec-title" contenteditable="false">Backup de<br>Atención al Cliente</h2>
+    <div class="sec-rule"></div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <p class="slide-body" style="margin-bottom:20px;" contenteditable="false">El puesto de cobranzas es también&nbsp;<strong>backup del puesto de Atención al Cliente.<br></strong>Cuando la asesora de Atención está ocupada atendiendo un cliente, se encuentra ausente (día de trámite/enferemdad) o está de vacaciones, debemos atender a los clientes que se acerquen al showroom, consulten por Whatsapp o vía mail.</p>
+        <p class="slide-body" contenteditable="false">Por este motivo es necesario saber cómo asesorar al cliente y conocer las tareas inherentes del área.</p>
+      </div>
+      <div>
+        <div class="note-box">
+          <p class="note-box-label" contenteditable="false"><b>Recurso NECESARIO</b></p>
+          <p contenteditable="false">Te invitamos a que leas un resumen de las tareas y conceptos básicos del área en la guía<strong>&nbsp;de Atención al Cliente</strong>&nbsp;que se encuentra disponible en está intranet. <br>También podes obtener más información en el&nbsp;<span style="font-weight: 600; color: rgb(12, 12, 12);">Instructivo de At al Cliente&nbsp;</span>y en el documento de&nbsp;<span style="color: rgb(12, 12, 12); font-weight: 600;">Preguntas Frecuentes.&nbsp;</span></p>
+        </div>
+        <div class="link-row" style="margin-top:12px;">
+          <p class="link-row-label" contenteditable="false">guía de Atención al Cliente</p>
+          <a href="manual-atencion-al-cliente.html">Ver manual →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo logo">
+    <span class="logo-line1">Tienda</span>
+    <span class="logo-line2">Mayor</span>
+  </div>
+  <p class="footer-info" contenteditable="false">Manual de Cobranzas · Uso interno</p>
+  <p class="footer-copy" contenteditable="false">Guía de Cobranzas · Uso interno · 2025</p>
+</footer>
+
+<script>
+/* EDITING MODE */
+let editingOn = false;
+
+function setToolbarHeight(visible) {
+  document.documentElement.style.setProperty('--toolbar-h', visible ? '52px' : '0px');
+}
+
+function toggleEditing() {
+  editingOn = !editingOn;
+  const btn = document.getElementById('edit-toggle');
+  const label = document.getElementById('edit-toggle-label');
+  const all = document.querySelectorAll('[contenteditable]');
+  if (editingOn) {
+    btn.classList.add('on');
+    label.textContent = 'Editando';
+    document.body.classList.add('editing-on');
+    document.body.classList.add('toolbar-visible');
+    setToolbarHeight(true);
+    all.forEach(el => el.setAttribute('contenteditable', 'true'));
+    showToast('Modo edición activado — Alt + E para salir');
+  } else {
+    btn.classList.remove('on');
+    label.textContent = 'Editar';
+    document.body.classList.remove('editing-on');
+    document.body.classList.remove('toolbar-visible');
+    setToolbarHeight(false);
+    all.forEach(el => el.setAttribute('contenteditable', 'false'));
+    showToast('Modo edición desactivado');
+  }
+}
+
+/* Alt + E shortcut */
+document.addEventListener('keydown', function(e) {
+  if (e.altKey && e.key.toLowerCase() === 'e') {
+    e.preventDefault();
+    toggleEditing();
+  }
+});
+
+/* FORMAT COMMANDS */
+function applyFormat(cmd) {
+  if (!editingOn) { showToast('Activá el modo Editar primero'); return; }
+  document.execCommand(cmd, false, null);
+  updateFormatButtons();
+}
+
+function applyFontSize(size) {
+  document.getElementById('font-size-select').value = '';
+  if (!size) return;
+  if (!editingOn) { showToast('Activá el modo Editar primero'); return; }
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+    showToast('Seleccioná texto primero');
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style.fontSize = size;
+  try {
+    range.surroundContents(span);
+  } catch(e) {
+    const frag = range.extractContents();
+    span.appendChild(frag);
+    range.insertNode(span);
+  }
+}
+
+function updateFormatButtons() {
+  document.getElementById('btn-bold').classList.toggle('active', document.queryCommandState('bold'));
+  document.getElementById('btn-italic').classList.toggle('active', document.queryCommandState('italic'));
+  document.getElementById('btn-underline').classList.toggle('active', document.queryCommandState('underline'));
+}
+document.addEventListener('selectionchange', updateFormatButtons);
+document.addEventListener('keyup', updateFormatButtons);
+
+/* SAVE & DOWNLOAD */
+function downloadDoc() {
+  const wasEditing = editingOn;
+  if (wasEditing) {
+    document.body.classList.remove('editing-on');
+    document.body.classList.remove('toolbar-visible');
+    document.documentElement.style.setProperty('--toolbar-h', '0px');
+    document.querySelectorAll('[contenteditable]').forEach(el => el.setAttribute('contenteditable', 'false'));
+  }
+  const doctype = '<!DOCTYPE html>\n';
+  const blob = new Blob([doctype + document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'manual-cobranzas.html';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  if (wasEditing) {
+    document.body.classList.add('editing-on');
+    document.body.classList.add('toolbar-visible');
+    document.documentElement.style.setProperty('--toolbar-h', '52px');
+    document.querySelectorAll('[contenteditable]').forEach(el => el.setAttribute('contenteditable', 'true'));
+  }
+  showToast('Documento descargado ✓');
+}
+
+/* TOAST */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* MOBILE NAV */
+function toggleDrawer() {
+  document.getElementById('nav-drawer').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+/* NAV HIGHLIGHT */
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const a = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
+    if (a) a.classList.add('active');
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('section[id]').forEach(s => navObs.observe(s));
+</script>
+
+
+
+</body></html>
