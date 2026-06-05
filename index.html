@@ -162,60 +162,6 @@ nav {
 }
 .nav-panel-link:hover .pl-dot { background: var(--black); }
 
-/* ═══ HERO ═══ */
-.hero {
-  padding-top: 60px;
-  min-height: 55vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-left: 80px;
-  padding-right: 80px;
-  padding-bottom: 64px;
-  position: relative;
-  overflow: hidden;
-}
-
-
-
-.hero-bg-text {
-  position: absolute;
-  right: 60px; bottom: -20px;
-  font-size: 22rem; font-weight: 200;
-  color: rgba(0,0,0,.025);
-  line-height: 1; letter-spacing: -.06em;
-  pointer-events: none;
-  user-select: none;
-}
-
-.hero-content { position: relative; z-index: 1; max-width: 680px; }
-
-.hero-eyebrow {
-  font-size: .58rem; font-weight: 600; letter-spacing: .28em;
-  text-transform: uppercase; color: rgba(0,0,0,.85);
-  margin-bottom: 22px;
-  opacity: 0; animation: fadeUp .6s .1s forwards;
-}
-
-.hero-h1 {
-  font-size: 4rem; font-weight: 300; line-height: 1.05;
-  color: var(--black); margin-bottom: 24px;
-  letter-spacing: -.03em;
-  opacity: 0; animation: fadeUp .6s .2s forwards;
-}
-.hero-h1 em { font-style: italic; font-weight: 300; color: rgba(0,0,0,.75); }
-
-.hero-sub {
-  font-size: .78rem; font-weight: 400; line-height: 1.9;
-  color: rgba(0,0,0,.75); max-width: 480px;
-  opacity: 0; animation: fadeUp .6s .35s forwards;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: none; }
-}
-
 /* ═══ DIVIDER ═══ */
 .divider {
   height: 1px;
@@ -422,27 +368,30 @@ footer {
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 900px) {
   nav { padding: 0 24px; }
-  .hero { padding-left: 24px; padding-right: 24px; padding-bottom: 48px; min-height: 45vh; }
-  .hero-bg-text { font-size: 12rem; right: 20px; }
-  .hero-h1 { font-size: 2.8rem; }
   .divider { margin: 0 24px; }
   .manuales-section { padding: 48px 24px 60px; }
+  .manuales-bienvenida { padding-top: 84px; }
   .manuales-grid { grid-template-columns: 1fr 1fr !important; }
+  .manual-card { min-height: 280px; padding: 32px 28px 28px; }
+  .card-title { font-size: 1.2rem; }
   footer { padding: 28px 24px; }
+  .area-block[style*="margin-top"] { margin-top: 32px !important; }
 }
 
 @media (max-width: 600px) {
   nav { padding: 0 18px; }
   .nav-panel { width: 100%; }
-  .hero { padding-left: 18px; padding-right: 18px; padding-bottom: 36px; min-height: 38vh; }
-  .hero-bg-text { display: none; }
-  .hero-h1 { font-size: 2.1rem; }
-  .hero-sub { font-size: .72rem; }
   .divider { margin: 0 18px; }
-  .manuales-section { padding: 36px 18px 48px; }
+  .manuales-section { padding: 32px 18px 40px; }
+  .manuales-bienvenida { padding-top: 76px; }
   .manuales-grid { grid-template-columns: 1fr !important; }
-  .manual-card { min-height: 200px; padding: 28px 22px 24px; }
+  .manual-card { min-height: 180px; padding: 28px 22px 24px; }
+  .card-title { font-size: 1.1rem; }
+  .card-desc { font-size: .66rem; }
   .sec-header { flex-direction: column; gap: 6px; margin-bottom: 24px; }
+  .sec-label { font-size: .48rem; }
+  .area-label { font-size: .44rem; }
+  .area-block[style*="margin-top"] { margin-top: 24px !important; }
   footer { flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px 18px; }
   .footer-copy { text-align: left; }
   #edit-toolbar {
@@ -499,31 +448,19 @@ footer {
   </div>
 </div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-bg-text">TM</div>
-  <div class="hero-content">
-    <p class="hero-eyebrow">Portal interno · Tienda Mayor</p>
-    <h1 class="hero-h1">Centro de<br><em>documentación</em><br>del equipo</h1>
-    <p class="hero-sub">Manuales, guías y recursos internos para el equipo de Tienda Mayor. Todo en un solo lugar.</p>
-  </div>
-</div>
-
-<div class="divider"></div>
-
 <!-- MANUALES -->
 
 <!-- BIENVENIDA -->
-<div class="manuales-section" style="padding-bottom: 0;">
+<div class="manuales-section manuales-bienvenida" style="padding-bottom: 0; padding-top: 96px;">
   <div class="sec-header">
-    <span class="sec-label">Incorporación general · Toda la empresa</span>
+    <span class="sec-label">Portal Interno · Equipo Tienda Mayor</span>
   </div>
   <div class="manuales-grid" style="grid-template-columns: 1fr;">
 
     <a class="manual-card" href="manual-bienvenida.html">
       <div class="card-bg-n">01</div>
       <div class="card-top">
-        <p class="card-area">Incorporación general · Toda la empresa</p>
+        <p class="card-area">Portal Interno · Equipo Tienda Mayor</p>
         <p class="card-title">Manual de<br><em>Bienvenida</em></p>
         <p class="card-desc">Todo lo que necesitás saber al entrar a Tienda Mayor: quiénes somos, cómo está organizado el equipo, las sedes, la cultura y los primeros pasos.</p>
       </div>
@@ -557,7 +494,7 @@ footer {
         <div class="card-bg-n">01</div>
         <div class="card-top">
           <p class="card-area">Manual de área · Atención al cliente</p>
-          <p class="card-title">Atención<br><em>al Cliente</em></p>
+          <p class="card-title">Guía de<br><em>Atención al Cliente</em></p>
           <p class="card-desc">Una guía con conceptos básicos para comenzar a entender el área y las tareas diarias.</p>
         </div>
         <div class="card-bottom">
@@ -607,7 +544,7 @@ footer {
         <div class="card-bg-n">01</div>
         <div class="card-top">
           <p class="card-area">Manual de área · Cobranzas</p>
-          <p class="card-title"><em>Cobranzas</em></p>
+          <p class="card-title">Guía de<br><em>Cobranzas</em></p>
           <p class="card-desc">Guía del área de cobranzas: procesos, tareas diarias y recursos para el equipo.</p>
         </div>
         <div class="card-bottom">
@@ -772,7 +709,6 @@ footer {
 
   /* Edit mode - Alt+E */
   var SELECTORS = [
-    '.hero-eyebrow', '.hero-h1', '.hero-sub',
     '.sec-label', '.sec-count',
     '.area-label',
     '.card-area', '.card-title', '.card-desc',
