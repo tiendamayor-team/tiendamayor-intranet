@@ -2589,7 +2589,7 @@ body.edit-mode [contenteditable="true"]:focus {
   </button>
 </div>
 
-<div class="edit-toast show" id="editToast">Cambios guardados en el navegador</div>
+<div class="edit-toast" id="editToast"></div>
 
 <script>
 /* ══ HAMBURGER NAV ══ */
@@ -2704,9 +2704,8 @@ body.edit-mode [contenteditable="true"]:focus {
     const snapshot = document.documentElement.outerHTML;
     try {
       localStorage.setItem('tm_manual_bienvenida_saved', snapshot);
-      showToast('Cambios guardados en el navegador');
     } catch(e) {
-      showToast('No se pudo guardar (storage lleno)');
+      // silent fail
     }
   });
 
@@ -2732,7 +2731,6 @@ body.edit-mode [contenteditable="true"]:focus {
       document.body.classList.add('edit-mode');
       document.querySelectorAll(EDITABLE_SELECTORS).forEach(el => el.setAttribute('contenteditable','true'));
     }
-    showToast('HTML descargado con los cambios');
   });
 
   // Restore saved version on load
