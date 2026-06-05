@@ -26,7 +26,7 @@ body {
 }
 
 /* ═══════════════════════════════
-   NAV
+   NAV — hamburger style
 ═══════════════════════════════ */
 nav {
   position: fixed;
@@ -63,25 +63,42 @@ nav {
   color: var(--black);
 }
 
-.nav-links {
+/* Right group: hamburger + back btn */
+.nav-left-group {
   display: flex;
-  gap: 32px;
-  list-style: none;
+  align-items: center;
+  gap: 16px;
 }
 
-.nav-links a {
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gray);
-  text-decoration: none;
-  transition: color 0.2s;
+/* Hamburger button */
+.nav-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--mid);
+  cursor: pointer;
+  padding: 8px;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
 }
+.nav-hamburger:hover { border-color: var(--black); }
+.nav-hamburger span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--black);
+  transition: transform 0.3s, opacity 0.3s;
+  transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-.nav-links a:hover,
-.nav-links a.active { color: var(--black); }
-
+/* Back button */
 .nav-back {
   display: flex;
   align-items: center;
@@ -95,9 +112,59 @@ nav {
   border: 1px solid var(--mid);
   padding: 7px 14px;
   transition: color .2s, border-color .2s;
+  white-space: nowrap;
 }
 .nav-back:hover { color: var(--black); border-color: var(--black); }
 .nav-back svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Fullscreen nav drawer */
+.nav-drawer {
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--mid);
+  z-index: 299;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+  opacity: 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+.nav-drawer.open {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.nav-drawer-inner {
+  padding: 28px 48px 36px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+}
+
+.nav-links li {
+  border-bottom: 1px solid var(--mid);
+}
+.nav-links li:first-child { border-top: 1px solid var(--mid); }
+
+.nav-links a {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  padding: 15px 0;
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--black); padding-left: 8px; }
 
 
 /* ═══════════════════════════════
@@ -381,7 +448,7 @@ section { padding: 96px 0; }
   font-size: 5rem;
   font-weight: 200;
   line-height: 1;
-  color: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.18);
   margin-bottom: 4px;
   letter-spacing: -0.03em;
 }
@@ -399,10 +466,10 @@ section { padding: 96px 0; }
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.75);
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .dir-enfoque-label {
@@ -410,7 +477,7 @@ section { padding: 96px 0; }
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.65);
   margin-bottom: 10px;
 }
 
@@ -424,7 +491,7 @@ section { padding: 96px 0; }
 .dir-tag {
   font-size: 0.72rem;
   font-weight: 400;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.92);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -436,7 +503,7 @@ section { padding: 96px 0; }
   display: block;
   width: 14px;
   height: 1px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.3);
   flex-shrink: 0;
 }
 
@@ -444,7 +511,7 @@ section { padding: 96px 0; }
   font-size: 0.76rem;
   font-weight: 400;
   line-height: 1.85;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.78);
   letter-spacing: 0.01em;
 }
 
@@ -701,7 +768,7 @@ section { padding: 96px 0; }
 }
 
 .c-item:nth-child(even)       { border-right: none; }
-.c-item:nth-last-child(-n+2)  { border-bottom: none; }
+.c-item:nth-last-child(-n+1):not(.c-item--full)  { border-bottom: none; }
 .c-item:hover                 { background: var(--off); }
 
 .c-num {
@@ -927,7 +994,7 @@ footer {
   .hero-left { padding: 80px 28px 56px; }
   .hero-h1 { font-size: 2.8rem; }
   nav { padding: 0 24px; }
-  .nav-links { display: none; }
+  
   .container { padding: 0 24px; }
   section { padding: 72px 0; }
   .manifiesto-grid,
@@ -1144,7 +1211,7 @@ footer {
 
 @media (max-width: 480px) {
   nav { padding: 0 16px; }
-  .nav-links { display: none; }
+  
   .container { padding: 0 16px; }
   section { padding: 48px 0; }
 
@@ -1206,23 +1273,34 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <div class="logo">
-    <span class="logo-line1" data-original="Tienda" spellcheck="false">Tienda</span>
-    <span class="logo-line2" data-original="Mayor" spellcheck="false">Mayor</span>
+  <div class="nav-left-group">
+    <div class="logo">
+      <span class="logo-line1" data-original="Tienda" spellcheck="false">Tienda</span>
+      <span class="logo-line2" data-original="Mayor" spellcheck="false">Mayor</span>
+    </div>
+    <a class="nav-back" href="index.html"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
   </div>
-  <a class="nav-back" href="index.html"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Inicio</a>
-  <ul class="nav-links">
-    <li><a href="#manifiesto" class="">Manifiesto</a></li>
-    <li><a href="#cultura" class="">Cultura</a></li>
-    <li><a href="#directorio" class="">Directorio</a></li>
-    <li><a href="#encargados" class="">Equipo</a></li>
-    <li><a href="#sedes" class="">Sedes</a></li>
-    <li><a href="#horarios-bienvenida" class="">Horarios</a></li>
-    <li><a href="#vestimenta" class="">Vestimenta</a></li>
-    <li><a href="#beneficios" class="">Beneficios</a></li>
-    <li><a href="#primeros-pasos" class="active">Primeros pasos</a></li>
-  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- NAV DRAWER -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-inner">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#manifiesto" class="active">Manifiesto</a></li>
+      <li><a href="#cultura" class="">Nuestra Cultura</a></li>
+      <li><a href="#directorio" class="">Co-Directoras</a></li>
+      <li><a href="#encargados" class="">Equipo y Áreas</a></li>
+      <li><a href="#sedes" class="">Sedes</a></li>
+      <li><a href="#horarios-bienvenida" class="">Horarios</a></li>
+      <li><a href="#vestimenta" class="">Vestimenta</a></li>
+      <li><a href="#beneficios" class="">Beneficios</a></li>
+      <li><a href="#primeros-pasos" class="">Primeros Pasos</a></li>
+    </ul>
+  </div>
+</div>
 
 <!-- ══ HERO ══ -->
 <div class="hero">
@@ -1239,7 +1317,7 @@ footer {
   </div>
   <div class="hero-right">
     <p class="hero-right-label" data-original="Manifiesto" spellcheck="false">Manifiesto</p>
-    <p class="hero-manifiesto" data-original="Un laboratorio textil orientado al desarrollo y la fabricación de géneros.&lt;br&gt;Cada decisión responde a un uso, a una materialidad y a una intención." spellcheck="false">Un laboratorio textil orientado al desarrollo y la fabricación de géneros.<br>Cada decisión responde a un uso, a una materialidad y a una intención.</p>
+    <p class="hero-manifiesto" data-original="Un laboratorio textil orientado al desarrollo y la fabricación de textiles.&lt;br&gt;Cada decisión responde a un uso, a una materialidad y a una intención." spellcheck="false">Un laboratorio textil orientado al desarrollo y la fabricación de textiles.<br>Cada decisión responde a un uso, a una materialidad y a una intención.</p>
     <div class="hero-scroll">
       <div class="scroll-line"></div>
       <span class="scroll-label">Explorar</span>
@@ -1268,7 +1346,7 @@ footer {
         </div>
       </div>
       <div>
-        <p class="manif-texto" data-original="&lt;strong data-original=&quot;Tienda Mayor&quot; spellcheck=&quot;false&quot;&gt;Tienda Mayor&lt;/strong&gt; es un laboratorio textil orientado al desarrollo y fabricación de géneros." spellcheck="false"><strong data-original="Tienda Mayor" spellcheck="false">Tienda Mayor</strong> es un laboratorio textil orientado al desarrollo y fabricación de géneros.</p>
+        <p class="manif-texto" data-original="&lt;strong data-original=&quot;Tienda Mayor&quot; spellcheck=&quot;false&quot;&gt;Tienda Mayor&lt;/strong&gt; es un laboratorio textil orientado al desarrollo y fabricación de textiles." spellcheck="false"><strong data-original="Tienda Mayor" spellcheck="false">Tienda Mayor</strong> es un laboratorio textil orientado al desarrollo y fabricación de textiles.</p>
         <p class="manif-texto" data-original="Cada textil es abordado desde el diseño y el proceso: la elección de la fibra, la trama, el peso, el color y la terminación. Cada decisión responde a un uso, a una materialidad y a una intención." spellcheck="false">Cada textil es abordado desde el diseño y el proceso: la elección de la fibra, la trama, el peso, el color y la terminación. Cada decisión responde a un uso, a una materialidad y a una intención.</p>
         <p class="manif-texto" data-original="Trabajamos con materiales nacionales, procesos cuidados y una mirada técnica puesta en el uso, la durabilidad y la materialidad." spellcheck="false">Trabajamos con materiales nacionales, procesos cuidados y una mirada técnica puesta en el uso, la durabilidad y la materialidad.</p>
         <p class="manif-texto" data-original="Nuestro catálogo se integra por 4 módulos textiles: Paleta Neutra, Paleta Color, Tejidos y Alto Tránsito." spellcheck="false">Nuestro catálogo se integra por 4 módulos textiles: Paleta Neutra, Paleta Color, Tejidos y Alto Tránsito.</p>
@@ -1288,13 +1366,11 @@ footer {
         <p class="cultura-intro" data-original="Somos un equipo chico con +10 años de historia.&lt;br&gt;Estos son los principios que guían cómo nos relacionamos, trabajamos y tomamos decisiones cada día." spellcheck="false">Somos un equipo chico con +10 años de historia.<br>Estos son los principios que guían cómo nos relacionamos, trabajamos y tomamos decisiones cada día.</p>
       </div>
       <div class="cultura-grid">
-        <div class="c-item"><p class="c-num" data-original="01" spellcheck="false">01</p><p class="c-title" data-original="Equipo pequeño, impacto real" spellcheck="false">Equipo pequeño, impacto real</p><p class="c-text" data-original="Somos pocos. Lo que cada persona hace se nota directamente en el resultado. &lt;br&gt;No hay anonimato: tu trabajo tiene peso y se ve." spellcheck="false">Somos pocos. Lo que cada persona hace se nota directamente en el resultado. <br>No hay anonimato: tu trabajo tiene peso y se ve.</p></div>
+        <div class="c-item"><p class="c-num" data-original="01" spellcheck="false">01</p><p class="c-title" data-original="Equipo pequeño, impacto real" spellcheck="false">Equipo pequeño, impacto real</p><p class="c-text" data-original="Somos pocos. Lo que cada persona hace se nota directamente en el resultado. No hay anonimato: tu trabajo tiene peso y se ve." spellcheck="false">Somos pocos. Lo que cada persona hace se nota directamente en el resultado. No hay anonimato: tu trabajo tiene peso y se ve.</p></div>
         <div class="c-item"><p class="c-num" data-original="02" spellcheck="false">02</p><p class="c-title" data-original="Comunicación directa" spellcheck="false">Comunicación directa</p><p class="c-text" data-original="Preferimos hablar antes que suponer. Si algo no está claro, se consulta. Las puertas están abiertas en todos los áreas." spellcheck="false">Preferimos hablar antes que suponer. Si algo no está claro, se consulta. Las puertas están abiertas en todos los áreas.</p></div>
-        <div class="c-item"><p class="c-num" data-original="03" spellcheck="false">03</p><p class="c-title" data-original="DISEÑO&amp;nbsp;" spellcheck="false">DISEÑO&nbsp;</p><p class="c-text" data-original="Nuestros textiles son pensados en base a conceptos y utlidades. Trabajamos en el diseño de cada tela, desde el hilado, el tipo de tejido a la calidad del textil terminado." spellcheck="false">Nuestros textiles son pensados en base a conceptos y utlidades. Trabajamos en el diseño de cada tela, desde el hilado, el tipo de tejido a la calidad del textil terminado.</p></div>
-        <div class="c-item"><p class="c-num" data-original="04" spellcheck="false">04</p><p class="c-title" data-original="Calidad sobre cantidad" spellcheck="false">Calidad sobre cantidad</p><p class="c-text" data-original="Realizamos pruebas de control de calidad constantes para asegurar la mejor calidad del producto.&amp;nbsp;" spellcheck="false">Realizamos pruebas de control de calidad constantes para asegurar la mejor calidad del producto.&nbsp;</p></div>
-        <div class="c-item"><p class="c-num" data-original="05" spellcheck="false">05</p><p class="c-title" data-original="Mirada técnica" spellcheck="false">Mirada técnica</p><p class="c-text" data-original="Fibra, trama, peso, color, terminación: cada decisión tiene un porqué técnico.&amp;nbsp;&amp;nbsp;" spellcheck="false">Fibra, trama, peso, color, terminación: cada decisión tiene un porqué técnico.&nbsp;&nbsp;</p></div>
-        <div class="c-item"><p class="c-num" data-original="06" spellcheck="false">06</p><p class="c-title" data-original="Proceso en constante ajuste" spellcheck="false">Proceso en constante ajuste</p><p class="c-text" data-original="El catálogo y la forma de trabajar evolucionan. Somos una empresa que se transforma sin perder identidad.&amp;nbsp;&lt;span&gt;Cada metro, cada interacción, cada comunicación debe representar bien lo que somos.&lt;/span&gt;" spellcheck="false">El catálogo y la forma de trabajar evolucionan. Somos una empresa que se transforma sin perder identidad.&nbsp;<span>Cada metro, cada interacción, cada comunicación debe representar bien lo que somos.</span></p></div>
-        <div class="c-item c-item--full"><p class="c-num" data-original="07" spellcheck="false">07</p><p class="c-title" data-original="Servicio como extensión del producto" spellcheck="false">Servicio como extensión del producto</p><p class="c-text" data-original="Ser una marca premium implica que la experiencia no termina en el textil. Cada pedido es una oportunidad de expresar quiénes somos: se arma con atención al detalle, con un packaging cuidado y etiquetas con especificaciones precisas para cada cliente. &lt;br&gt;El servicio no es un complemento — es parte constitutiva de lo que ofrecemos." spellcheck="false">Ser una marca premium implica que la experiencia no termina en el textil. Cada pedido es una oportunidad de expresar quiénes somos: se arma con atención al detalle, con un packaging cuidado y etiquetas con especificaciones precisas para cada cliente. <br>El servicio no es un complemento — es parte constitutiva de lo que ofrecemos.</p></div>
+        <div class="c-item"><p class="c-num" data-original="03" spellcheck="false">03</p><p class="c-title" data-original="Diseño &amp; Mirada Técnica" spellcheck="false">Diseño &amp; Mirada Técnica</p><p class="c-text" data-original="Nuestros textiles son pensados en base a conceptos y utilidades. Trabajamos en el diseño de cada tela, desde el hilado, el tipo de tejido a la calidad del textil terminado.&lt;br&gt;&lt;br&gt;Fibra, trama, peso, color, terminación: cada decisión tiene un porqué técnico." spellcheck="false">Nuestros textiles son pensados en base a conceptos y utilidades. Trabajamos en el diseño de cada tela, desde el hilado, el tipo de tejido a la calidad del textil terminado.<br>Fibra, trama, peso, color, terminación: cada decisión tiene un porqué técnico.</p></div>
+        <div class="c-item"><p class="c-num" data-original="04" spellcheck="false">04</p><p class="c-title" data-original="Calidad Textil" spellcheck="false">Calidad Textil</p><p class="c-text" data-original="Realizamos pruebas de control de calidad constantes para asegurar la mejor calidad del producto." spellcheck="false">Realizamos pruebas de control de calidad constantes para asegurar la mejor calidad del producto.</p></div>
+        <div class="c-item c-item--full"><p class="c-num" data-original="05" spellcheck="false">05</p><p class="c-title" data-original="Servicio como extensión del producto" spellcheck="false">Servicio como extensión del producto</p><p class="c-text" data-original="Ser una marca premium implica que la experiencia no termina en el textil. Cada pedido es una oportunidad de expresar quiénes somos: se arma con atención al detalle, con un packaging cuidado y etiquetas con especificaciones precisas para cada cliente. El servicio no es un complemento — es parte constitutiva de lo que ofrecemos." spellcheck="false">Ser una marca premium implica que la experiencia no termina en el textil. Cada pedido es una oportunidad de expresar quiénes somos: se arma con atención al detalle, con un packaging cuidado y etiquetas con especificaciones precisas para cada cliente. El servicio no es un complemento — es parte constitutiva de lo que ofrecemos.</p></div>
       </div>
     </div>
   </div>
@@ -1698,7 +1774,7 @@ footer {
               <span class="acc-label" data-original="Dirección" spellcheck="false">Dirección</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="IS" spellcheck="false">IS</div>
                 <div><p class="c-nombre" data-original="Isa" spellcheck="false">Isa</p><p class="c-rol" data-original="Co-directora · info@tiendamayor.com.ar" spellcheck="false">Co-directora · info@tiendamayor.com.ar</p></div>
@@ -1709,7 +1785,7 @@ footer {
                 <div><p class="c-nombre" data-original="Belu" spellcheck="false">Belu</p><p class="c-rol" data-original="Co-directora · info@tiendamayor.com.ar" spellcheck="false">Co-directora · info@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="&lt;br&gt;" spellcheck="false"><br></span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Operación & Admin -->
@@ -1721,7 +1797,7 @@ footer {
               <span class="acc-label" data-original="producción &amp;amp; Administración" spellcheck="false">producción &amp; Administración</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="CA" spellcheck="false">CA</div>
                 <div><p class="c-nombre" data-original="Cande" spellcheck="false">Cande</p><p class="c-rol" data-original="Encargada de Producción · produccion@tiendamayor.com.ar" spellcheck="false">Sede Zona Norte - Encargada de Producción · produccion@tiendamayor.com.ar</p></div>
@@ -1732,7 +1808,7 @@ footer {
                 <div><p class="c-nombre" data-original="Nico" spellcheck="false">Nico</p><p class="c-rol" data-original="Encargado de Administración · administracion@tiendamayor.com.ar" spellcheck="false">Sede Villa Crespo - Encargado de Administración· administracion@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="Administración" spellcheck="false">Administración</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Comercial & Comunicación -->
@@ -1744,7 +1820,7 @@ footer {
               <span class="acc-label" data-original="Comercial &amp;amp; Comunicación" spellcheck="false">Comercial &amp; Comunicación</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="GA" spellcheck="false">GA</div>
                 <div><p class="c-nombre" data-original="Gaby" spellcheck="false">Gaby</p><p class="c-rol" data-original="Encargada Comercial · &lt;br&gt;comercial@tiendamayor.com.ar" spellcheck="false">Encargada Comercial · <br>comercial@tiendamayor.com.ar</p></div>
@@ -1755,11 +1831,11 @@ footer {
                 <div><p class="c-nombre" data-original="Pili" spellcheck="false">Pili</p><p class="c-rol" data-original="Encargada de Comunicación · comunicacion@tiendamayor.com.ar" spellcheck="false">Encargada de Comunicación · comunicacion@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="comunicación" spellcheck="false">comunicación</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Atención al Cliente -->
-          <div class="acc-group">
+          <div class="acc-group open">
             <button class="acc-trigger" data-original="
               &lt;span class=&quot;acc-label&quot; data-original=&quot;Atención al Cliente&quot; spellcheck=&quot;false&quot;&gt;Atención al Cliente&lt;/span&gt;
               &lt;span class=&quot;acc-arrow&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot;&gt;&lt;polyline points=&quot;6 9 12 15 18 9&quot;&gt;&lt;/polyline&gt;&lt;/svg&gt;&lt;/span&gt;
@@ -1767,10 +1843,10 @@ footer {
               <span class="acc-label" data-original="Atención al Cliente" spellcheck="false">Atención al Cliente</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="A1" spellcheck="false">A1</div>
-                <div><p class="c-nombre" data-original="Asesora 1" spellcheck="false">Asesora 1</p><p class="c-rol" data-original="Sede Villa Crespo ·&lt;br&gt;info@tiendamayor.com.ar" spellcheck="false">Sede Villa Crespo ·<br>info@tiendamayor.com.ar</p></div>
+                <div><p class="c-nombre" data-original="Asesora 1" spellcheck="false">Flora - Asesora&nbsp;</p><p class="c-rol" data-original="Sede Villa Crespo ·&lt;br&gt;info@tiendamayor.com.ar" spellcheck="false">Sede Villa Crespo ·<br>info@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="At. Cliente" spellcheck="false">At. Cliente</span>
               </div>
               <div class="c-row">
@@ -1778,7 +1854,7 @@ footer {
                 <div><p class="c-nombre" data-original="Flor - Asesora&amp;nbsp;" spellcheck="false">Flor - Asesora&nbsp;</p><p class="c-rol" data-original="Sede Zona Norte ·&lt;br&gt;info@tiendamayor.com.ar" spellcheck="false">Sede Zona Norte ·<br>info@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="At. Cliente" spellcheck="false">At. Cliente</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Cobranzas -->
@@ -1790,7 +1866,7 @@ footer {
               <span class="acc-label" data-original="Cobranzas — Backup At. Cliente" spellcheck="false">Cobranzas — Backup At. Cliente</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="A1" spellcheck="false">A1</div>
                 <div><p class="c-nombre" data-original="Lu - Cobranzas" spellcheck="false">Lu - Cobranzas</p><p class="c-rol" data-original="Sede Villa Crespo · &lt;br&gt;cobranzas@tiendamayor.com.ar" spellcheck="false">Sede Villa Crespo · <br>cobranzas@tiendamayor.com.ar</p></div>
@@ -1801,7 +1877,7 @@ footer {
                 <div><p class="c-nombre" data-original="Cobranzas 2" spellcheck="false">Cobranzas 2</p><p class="c-rol" data-original="Sede Zona Norte ·&lt;br&gt;cobranzas@tiendamayor.com.ar" spellcheck="false">Sede Zona Norte ·<br>cobranzas@tiendamayor.com.ar</p></div>
                 <span class="c-area-tag" data-original="Cobranzas" spellcheck="false">Cobranzas</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Depósito -->
@@ -1813,13 +1889,13 @@ footer {
               <span class="acc-label" data-original="Depósito — Responde a Producción" spellcheck="false">Depósito — Responde a Producción</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="DE" spellcheck="false">DE</div>
                 <div><p class="c-nombre" data-original="Equipo Depósito (3 integrantes)" spellcheck="false">Equipo Depósito (3 integrantes)</p><p class="c-rol" data-original="Edwin - Diego - Agustin (Responsable logística interna)&lt;br&gt;Contacto por grupos de WhatsApp" spellcheck="false">Sede Zona Norte<br>Edwin - Diego - Agustin (Responsable logística interna)<br>Contacto por grupos de WhatsApp</p></div>
                 <span class="c-area-tag" data-original="Depósito" spellcheck="false">Depósito</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
           <!-- Recursos Humanos -->
@@ -1831,7 +1907,7 @@ footer {
               <span class="acc-label" data-original="Recursos Humanos" spellcheck="false">Recursos Humanos</span>
               <span class="acc-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
             </button>
-            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
+            <div class="acc-body"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner"><div class="acc-body-inner">
               <div class="c-row">
                 <div class="c-avatar" data-original="RH" spellcheck="false">RH</div>
                 <div><p class="c-nombre" data-original="RRHH — Belu &amp;amp; Isa" spellcheck="false">RRHH — Belu &amp; Isa</p><p class="c-rol" data-original="Vacaciones y temas de RRHH · &lt;br&gt;rrhh@tiendamayor.com.ar" spellcheck="false">Vacaciones y temas de RRHH · <br>rrhh@tiendamayor.com.ar</p></div>
@@ -1842,7 +1918,7 @@ footer {
                 <div><p class="c-nombre" data-original="Administración" spellcheck="false">Administración</p><p class="c-rol" data-original="Ausencias, faltas, días de trámite · &lt;br&gt;contacto por WhatsApp" spellcheck="false">Ausencias, faltas, días de trámite · <br>contacto por WhatsApp</p></div>
                 <span class="c-area-tag" data-original="Ausencias" spellcheck="false">Ausencias</span>
               </div>
-            </div></div></div></div></div></div>
+            </div></div></div></div></div></div></div>
           </div>
 
         </div>
@@ -2235,7 +2311,100 @@ footer {
 
 
 <style>
-/* ══ NOTA DE HORARIOS (bloque rectangular inferior) ══ */
+/* ══ EDIT MODE TOOLBAR ══ */
+#edit-toolbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: var(--black);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  z-index: 500;
+}
+body.edit-mode #edit-toolbar { display: flex; }
+body.edit-mode { padding-bottom: 52px; }
+
+.etb-label {
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.etb-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.etb-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: #fff; }
+.etb-btn.active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); color: #fff; }
+.etb-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.etb-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.12); margin: 0 4px; }
+
+.etb-btn--save { border-color: rgba(255,255,255,0.4); color: #fff; }
+.etb-btn--save:hover { background: rgba(255,255,255,0.15); }
+.etb-btn--download { border-color: rgba(255,255,255,0.4); color: #fff; }
+.etb-btn--download:hover { background: rgba(255,255,255,0.15); }
+.etb-btn--exit { margin-left: auto; }
+
+/* Edit mode: make contenteditable blocks editable */
+body.edit-mode [contenteditable="true"] {
+  outline: none;
+  border-bottom: 1px dashed rgba(0,0,0,0.25);
+  cursor: text;
+}
+body.edit-mode [contenteditable="true"]:focus {
+  border-bottom-color: var(--black);
+  background: rgba(0,0,0,0.025);
+}
+#directorio [contenteditable="true"]:focus {
+  border-bottom-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+}
+
+/* edit mode hint toast */
+.edit-toast {
+  position: fixed;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--black);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 600;
+  white-space: nowrap;
+}
+.edit-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* c-item--full: no bottom border when last before another item */
+.c-item--full { border-bottom: 1px solid var(--mid) !important; }
+.c-item--full:last-child { border-bottom: none !important; }
 .horarios-nota-bloque {
   margin-top: 1px;
   border: 1px solid var(--mid);
@@ -2284,7 +2453,7 @@ footer {
   .horarios-nota-header { white-space: normal; }
   footer { padding: 40px 24px; }
   nav { padding: 0 20px; }
-  .nav-links { display: none; }
+  
   .container { padding: 0 20px; }
   section { padding: 56px 0; }
   .hero { grid-template-columns: 1fr; }
@@ -2393,5 +2562,186 @@ footer {
   .footer-copy { text-align: left; }
 }
 </style>
+
+<!-- EDIT TOOLBAR -->
+<div id="edit-toolbar">
+  <span class="etb-label">Modo Edición</span>
+  <button class="etb-btn" id="etbBold" title="Negrita (Ctrl+B)">
+    <svg viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
+    Negrita
+  </button>
+  <button class="etb-btn" id="etbItalic" title="Cursiva (Ctrl+I)">
+    <svg viewBox="0 0 24 24"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg>
+    Cursiva
+  </button>
+  <div class="etb-sep"></div>
+  <button class="etb-btn etb-btn--save" id="etbSave">
+    <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+    Guardar
+  </button>
+  <button class="etb-btn etb-btn--download" id="etbDownload">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    Descargar HTML
+  </button>
+  <button class="etb-btn etb-btn--exit" id="etbExit">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    Salir
+  </button>
+</div>
+
+<div class="edit-toast show" id="editToast">Cambios guardados en el navegador</div>
+
+<script>
+/* ══ HAMBURGER NAV ══ */
+(function() {
+  const btn = document.getElementById('navHamburger');
+  const drawer = document.getElementById('navDrawer');
+  if (!btn || !drawer) return;
+
+  btn.addEventListener('click', function() {
+    const open = drawer.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+  });
+
+  // Close on link click
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      btn.classList.remove('open');
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', e => {
+    if (!drawer.contains(e.target) && !btn.contains(e.target)) {
+      drawer.classList.remove('open');
+      btn.classList.remove('open');
+    }
+  });
+
+  // Nav active link using drawer links
+  const navObs2 = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      document.querySelectorAll('#navLinks a').forEach(a => a.classList.remove('active'));
+      const a = document.querySelector(`#navLinks a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('section[id]').forEach(s => navObs2.observe(s));
+})();
+
+/* ══ EDIT MODE ══ */
+(function() {
+  const EDITABLE_SELECTORS = [
+    'h1','h2','h3','h4','h5','h6','p','li','span',
+    '.hero-h1','.hero-eyebrow','.hero-sub','.hero-manifiesto',
+    '.manif-texto','.sec-title','.sec-label','.cultura-intro',
+    '.c-num','.c-title','.c-text',
+    '.dir-nombre','.dir-rol','.dir-tag','.dir-desc','.dir-enfoque-label','.dir-inicial',
+    '.area-nombre','.area-encargado','.area-desc',
+    '.sede-nombre','.sede-dir','.sede-ft','.sede-fl','.sede-tag',
+    '.dato-n','.dato-l',
+    '.logo-line1','.logo-line2',
+    '.paso-titulo','.paso-desc',
+    '.hc-nombre','.hc-nota',
+    '.benefit-title','.benefit-desc',
+    '.vest-title','.vest-text',
+    '.servicio-texto','.servicio-label',
+    '.footer-info','.footer-copy',
+    '.acc-label',
+    '.nav-links a',
+    '.nota-final p'
+  ].join(',');
+
+  let editMode = false;
+
+  function enableEditMode() {
+    editMode = true;
+    document.body.classList.add('edit-mode');
+    document.querySelectorAll(EDITABLE_SELECTORS).forEach(el => {
+      el.setAttribute('contenteditable', 'true');
+    });
+    showToast('Modo edición activado — Alt+E para salir');
+  }
+
+  function disableEditMode() {
+    editMode = false;
+    document.body.classList.remove('edit-mode');
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.removeAttribute('contenteditable');
+    });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('editToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Alt+E toggle
+  document.addEventListener('keydown', e => {
+    if (e.altKey && (e.key === 'e' || e.key === 'E')) {
+      e.preventDefault();
+      editMode ? disableEditMode() : enableEditMode();
+    }
+  });
+
+  // Toolbar buttons
+  document.getElementById('etbBold').addEventListener('click', () => {
+    document.execCommand('bold');
+  });
+  document.getElementById('etbItalic').addEventListener('click', () => {
+    document.execCommand('italic');
+  });
+  document.getElementById('etbExit').addEventListener('click', disableEditMode);
+
+  document.getElementById('etbSave').addEventListener('click', function() {
+    // Save to localStorage
+    const snapshot = document.documentElement.outerHTML;
+    try {
+      localStorage.setItem('tm_manual_bienvenida_saved', snapshot);
+      showToast('Cambios guardados en el navegador');
+    } catch(e) {
+      showToast('No se pudo guardar (storage lleno)');
+    }
+  });
+
+  document.getElementById('etbDownload').addEventListener('click', function() {
+    const was = editMode;
+    // Temporarily disable contenteditable before serializing
+    document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    document.body.classList.remove('edit-mode');
+
+    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'manual-bienvenida.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Restore edit mode
+    if (was) {
+      document.body.classList.add('edit-mode');
+      document.querySelectorAll(EDITABLE_SELECTORS).forEach(el => el.setAttribute('contenteditable','true'));
+    }
+    showToast('HTML descargado con los cambios');
+  });
+
+  // Restore saved version on load
+  try {
+    const saved = localStorage.getItem('tm_manual_bienvenida_saved');
+    // (optional: auto-restore — commented out to avoid confusion)
+    // if (saved) { document.open(); document.write(saved); document.close(); }
+  } catch(e) {}
+})();
+</script>
 
 </body></html>
